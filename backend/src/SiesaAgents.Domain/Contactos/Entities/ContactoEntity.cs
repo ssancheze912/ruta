@@ -9,5 +9,15 @@ public class ContactoEntity
     public string Email { get; set; } = string.Empty;
     public Guid? ClienteId { get; set; }
     public DateTimeOffset CreatedAt { get; private set; } = DateTimeOffset.UtcNow;
-    public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset UpdatedAt { get; private set; } = DateTimeOffset.UtcNow;
+
+    public void Update(string nombre, string cargo, string telefono, string email, Guid? clienteId)
+    {
+        Nombre = nombre;
+        Cargo = cargo;
+        Telefono = telefono;
+        Email = email;
+        ClienteId = clienteId;
+        UpdatedAt = DateTimeOffset.UtcNow;
+    }
 }
