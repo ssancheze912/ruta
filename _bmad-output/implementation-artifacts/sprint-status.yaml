@@ -53,7 +53,7 @@ development_status:
   epic-2: in-progress
   epic-2-source: _bmad-output/planning-artifacts/epics/epic-02-gestion-de-clientes.md
   epic-2-last-update: 13-03-2026
-  2-1-client-list-search: in-progress
+  2-1-client-list-search: review
   2-2-client-detail-view: backlog
   2-3-create-client: backlog
   2-4-edit-client: backlog
