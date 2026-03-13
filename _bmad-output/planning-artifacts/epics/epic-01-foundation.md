@@ -80,3 +80,5 @@ So that subsequent stories can define entities and run migrations against a work
 **Given** the backend receives any request
 **When** the request is processed
 **Then** `ApplySnakeCaseNaming()` is applied in `OnModelCreating` and all future column names follow snake_case convention
+
+> **Scope note:** This story creates an empty initial migration (no domain tables). The `clientes` table is created in Epic 2 Story 2.1. The `contactos` table is created in Epic 3 Story 3.1. Do NOT define `ClienteEntity` or `ContactoEntity` in this story.

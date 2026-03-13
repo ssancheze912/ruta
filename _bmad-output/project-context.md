@@ -39,7 +39,7 @@ Read this before writing any code.
 |---|---|---|
 | .NET | 10 | C# Minimal API |
 | EF Core | 10 | Primary ORM |
-| PostgreSQL | 18+ | snake_case via ApplySnakeCaseNaming() |
+| PostgreSQL | 18+ | snake_case via UseSnakeCaseNamingConvention() (EFCore.NamingConventions 10.0.1) |
 | FluentValidation | latest | All request DTOs |
 | xUnit | latest | Unit + integration tests |
 | Scalar | latest | API docs — NEVER Swagger |
@@ -53,7 +53,7 @@ Read this before writing any code.
 3. **DateTimeOffset always**: NEVER use `DateTime` in C# entities or DTOs. Always `DateTimeOffset`. Maps to PostgreSQL `TIMESTAMPTZ`.
 4. **Scalar, never Swagger**: Register `builder.Services.AddOpenApi()` + `app.MapScalarApiReference()`. Never `AddSwaggerGen` or `UseSwagger`.
 5. **UUID primary keys**: All entities use `Guid` in C# / `uuid` in PostgreSQL. Never `int` or `long` PKs.
-6. **snake_case in PostgreSQL**: Always call `modelBuilder.ApplySnakeCaseNaming()` in `AppDbContext.OnModelCreating`. Column names, table names, indexes — all snake_case.
+6. **snake_case in PostgreSQL**: Call `UseSnakeCaseNamingConvention()` on `DbContextOptionsBuilder` when registering `AddDbContext<AppDbContext>` (in `Program.cs` and `AppDbContextFactory`). Requires `EFCore.NamingConventions` package. Do NOT call anything snake_case in `OnModelCreating`. Column names, table names, indexes — all snake_case automatically.
 7. **ContactManager options in Spanish**: When using `ContactManager`, `useForOptions` and `phoneCategoryOptions` arrays must have Spanish labels.
 8. **Problem Details RFC 7807**: Backend never returns raw exceptions. `ExceptionHandlingMiddleware` intercepts all errors → Problem Details format.
 9. **No implicit navigation properties**: Never rely on EF Core lazy loading. Load related data with explicit queries only.
@@ -173,10 +173,17 @@ public static class ClienteEndpoints {
 
 ### EF Core DbContext
 ```csharp
+// AppDbContext.cs — OnModelCreating (no snake_case call here)
 protected override void OnModelCreating(ModelBuilder modelBuilder) {
-  modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-  modelBuilder.ApplySnakeCaseNaming(); // MANDATORY — all tables/columns snake_case
+  base.OnModelCreating(modelBuilder);
+  modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+  // snake_case is applied via UseSnakeCaseNamingConvention() on DbContextOptionsBuilder
+  // in Program.cs and AppDbContextFactory — NOT here
 }
+
+// Program.cs — DbContext registration (snake_case configured here)
+builder.Services.AddDbContext<AppDbContext>(options =>
+  options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention());
 ```
 
 ### Entity Pattern

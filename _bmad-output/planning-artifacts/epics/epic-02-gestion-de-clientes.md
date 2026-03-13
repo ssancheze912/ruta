@@ -132,3 +132,10 @@ So that the client list only contains active and relevant records.
 **Given** the user clicks "Cancelar" in the confirmation dialog
 **When** the dialog closes
 **Then** the client record remains in the system unchanged
+
+**Given** the client being deleted has associated contacts
+**When** the deletion is confirmed and processed
+**Then** the client record is deleted
+**And** all previously associated contacts remain in the system with their data intact
+**And** those contacts become unassigned (`clienteId = null`) and appear in the "Sin cliente" filter (FR25)
+**And** the toast shows "Cliente eliminado. Sus contactos asociados quedaron sin cliente asignado."

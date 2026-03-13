@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using SiesaAgents.API.Middleware;
+using SiesaAgents.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,16 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowAnyMethod());
 });
+
+// Database — PostgreSQL via EF Core
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException(
+        "Connection string 'DefaultConnection' not found. Add it to appsettings.Development.json.");
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options
+        .UseNpgsql(connectionString)
+        .UseSnakeCaseNamingConvention());
 
 // OpenAPI (for Scalar — NOT Swagger)
 builder.Services.AddOpenApi();

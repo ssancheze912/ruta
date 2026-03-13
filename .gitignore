@@ -33,6 +33,9 @@ obj/
 # EF Core migrations (tracked intentionally)
 # backend/src/SiesaAgents.Infrastructure/Migrations/ — DO track
 
+# Connection strings — each developer configures their own local password
+backend/src/SiesaAgents.API/appsettings.Development.json
+
 # Publish output
 publish/
 out/
