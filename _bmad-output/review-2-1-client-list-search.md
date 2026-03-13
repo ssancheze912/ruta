@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [1, 2, 3]
+stepsCompleted: [1, 2, 3, 4, 5, 6]
 story_path: _bmad-output/implementation-artifacts/2-1-client-list-search.md
 story_key: 2-1-client-list-search
 status: In Progress
@@ -242,3 +242,18 @@ await waitFor(
 | MEDIUM | 3 | EmptyState wrong on search empty, vi.mock not MSW, undocumented __root.tsx + siesa-ui-kit 1.0.77 |
 | LOW | 3 | UpdatedAt public setter, File List misattribution, navigation test 5000ms timeout |
 | **Total** | **8** | |
+
+---
+
+## Fix Outcome
+
+- **Action Taken**: Fixed automatically
+- **Fixed Count**: 5 (CRITICAL-1, HIGH-1, MED-1, MED-2, MED-3)
+- **Remaining**: 3 LOW issues (UpdatedAt setter, File List attribution note, navigation timeout — LOW-3 resolved as side effect of MSW)
+- **Tests after fix**: Frontend 29/29 ✅ | Backend unit 8/8 ✅ | Integration tests require Docker (TestContainers)
+- **Commits**: `80c02f0` (frontend submodule) + `79ac9f1` (parent repo fixes)
+- **Recommended Status**: `done`
+
+## Status Sync
+- **Story File Status**: Updated to `done`
+- **Sprint Status YAML**: Synced — `2-1-client-list-search: done`

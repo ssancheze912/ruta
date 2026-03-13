@@ -1,6 +1,6 @@
 ---
 stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-status: review
+status: done
 epic: 2
 story: 1
 storyKey: 2-1-client-list-search
@@ -9,7 +9,7 @@ createdAt: '2026-03-13'
 
 # Story 2.1: Client List & Search
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
