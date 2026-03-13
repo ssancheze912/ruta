@@ -1,68 +1,63 @@
 using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SiesaAgents.Application.Clientes.DTOs;
 using SiesaAgents.Domain.Clientes.Entities;
 using SiesaAgents.Infrastructure.Data;
+using Testcontainers.PostgreSql;
 
 namespace SiesaAgents.IntegrationTests.Clientes;
 
-public class ClienteEndpointsTests
+public class ClienteEndpointsTests : IAsyncLifetime
 {
-    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
+    private static readonly JsonSerializerOptions JsonOptions =
+        new() { PropertyNameCaseInsensitive = true };
+
+    private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder()
+        .WithImage("postgres:16-alpine")
+        .WithDatabase("siesa_test")
+        .WithUsername("test")
+        .WithPassword("test")
+        .Build();
+
+    public async Task InitializeAsync() => await _postgres.StartAsync();
+
+    public async Task DisposeAsync() => await _postgres.DisposeAsync();
 
     /// <summary>
-    /// Creates an isolated WebApplicationFactory with InMemory EF Core.
-    /// Direct scoped registration avoids EF Core internal service provider conflict
-    /// caused by both Npgsql and InMemory providers being present simultaneously.
+    /// Creates a WebApplicationFactory pointing at the TestContainers PostgreSQL instance.
+    /// Overrides the connection string so Program.cs uses the test database.
+    /// EF Core migrations are run before each test to ensure schema is up-to-date.
     /// </summary>
-    private static WebApplicationFactory<Program> CreateFactory(string dbName)
+    private WebApplicationFactory<Program> CreateFactory()
     {
         return new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {
             builder.ConfigureAppConfiguration((_, config) =>
             {
-                // Provide a placeholder so Program.cs doesn't throw on startup
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    ["ConnectionStrings:DefaultConnection"] =
-                        "Host=localhost;Database=placeholder;Username=test;Password=test"
-                });
-            });
-
-            builder.ConfigureServices(services =>
-            {
-                // Remove ALL DbContext registrations to eliminate provider conflicts
-                var toRemove = services
-                    .Where(d =>
-                        d.ServiceType == typeof(DbContextOptions<AppDbContext>) ||
-                        d.ServiceType == typeof(AppDbContext) ||
-                        (d.ServiceType.IsGenericType &&
-                         d.ServiceType.GetGenericTypeDefinition() == typeof(DbContextOptions<>)))
-                    .ToList();
-                foreach (var d in toRemove) services.Remove(d);
-
-                // Register AppDbContext directly with a fresh options object per scope.
-                // This bypasses EF Core's internal service provider caching and avoids
-                // the "multiple providers registered" conflict (Npgsql + InMemory).
-                services.AddScoped(_ =>
-                {
-                    var options = new DbContextOptionsBuilder<AppDbContext>()
-                        .UseInMemoryDatabase(dbName)
-                        .Options;
-                    return new AppDbContext(options);
+                    ["ConnectionStrings:DefaultConnection"] = _postgres.GetConnectionString(),
                 });
             });
         });
     }
 
+    private static async Task MigrateAsync(WebApplicationFactory<Program> factory)
+    {
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        await db.Database.MigrateAsync();
+    }
+
     [Fact]
     public async Task GetClientes_WhenEmpty_Returns200WithEmptyArray()
     {
-        await using var factory = CreateFactory("TestClientes_Empty_" + Guid.NewGuid());
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
         var client = factory.CreateClient();
 
         var response = await client.GetAsync("/api/v1/clientes");
@@ -77,21 +72,19 @@ public class ClienteEndpointsTests
     [Fact]
     public async Task GetClientes_WhenClientsExist_ReturnsCorrectShape()
     {
-        var dbName = "TestClientes_WithData_" + Guid.NewGuid();
-        await using var factory = CreateFactory(dbName);
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
 
-        // Seed data using the same InMemory database name
-        var seedOptions = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase(dbName)
-            .Options;
-        await using (var db = new AppDbContext(seedOptions))
+        // Seed via EF Core using the factory's service scope
+        using (var scope = factory.Services.CreateScope())
         {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             db.Clientes.Add(new ClienteEntity
             {
                 Nombre = "Empresa Test",
                 Nit = "900000099-9",
                 Ciudad = "Cali",
-                Telefono = "+57 1 000 0000"
+                Telefono = "+57 1 000 0000",
             });
             await db.SaveChangesAsync();
         }
@@ -107,5 +100,20 @@ public class ClienteEndpointsTests
         Assert.NotNull(found);
         Assert.Equal("Empresa Test", found.Nombre);
         Assert.NotEqual(Guid.Empty, found.Id);
+    }
+
+    [Fact]
+    public async Task GetClientes_EnforcesUniqueNit_DuplicateNitThrowsOnSave()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        db.Clientes.Add(new ClienteEntity { Nombre = "Empresa A", Nit = "999-1" });
+        db.Clientes.Add(new ClienteEntity { Nombre = "Empresa B", Nit = "999-1" });
+
+        // Real PostgreSQL enforces the uk_clientes_nit unique index
+        await Assert.ThrowsAnyAsync<Exception>(() => db.SaveChangesAsync());
     }
 }

@@ -1,25 +1,33 @@
 using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SiesaAgents.Application.Contactos.DTOs;
 using SiesaAgents.Domain.Contactos.Entities;
 using SiesaAgents.Infrastructure.Data;
+using Testcontainers.PostgreSql;
 
 namespace SiesaAgents.IntegrationTests.Contactos;
 
-public class ContactoEndpointsTests
+public class ContactoEndpointsTests : IAsyncLifetime
 {
-    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
+    private static readonly JsonSerializerOptions JsonOptions =
+        new() { PropertyNameCaseInsensitive = true };
 
-    /// <summary>
-    /// Creates an isolated WebApplicationFactory with InMemory EF Core.
-    /// Direct scoped registration avoids EF Core internal service provider conflict
-    /// caused by both Npgsql and InMemory providers being present simultaneously.
-    /// </summary>
-    private static WebApplicationFactory<Program> CreateFactory(string dbName)
+    private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder()
+        .WithImage("postgres:16-alpine")
+        .WithDatabase("siesa_test")
+        .WithUsername("test")
+        .WithPassword("test")
+        .Build();
+
+    public async Task InitializeAsync() => await _postgres.StartAsync();
+
+    public async Task DisposeAsync() => await _postgres.DisposeAsync();
+
+    private WebApplicationFactory<Program> CreateFactory()
     {
         return new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
         {
@@ -27,37 +35,24 @@ public class ContactoEndpointsTests
             {
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    ["ConnectionStrings:DefaultConnection"] =
-                        "Host=localhost;Database=placeholder;Username=test;Password=test"
-                });
-            });
-
-            builder.ConfigureServices(services =>
-            {
-                var toRemove = services
-                    .Where(d =>
-                        d.ServiceType == typeof(DbContextOptions<AppDbContext>) ||
-                        d.ServiceType == typeof(AppDbContext) ||
-                        (d.ServiceType.IsGenericType &&
-                         d.ServiceType.GetGenericTypeDefinition() == typeof(DbContextOptions<>)))
-                    .ToList();
-                foreach (var d in toRemove) services.Remove(d);
-
-                services.AddScoped(_ =>
-                {
-                    var options = new DbContextOptionsBuilder<AppDbContext>()
-                        .UseInMemoryDatabase(dbName)
-                        .Options;
-                    return new AppDbContext(options);
+                    ["ConnectionStrings:DefaultConnection"] = _postgres.GetConnectionString(),
                 });
             });
         });
     }
 
+    private static async Task MigrateAsync(WebApplicationFactory<Program> factory)
+    {
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        await db.Database.MigrateAsync();
+    }
+
     [Fact]
     public async Task GetContactos_WhenEmpty_Returns200WithEmptyArray()
     {
-        await using var factory = CreateFactory("TestContactos_Empty_" + Guid.NewGuid());
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
         var client = factory.CreateClient();
 
         var response = await client.GetAsync("/api/v1/contactos");
@@ -72,14 +67,12 @@ public class ContactoEndpointsTests
     [Fact]
     public async Task GetContactos_WhenContactosExist_ReturnsCorrectShape()
     {
-        var dbName = "TestContactos_WithData_" + Guid.NewGuid();
-        await using var factory = CreateFactory(dbName);
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
 
-        var seedOptions = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase(dbName)
-            .Options;
-        await using (var db = new AppDbContext(seedOptions))
+        using (var scope = factory.Services.CreateScope())
         {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             db.Contactos.Add(new ContactoEntity
             {
                 Nombre = "Ana García",
@@ -109,7 +102,8 @@ public class ContactoEndpointsTests
     [Fact]
     public async Task GetContactos_ResponseContentType_IsApplicationJson()
     {
-        await using var factory = CreateFactory("TestContactos_ContentType_" + Guid.NewGuid());
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
         var client = factory.CreateClient();
 
         var response = await client.GetAsync("/api/v1/contactos");

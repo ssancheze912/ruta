@@ -386,5 +386,21 @@ claude-sonnet-4-6
 **Frontend — Modified:**
 - `frontend/src/routes/_app/clientes.tsx` (split-panel layout)
 - `frontend/src/shared/components/ErrorPanel.tsx` (added optional `message` prop)
-- `frontend/src/routes/__tests__/navigation.test.tsx` (updated stale heading assertions)
+- `frontend/src/routes/__tests__/navigation.test.tsx` (updated stale heading assertions, increased waitFor timeout)
 - `frontend/src/modules/crm/contactos/presentation/ContactoListView.test.tsx` (fixed type cast)
+- `frontend/src/routes/__root.tsx` (added Spanish labels to NavigationRail: `collapseButton`, `searchPlaceholder` — P0 compliance)
+- `frontend/package.json` + `frontend/package-lock.json` (siesa-ui-kit upgraded 1.0.76 → 1.0.77; required for NavigationRail labels support)
+
+**Frontend — Created (code-review fixes):**
+- `frontend/src/mocks/handlers.ts` (MSW default handlers)
+- `frontend/src/mocks/server.ts` (MSW node server)
+- `frontend/src/modules/crm/clientes/presentation/ClienteListView.tsx` — EmptyState logic fixed: distinguishes API-empty vs search-empty
+- `frontend/src/modules/crm/clientes/application/useClientes.test.ts` — rewritten with MSW (was vi.mock)
+- `frontend/src/test/setup.ts` — added MSW server lifecycle (beforeAll/afterEach/afterAll)
+
+**Backend — Modified (code-review fixes):**
+- `backend/tests/SiesaAgents.IntegrationTests/SiesaAgents.IntegrationTests.csproj` (removed InMemory, added Testcontainers.PostgreSql 4.2.0)
+- `backend/tests/SiesaAgents.IntegrationTests/Clientes/ClienteEndpointsTests.cs` (rewritten with TestContainers; added unique constraint test)
+- `backend/tests/SiesaAgents.IntegrationTests/Contactos/ContactoEndpointsTests.cs` (rewritten with TestContainers)
+
+**NOTE:** `AppDbContext.cs`, `Program.cs`, and `AddClienteEntity` migration were committed in Story 3.1 commit (`fba88a8`) due to parallel development — not in Story 2.1 commit (`3e947fc`).
