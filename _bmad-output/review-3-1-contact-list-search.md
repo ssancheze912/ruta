@@ -5,7 +5,7 @@
 - **Status**: In Progress
 
 <!--
-stepsCompleted: [1, 2, 3]
+stepsCompleted: [1, 2, 3, 4]
 story_path: _bmad-output/implementation-artifacts/3-1-contact-list-search.md
 story_key: 3-1-contact-list-search
 -->
@@ -183,3 +183,39 @@ render: (_value: unknown, row: Contacto) =>
 | Integration tests for endpoint | 0 | ❌ Missing |
 
 **Overall test quality**: Unit and component tests are solid with real assertions. Integration gap is the main risk.
+
+---
+
+## Fix Outcome
+
+- **Action Taken**: Fixed automatically
+- **Fixed Count**: 5 (CRIT-1, HIGH-1, HIGH-2, MED-1, MED-2, LOW-3)
+- **Task Count**: 0
+- **Recommended Status**: done
+
+### Fixes Applied
+
+| ID | Fix | Commit |
+|---|---|---|
+| CRIT-1 | Frontend submodule pointer staged and committed to parent repo | `9989212` |
+| HIGH-1 | `ErrorPanel.onRetry` made optional; button conditionally rendered | frontend `8dd4601` |
+| HIGH-2 | `ContactoEntity.UpdatedAt` made private setter; `Update()` domain method added | `9989212` |
+| MED-1 | `ContactoEndpointsTests.cs` created — 3 integration tests (12/12 passing) | `9989212` |
+| MED-2 | `getById` removed from frontend `IContactoRepository` + `contactoApiRepository` | frontend `8dd4601` |
+| LOW-3 | `clienteId === null` → `clienteId == null` in `ContactoListView.tsx` | frontend `8dd4601` |
+
+### Remaining (LOW — Documentation)
+- LOW-1: Dev Notes code patterns stale (Badge children vs label, handler signature) — update recommended before Story 3.2
+- LOW-2: Dev Notes version table shows 1.0.76 instead of 1.0.77
+
+### Test Results After Fixes
+- Backend unit tests: **8/8** ✅
+- Backend integration tests: **12/12** ✅ (9 pre-existing + 3 new Contactos)
+- Frontend tests: **28/28** ✅
+
+---
+
+## Status Sync
+
+- **Story File Status**: Updated to `done`
+- **Sprint Status YAML**: Synced — `3-1-contact-list-search: done`
