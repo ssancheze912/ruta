@@ -1,7 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using SiesaAgents.API.Endpoints;
 using SiesaAgents.API.Middleware;
+using SiesaAgents.Application.Clientes.Queries;
+using SiesaAgents.Application.Contactos.Queries;
+using SiesaAgents.Domain.Clientes.Interfaces;
+using SiesaAgents.Domain.Contactos.Interfaces;
 using SiesaAgents.Infrastructure.Data;
+using SiesaAgents.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +35,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         .UseNpgsql(connectionString)
         .UseSnakeCaseNamingConvention());
 
+// Clientes — DI
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+builder.Services.AddScoped<GetClientesQueryHandler>();
+
+// Contactos — DI
+builder.Services.AddScoped<IContactoRepository, ContactoRepository>();
+builder.Services.AddScoped<GetContactosQueryHandler>();
+
 // OpenAPI (for Scalar — NOT Swagger)
 builder.Services.AddOpenApi();
 
@@ -43,4 +57,12 @@ app.UseCors();
 app.MapOpenApi();
 app.MapScalarApiReference();
 
+// API endpoints
+app.MapGroup("/api/v1")
+    .MapClienteEndpoints()
+    .MapContactoEndpoints();
+
 app.Run();
+
+// Expose Program class for WebApplicationFactory in integration tests
+public partial class Program { }
