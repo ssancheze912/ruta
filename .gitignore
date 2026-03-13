@@ -1,0 +1,57 @@
+# ===========================
+# Node / Frontend
+# ===========================
+node_modules/
+dist/
+dist-ssr/
+build/
+*.local
+.cache/
+
+# Vite generated
+frontend/src/routeTree.gen.ts
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# shadcn/ui generated components (committed intentionally, but dist artifacts excluded)
+# components.json is tracked — it's shadcn config
+
+# ===========================
+# .NET / Backend
+# ===========================
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.idea/
+*.swp
+
+# EF Core migrations (tracked intentionally)
+# backend/src/SiesaAgents.Infrastructure/Migrations/ — DO track
+
+# Publish output
+publish/
+out/
+
+# Test results
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# ===========================
+# OS / Editor
+# ===========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===========================
+# BMAD / Project Management
+# ===========================
+# Uncomment to ignore planning artifacts from git:
+# _bmad-output/

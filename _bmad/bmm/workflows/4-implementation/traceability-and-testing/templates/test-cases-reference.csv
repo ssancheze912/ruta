@@ -1,0 +1,11 @@
+,,FORMATO DE DEFINICIÓN DE CASOS DE PRUEBA DE SOFTWARE,,,,,,,,,,,"Elaborado Por:
+Lider Aseguramiento","Revisado Por:
+Gerente Procesos","Aprobado Por:
+Director I&D"
+,,,,,,,,,,,,,CODIGO,Versión,Fecha
+,,,,,,,,,,,,,FT-SD-007,5.0,20/06/2024
+,,,,,,,,,,,,,Aplicativo,Versión,Ruta
+,,,,,,,,,,,,,Example,1.0,Path
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+ID Épica,ID Caso de Prueba,Título,Descripción Completa,Precondiciones,Pasos de Ejecución,Resultados Esperados,Tipo prueba,Fecha Ejecución,Estado,ID Defecto,Descripción Fallo,Notas

@@ -1,0 +1,138 @@
+# Traceability & Test Planning Workflow
+name: traceability-and-testing
+description: "Generate functional traceability map (FR→Epic→Story→Task) and consolidated epic-level test plans from existing test cases"
+author: "BMad"
+version: "1.0.0"
+
+# Critical variables from config
+config_source: "{project-root}/_bmad/bmm/config.yaml"
+user_name: "{config_source}:user_name"
+communication_language: "{config_source}:communication_language"
+user_skill_level: "{config_source}:user_skill_level"
+document_output_language: "{config_source}:document_output_language"
+date: system-generated
+planning_artifacts: "{config_source}:planning_artifacts"
+implementation_artifacts: "{config_source}:implementation_artifacts"
+output_folder: "{planning_artifacts}"
+
+# Workflow components - Step-file architecture
+installed_path: "{project-root}/_bmad/bmm/workflows/4-implementation/traceability-and-testing"
+instructions: "{installed_path}/workflow.md"
+readme: "{installed_path}/README.md"
+usage_guide: "{installed_path}/USAGE-GUIDE.md"
+
+# Step files
+step_01_init: "{installed_path}/steps/step-01-init.md"
+step_01b_continue: "{installed_path}/steps/step-01b-continue.md"
+step_02_build_traceability: "{installed_path}/steps/step-02-build-traceability.md"
+step_03_interpret_tests: "{installed_path}/steps/step-03-interpret-tests.md"
+step_04_generate_plans: "{installed_path}/steps/step-04-generate-plans.md"
+step_05_export: "{installed_path}/steps/step-05-export.md"
+
+# Templates
+traceability_map_template: "{installed_path}/templates/traceability-map-template.md"
+epic_test_plan_template: "{installed_path}/templates/epic-test-plan-template.md"
+
+# Data and reference
+excel_structure_guide: "{installed_path}/data/excel-structure-guide.md"
+
+# Variables
+variables:
+  # Project context
+  project_name: "{config_source}:project_name"
+
+  # Input files
+  epics_file: "{planning_artifacts}/*epic*.md"
+  excel_test_file: "{project-root}/pruebas_comandera.xlsm"
+
+  # Output files
+  traceability_map: "{planning_artifacts}/traceability-map.md"
+  epic_plans_dir: "{planning_artifacts}/epic-test-plans"
+  exports_dir: "{planning_artifacts}/exports"
+  master_index: "{planning_artifacts}/traceability-and-testing-INDEX.md"
+
+# Input file patterns - Required source documents
+input_file_patterns:
+  epics:
+    description: "Epic and story definitions with FR Coverage Map"
+    whole: "{planning_artifacts}/*epic*.md"
+    sharded_index: "{planning_artifacts}/*epic*/index.md"
+    load_strategy: "FULL_LOAD"
+    required: true
+
+  test_cases:
+    description: "Excel file with existing test case repository"
+    file: "{project-root}/pruebas_comandera.xlsm"
+    required: true
+    note: "If not found, workflow will prompt for alternative location"
+
+# Output artifacts
+output_artifacts:
+  markdown:
+    - "{planning_artifacts}/traceability-map.md"
+    - "{planning_artifacts}/traceability-and-testing-INDEX.md"
+    - "{planning_artifacts}/epic-test-plans/INDEX.md"
+    - "{planning_artifacts}/epic-test-plans/epic-*.md"
+  excel:
+    - "{planning_artifacts}/exports/traceability-and-test-plans.xlsx"
+  scripts:
+    - "{planning_artifacts}/exports/export_to_excel.py"
+    - "{planning_artifacts}/exports/export_data.json"
+
+# Workflow characteristics
+standalone: true
+web_bundle: true
+phase: "4-implementation"
+category: "testing"
+tags:
+  - traceability
+  - test-planning
+  - requirements
+  - quality-assurance
+  - epic-test-plans
+  - coverage-analysis
+
+# Execution mode
+execution_mode: "step-file-architecture"
+continuation_support: true
+state_tracking: "frontmatter"
+
+# Prerequisites
+prerequisites:
+  - phase: "3-solutioning"
+    artifact: "epics.md"
+    description: "Epic and story definitions must exist"
+  - file: "pruebas_comandera.xlsm"
+    description: "Test case repository (Excel format)"
+  - config: "_bmad/bmm/config.yaml"
+    required_fields:
+      - project_name
+      - planning_artifacts
+      - communication_language
+      - document_output_language
+
+# Estimated execution time
+estimated_time:
+  preparation: "15-30 minutes"
+  execution: "20-45 minutes"
+  review: "30-60 minutes"
+  total: "1-2 hours"
+
+# Invocation examples
+invocation_examples:
+  - "Execute the traceability-and-testing workflow"
+  - "Ejecuta el workflow traceability-and-testing"
+  - "Generate traceability map and test plans"
+  - "/traceability-and-testing"
+
+# Documentation
+documentation:
+  quick_start: "{installed_path}/README.md"
+  detailed_guide: "{installed_path}/USAGE-GUIDE.md"
+  excel_guide: "{installed_path}/data/excel-structure-guide.md"
+
+# Support
+support:
+  issues: "Report issues in project documentation"
+  faq: "See USAGE-GUIDE.md FAQ section"
+  troubleshooting: "See README.md Troubleshooting section"

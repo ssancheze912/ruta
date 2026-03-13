@@ -1,0 +1,4 @@
+{
+   "issueIdOrKey": "{{Parent_Task_Key}}",
+   "commentBody": "## Details\n\n{{nested_bullets_content}}"
+}
