@@ -65,7 +65,7 @@ development_status:
   epic-3-source: _bmad-output/planning-artifacts/epics/epic-03-gestion-de-contactos.md
   epic-3-last-update: 13-03-2026
   3-1-contact-list-search: done
-  3-2-contact-detail-view: backlog
+  3-2-contact-detail-view: ready-for-dev
   3-3-create-contact: backlog
   3-4-edit-contact: backlog
   3-5-delete-contact: backlog
