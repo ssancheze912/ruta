@@ -134,10 +134,12 @@ public class ClienteEndpointsTests : IAsyncLifetime
         Assert.Equal("Empresa Detail Test", cliente.Nombre);
         Assert.Equal(clienteId, cliente.Id);
         Assert.Equal("999-detail-1", cliente.Nit);
+        Assert.NotEqual(default, cliente.CreatedAt);
+        Assert.NotEqual(default, cliente.UpdatedAt);
     }
 
     [Fact]
-    public async Task GetClienteById_WhenNotFound_Returns404()
+    public async Task GetClienteById_WhenNotFound_Returns404ProblemDetails()
     {
         await using var factory = CreateFactory();
         await MigrateAsync(factory);
@@ -146,6 +148,8 @@ public class ClienteEndpointsTests : IAsyncLifetime
         var response = await client.GetAsync($"/api/v1/clientes/{Guid.NewGuid()}");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        var json = await response.Content.ReadAsStringAsync();
+        Assert.Contains("Not Found", json);
     }
 
     [Fact]

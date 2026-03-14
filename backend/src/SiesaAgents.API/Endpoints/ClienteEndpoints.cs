@@ -23,13 +23,13 @@ public static class ClienteEndpoints
         {
             var result = await handler.HandleAsync(new GetClienteByIdQuery(id), ct);
             return result is null
-                ? Results.NotFound()
+                ? Results.Problem(statusCode: StatusCodes.Status404NotFound, title: "Not Found", detail: "Cliente not found")
                 : Results.Ok(result);
         })
         .WithName("GetClienteById")
         .WithSummary("Obtiene un cliente por ID")
         .Produces<ClienteDto>()
-        .Produces(StatusCodes.Status404NotFound);
+        .ProducesProblem(StatusCodes.Status404NotFound);
 
         return group;
     }
