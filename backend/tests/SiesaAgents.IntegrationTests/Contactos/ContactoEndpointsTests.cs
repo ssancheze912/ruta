@@ -111,4 +111,52 @@ public class ContactoEndpointsTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
     }
+
+    [Fact]
+    public async Task GetContactoById_WhenExists_Returns200WithShape()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+
+        Guid contactoId;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var entity = new ContactoEntity
+            {
+                Nombre = "Test User",
+                Cargo = "Analista",
+                Telefono = "3001234567",
+                Email = "test@test.com",
+                ClienteId = null,
+            };
+            db.Contactos.Add(entity);
+            await db.SaveChangesAsync();
+            contactoId = entity.Id;
+        }
+
+        var client = factory.CreateClient();
+        var response = await client.GetAsync($"/api/v1/contactos/{contactoId}");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var json = await response.Content.ReadAsStringAsync();
+        var contacto = JsonSerializer.Deserialize<ContactoDto>(json, JsonOptions);
+        Assert.NotNull(contacto);
+        Assert.Equal("Test User", contacto.Nombre);
+        Assert.Equal("Analista", contacto.Cargo);
+        Assert.Equal(contactoId, contacto.Id);
+        Assert.Null(contacto.ClienteId);
+    }
+
+    [Fact]
+    public async Task GetContactoById_WhenNotFound_Returns404()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+        var client = factory.CreateClient();
+
+        var response = await client.GetAsync($"/api/v1/contactos/{Guid.NewGuid()}");
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
 }

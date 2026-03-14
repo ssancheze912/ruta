@@ -1,6 +1,6 @@
 # Story 3.2: Contact Detail View
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -32,39 +32,39 @@ So that I can review all their information at once.
 
 ### Backend
 
-- [ ] Task 1: Extend Application Layer (AC: 7)
-  - [ ] 1.1 Create `backend/src/SiesaAgents.Application/Contactos/Queries/GetContactoByIdQuery.cs`
-  - [ ] 1.2 Create `backend/src/SiesaAgents.Application/Contactos/Queries/GetContactoByIdQueryHandler.cs`
+- [x] Task 1: Extend Application Layer (AC: 7)
+  - [x] 1.1 Create `backend/src/SiesaAgents.Application/Contactos/Queries/GetContactoByIdQuery.cs`
+  - [x] 1.2 Create `backend/src/SiesaAgents.Application/Contactos/Queries/GetContactoByIdQueryHandler.cs`
 
-- [ ] Task 2: Extend API Endpoint (AC: 7)
-  - [ ] 2.1 Add `GET /contactos/{id}` to `backend/src/SiesaAgents.API/Endpoints/ContactoEndpoints.cs`
-  - [ ] 2.2 Register `GetContactoByIdQueryHandler` in `backend/src/SiesaAgents.API/Program.cs`
+- [x] Task 2: Extend API Endpoint (AC: 7)
+  - [x] 2.1 Add `GET /contactos/{id}` to `backend/src/SiesaAgents.API/Endpoints/ContactoEndpoints.cs`
+  - [x] 2.2 Register `GetContactoByIdQueryHandler` in `backend/src/SiesaAgents.API/Program.cs`
 
-- [ ] Task 3: Backend Tests (AC: 7)
-  - [ ] 3.1 Add unit tests to `GetContactoByIdQueryHandlerTests.cs` — found + not found cases
-  - [ ] 3.2 Add integration tests to `ContactoEndpointsTests.cs` — `GetContactoById_WhenExists_Returns200WithShape` + `GetContactoById_WhenNotFound_Returns404`
-  - [ ] 3.3 `dotnet build` — 0 errors, 0 warnings ✅
-  - [ ] 3.4 `dotnet test` — all passed ✅
+- [x] Task 3: Backend Tests (AC: 7)
+  - [x] 3.1 Add unit tests to `GetContactoByIdQueryHandlerTests.cs` — found + not found cases
+  - [x] 3.2 Add integration tests to `ContactoEndpointsTests.cs` — `GetContactoById_WhenExists_Returns200WithShape` + `GetContactoById_WhenNotFound_Returns404`
+  - [x] 3.3 `dotnet build` — 0 errors, 0 warnings ✅
+  - [x] 3.4 `dotnet test` — all passed ✅
 
 ### Frontend
 
-- [ ] Task 4: Extend Domain + Infrastructure Layers (AC: 3)
-  - [ ] 4.1 Add `getById(id: string): Promise<Contacto>` to `frontend/src/modules/crm/contactos/domain/IContactoRepository.ts`
-  - [ ] 4.2 Add `getById` implementation to `frontend/src/modules/crm/contactos/infrastructure/contactoApiRepository.ts`
+- [x] Task 4: Extend Domain + Infrastructure Layers (AC: 3)
+  - [x] 4.1 Add `getById(id: string): Promise<Contacto>` to `frontend/src/modules/crm/contactos/domain/IContactoRepository.ts`
+  - [x] 4.2 Add `getById` implementation to `frontend/src/modules/crm/contactos/infrastructure/contactoApiRepository.ts`
 
-- [ ] Task 5: Create Application Layer (AC: 3, 5, 6)
-  - [ ] 5.1 Create `frontend/src/modules/crm/contactos/application/useContacto.ts` — `useQuery({ queryKey: ['contactos', id] })`
+- [x] Task 5: Create Application Layer (AC: 3, 5, 6)
+  - [x] 5.1 Create `frontend/src/modules/crm/contactos/application/useContacto.ts` — `useQuery({ queryKey: ['contactos', id] })`
 
-- [ ] Task 6: Create Presentation Layer (AC: 1, 2, 4, 5, 6, 8)
-  - [ ] 6.1 Create `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.tsx`
-  - [ ] 6.2 Create `frontend/src/routes/_app/contactos.$contactoId.tsx`
-  - [ ] 6.3 Update `ContactoListView.tsx` — add "Ver" link column using TanStack `Link`
+- [x] Task 6: Create Presentation Layer (AC: 1, 2, 4, 5, 6, 8)
+  - [x] 6.1 Create `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.tsx`
+  - [x] 6.2 Create `frontend/src/routes/_app/contactos.$contactoId.tsx`
+  - [x] 6.3 Update `ContactoListView.tsx` — add "Ver" link column using TanStack `Link`
 
-- [ ] Task 7: Frontend Tests (AC: 1, 2, 4, 5, 6, 8)
-  - [ ] 7.1 Create `ContactoDetailView.test.tsx` — render fields, loading, error, not-found, volver navigation
-  - [ ] 7.2 Create `useContacto.test.ts` — success, not-found (404), network error
-  - [ ] 7.3 `npm run build` — 0 TypeScript errors ✅
-  - [ ] 7.4 `npm test` — all passed ✅
+- [x] Task 7: Frontend Tests (AC: 1, 2, 4, 5, 6, 8)
+  - [x] 7.1 Create `ContactoDetailView.test.tsx` — render fields, loading, error, not-found, volver navigation
+  - [x] 7.2 Create `useContacto.test.ts` — success, not-found (404), network error
+  - [x] 7.3 `npm run build` — 0 TypeScript errors ✅
+  - [x] 7.4 `npm test` — all passed ✅
 
 ## Dev Notes
 
@@ -466,8 +466,42 @@ public async Task GetContactoById_WhenNotFound_Returns404()
 
 ### Agent Model Used
 
+claude-sonnet-4-6
+
 ### Debug Log References
+
+None — clean implementation, no blocking errors.
 
 ### Completion Notes List
 
+- Backend GET /{id} endpoint follows `{id:guid}` route constraint pattern.
+- Frontend `routeTree.gen.ts` updated manually then auto-corrected by Vite plugin (nested route under `AppContactosRoute`).
+- `ContactoListView.test.tsx` required `@tanstack/react-router` mock after adding `Link` column.
+- `useContacto.test.ts` uses `retryDelay: 0` in QueryClient to keep retries instant in tests.
+- All 37 frontend tests pass; 11 backend unit tests pass.
+
 ### File List
+
+**Backend — New:**
+- `backend/src/SiesaAgents.Application/Contactos/Queries/GetContactoByIdQuery.cs`
+- `backend/src/SiesaAgents.Application/Contactos/Queries/GetContactoByIdQueryHandler.cs`
+- `backend/tests/SiesaAgents.UnitTests/Application/Contactos/GetContactoByIdQueryHandlerTests.cs`
+
+**Backend — Modified:**
+- `backend/src/SiesaAgents.API/Endpoints/ContactoEndpoints.cs`
+- `backend/src/SiesaAgents.API/Program.cs`
+- `backend/tests/SiesaAgents.IntegrationTests/Contactos/ContactoEndpointsTests.cs`
+
+**Frontend — New:**
+- `frontend/src/modules/crm/contactos/application/useContacto.ts`
+- `frontend/src/modules/crm/contactos/application/useContacto.test.ts`
+- `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.tsx`
+- `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.test.tsx`
+- `frontend/src/routes/_app/contactos.$contactoId.tsx`
+
+**Frontend — Modified:**
+- `frontend/src/modules/crm/contactos/domain/IContactoRepository.ts`
+- `frontend/src/modules/crm/contactos/infrastructure/contactoApiRepository.ts`
+- `frontend/src/modules/crm/contactos/presentation/ContactoListView.tsx`
+- `frontend/src/modules/crm/contactos/presentation/ContactoListView.test.tsx`
+- `frontend/src/routeTree.gen.ts`

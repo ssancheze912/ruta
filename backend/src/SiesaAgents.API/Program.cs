@@ -38,10 +38,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Clientes — DI
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<GetClientesQueryHandler>();
+builder.Services.AddScoped<GetClienteByIdQueryHandler>();
 
 // Contactos — DI
 builder.Services.AddScoped<IContactoRepository, ContactoRepository>();
 builder.Services.AddScoped<GetContactosQueryHandler>();
+builder.Services.AddScoped<GetContactoByIdQueryHandler>();
 
 // OpenAPI (for Scalar — NOT Swagger)
 builder.Services.AddOpenApi();
