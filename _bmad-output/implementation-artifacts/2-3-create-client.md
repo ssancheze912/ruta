@@ -1,6 +1,6 @@
 ---
 stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-status: in-review
+status: done
 epic: 2
 story: 3
 storyKey: 2-3-create-client

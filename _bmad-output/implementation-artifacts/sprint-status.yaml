@@ -55,7 +55,7 @@ development_status:
   epic-2-last-update: 14-03-2026
   2-1-client-list-search: done
   2-2-client-detail-view: done
-  2-3-create-client: review
+  2-3-create-client: done
   2-4-edit-client: backlog
   2-5-delete-client: backlog
   epic-2-retrospective: optional
