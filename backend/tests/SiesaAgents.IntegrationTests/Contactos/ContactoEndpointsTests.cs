@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
@@ -159,5 +160,90 @@ public class ContactoEndpointsTests : IAsyncLifetime
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+    }
+
+    [Fact]
+    public async Task CreateContacto_WithValidData_Returns201WithShape()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+        var client = factory.CreateClient();
+
+        var request = new { Nombre = "Ana García", Cargo = "Analista", Telefono = "3001234567", Email = "ana@test.com" };
+        var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+
+        var response = await client.PostAsync("/api/v1/contactos", content);
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        var json = await response.Content.ReadAsStringAsync();
+        var contacto = JsonSerializer.Deserialize<ContactoDto>(json, JsonOptions);
+        Assert.NotNull(contacto);
+        Assert.Equal("Ana García", contacto.Nombre);
+        Assert.Equal("Analista", contacto.Cargo);
+        Assert.Equal("3001234567", contacto.Telefono);
+        Assert.Equal("ana@test.com", contacto.Email);
+        Assert.NotEqual(Guid.Empty, contacto.Id);
+        Assert.Null(contacto.ClienteId);
+        Assert.NotEqual(default, contacto.CreatedAt);
+    }
+
+    [Fact]
+    public async Task CreateContacto_WithEmptyNombre_Returns422()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+        var client = factory.CreateClient();
+
+        var request = new { Nombre = "", Cargo = "Analista", Telefono = "3001234567", Email = "ana@test.com" };
+        var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+
+        var response = await client.PostAsync("/api/v1/contactos", content);
+
+        Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateContacto_WithInvalidEmail_Returns422()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+        var client = factory.CreateClient();
+
+        var request = new { Nombre = "Ana García", Cargo = "Analista", Telefono = "3001234567", Email = "not-an-email" };
+        var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+
+        var response = await client.PostAsync("/api/v1/contactos", content);
+
+        Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateContacto_WithEmptyCargo_Returns422()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+        var client = factory.CreateClient();
+
+        var request = new { Nombre = "Ana García", Cargo = "", Telefono = "3001234567", Email = "ana@test.com" };
+        var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+
+        var response = await client.PostAsync("/api/v1/contactos", content);
+
+        Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateContacto_WithEmptyTelefono_Returns422()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+        var client = factory.CreateClient();
+
+        var request = new { Nombre = "Ana García", Cargo = "Analista", Telefono = "", Email = "ana@test.com" };
+        var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+
+        var response = await client.PostAsync("/api/v1/contactos", content);
+
+        Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
     }
 }

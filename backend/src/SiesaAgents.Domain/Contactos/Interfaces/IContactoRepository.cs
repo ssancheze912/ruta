@@ -6,4 +6,5 @@ public interface IContactoRepository
 {
     Task<IEnumerable<ContactoEntity>> GetAllAsync(CancellationToken ct = default);
     Task<ContactoEntity?> GetByIdAsync(Guid id, CancellationToken ct = default);
+    Task<ContactoEntity> CreateAsync(ContactoEntity entity, CancellationToken ct = default);
 }

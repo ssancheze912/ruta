@@ -17,4 +17,11 @@ public class ContactoRepository(AppDbContext context) : IContactoRepository
         return await context.Contactos.AsNoTracking()
             .FirstOrDefaultAsync(c => c.Id == id, ct);
     }
+
+    public async Task<ContactoEntity> CreateAsync(ContactoEntity entity, CancellationToken ct = default)
+    {
+        context.Contactos.Add(entity);
+        await context.SaveChangesAsync(ct);
+        return entity;
+    }
 }

@@ -1,3 +1,5 @@
+using FluentValidation;
+using SiesaAgents.Application.Contactos.Commands;
 using SiesaAgents.Application.Contactos.DTOs;
 using SiesaAgents.Application.Contactos.Queries;
 
@@ -29,7 +31,27 @@ public static class ContactoEndpoints
         .WithName("GetContactoById")
         .WithSummary("Obtiene un contacto por ID")
         .Produces<ContactoDto>()
-        .Produces(StatusCodes.Status404NotFound);
+        .ProducesProblem(StatusCodes.Status404NotFound);
+
+        group.MapPost("/contactos", async (
+            CreateContactoRequest request,
+            IValidator<CreateContactoRequest> validator,
+            CreateContactoCommandHandler handler,
+            CancellationToken ct) =>
+        {
+            var validation = await validator.ValidateAsync(request, ct);
+            if (!validation.IsValid)
+                return Results.ValidationProblem(validation.ToDictionary());
+
+            var result = await handler.HandleAsync(
+                new CreateContactoCommand(request.Nombre, request.Cargo, request.Telefono, request.Email), ct);
+
+            return Results.Created($"/api/v1/contactos/{result.Id}", result);
+        })
+        .WithName("CreateContacto")
+        .WithSummary("Crea un nuevo contacto")
+        .Produces<ContactoDto>(StatusCodes.Status201Created)
+        .ProducesValidationProblem();
 
         return group;
     }
