@@ -77,6 +77,7 @@ public class GetContactoByIdQueryHandlerTests
 
         // Assert
         Assert.NotNull(result);
+        Assert.Equal(entity.Id, result.Id);
         Assert.Equal(entity.Nombre, result.Nombre);
         Assert.Equal(entity.Cargo, result.Cargo);
         Assert.Equal(entity.Telefono, result.Telefono);

@@ -149,7 +149,7 @@ public class ContactoEndpointsTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task GetContactoById_WhenNotFound_Returns404()
+    public async Task GetContactoById_WhenNotFound_Returns404WithProblemDetails()
     {
         await using var factory = CreateFactory();
         await MigrateAsync(factory);
@@ -158,5 +158,6 @@ public class ContactoEndpointsTests : IAsyncLifetime
         var response = await client.GetAsync($"/api/v1/contactos/{Guid.NewGuid()}");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
     }
 }

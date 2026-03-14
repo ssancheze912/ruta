@@ -23,7 +23,7 @@ public static class ContactoEndpoints
         {
             var result = await handler.HandleAsync(new GetContactoByIdQuery(id), ct);
             return result is null
-                ? Results.NotFound()
+                ? Results.Problem(statusCode: StatusCodes.Status404NotFound, title: "Not Found", detail: "Contacto no encontrado.")
                 : Results.Ok(result);
         })
         .WithName("GetContactoById")
