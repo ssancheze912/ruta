@@ -6,4 +6,6 @@ public interface IClienteRepository
 {
     Task<IEnumerable<ClienteEntity>> GetAllAsync(CancellationToken ct = default);
     Task<ClienteEntity?> GetByIdAsync(Guid id, CancellationToken ct = default);
+    Task<ClienteEntity?> FindByNitAsync(string nit, CancellationToken ct = default);
+    Task CreateAsync(ClienteEntity entity, CancellationToken ct = default);
 }

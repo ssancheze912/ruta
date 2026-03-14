@@ -1,4 +1,7 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using SiesaAgents.Application.Clientes.Commands;
 using SiesaAgents.Application.Clientes.DTOs;
 using SiesaAgents.Application.Clientes.Queries;
 
@@ -30,6 +33,31 @@ public static class ClienteEndpoints
         .WithSummary("Obtiene un cliente por ID")
         .Produces<ClienteDto>()
         .ProducesProblem(StatusCodes.Status404NotFound);
+
+        group.MapPost("/clientes", async (
+            CreateClienteCommand command,
+            IValidator<CreateClienteCommand> validator,
+            CreateClienteCommandHandler handler,
+            CancellationToken ct) =>
+        {
+            var validation = await validator.ValidateAsync(command, ct);
+            if (!validation.IsValid)
+                return Results.ValidationProblem(validation.ToDictionary());
+
+            var result = await handler.HandleAsync(command, ct);
+            if (result is null)
+                return Results.Problem(
+                    statusCode: StatusCodes.Status409Conflict,
+                    title: "Conflict",
+                    detail: "El NIT/RUC ya está registrado.");
+
+            return Results.Created($"/api/v1/clientes/{result.Id}", result);
+        })
+        .WithName("CreateCliente")
+        .WithSummary("Crea un nuevo cliente")
+        .Produces<ClienteDto>(StatusCodes.Status201Created)
+        .ProducesProblem(StatusCodes.Status409Conflict)
+        .ProducesValidationProblem();
 
         return group;
     }

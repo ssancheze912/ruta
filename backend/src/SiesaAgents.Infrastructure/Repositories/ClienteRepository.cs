@@ -18,4 +18,17 @@ public class ClienteRepository(AppDbContext context) : IClienteRepository
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.Id == id, ct);
     }
+
+    public async Task<ClienteEntity?> FindByNitAsync(string nit, CancellationToken ct = default)
+    {
+        return await context.Clientes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Nit == nit, ct);
+    }
+
+    public async Task CreateAsync(ClienteEntity entity, CancellationToken ct = default)
+    {
+        context.Clientes.Add(entity);
+        await context.SaveChangesAsync(ct);
+    }
 }

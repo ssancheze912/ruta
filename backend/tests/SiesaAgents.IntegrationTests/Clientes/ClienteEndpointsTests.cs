@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
@@ -150,6 +151,59 @@ public class ClienteEndpointsTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         var json = await response.Content.ReadAsStringAsync();
         Assert.Contains("Not Found", json);
+    }
+
+    [Fact]
+    public async Task PostCliente_WithValidData_Returns201WithLocation()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+        var client = factory.CreateClient();
+
+        var payload = new
+        {
+            nombre = "Nueva Empresa",
+            nit = "901-test-1",
+            telefono = "3001234567",
+            ciudad = "Bogotá"
+        };
+
+        var response = await client.PostAsJsonAsync("/api/v1/clientes", payload);
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        Assert.NotNull(response.Headers.Location);
+        var json = await response.Content.ReadAsStringAsync();
+        var created = JsonSerializer.Deserialize<ClienteDto>(json, JsonOptions);
+        Assert.NotNull(created);
+        Assert.Equal("Nueva Empresa", created.Nombre);
+        Assert.Equal("901-test-1", created.Nit);
+        Assert.NotEqual(Guid.Empty, created.Id);
+    }
+
+    [Fact]
+    public async Task PostCliente_WithDuplicateNit_Returns409WithProblemDetails()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            db.Clientes.Add(new ClienteEntity
+            {
+                Nombre = "Empresa Existente",
+                Nit = "duplicate-nit-001",
+            });
+            await db.SaveChangesAsync();
+        }
+
+        var client = factory.CreateClient();
+        var payload = new { nombre = "Otra Empresa", nit = "duplicate-nit-001", telefono = "3000000000", ciudad = "Cali" };
+
+        var response = await client.PostAsJsonAsync("/api/v1/clientes", payload);
+
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
     }
 
     [Fact]

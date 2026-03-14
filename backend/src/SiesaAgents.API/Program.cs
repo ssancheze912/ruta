@@ -1,9 +1,14 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using SiesaAgents.API.Endpoints;
 using SiesaAgents.API.Middleware;
+using SiesaAgents.Application.Clientes.Commands;
 using SiesaAgents.Application.Clientes.Queries;
+using SiesaAgents.Application.Contactos.Commands;
+using SiesaAgents.Application.Contactos.DTOs;
 using SiesaAgents.Application.Contactos.Queries;
+using SiesaAgents.Application.Contactos.Validators;
 using SiesaAgents.Domain.Clientes.Interfaces;
 using SiesaAgents.Domain.Contactos.Interfaces;
 using SiesaAgents.Infrastructure.Data;
@@ -39,11 +44,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<GetClientesQueryHandler>();
 builder.Services.AddScoped<GetClienteByIdQueryHandler>();
+builder.Services.AddScoped<CreateClienteCommandHandler>();
+builder.Services.AddScoped<IValidator<CreateClienteCommand>, CreateClienteCommandValidator>();
 
 // Contactos — DI
 builder.Services.AddScoped<IContactoRepository, ContactoRepository>();
 builder.Services.AddScoped<GetContactosQueryHandler>();
 builder.Services.AddScoped<GetContactoByIdQueryHandler>();
+builder.Services.AddScoped<CreateContactoCommandHandler>();
+builder.Services.AddScoped<IValidator<CreateContactoRequest>, CreateContactoRequestValidator>();
 
 // OpenAPI (for Scalar — NOT Swagger)
 builder.Services.AddOpenApi();
