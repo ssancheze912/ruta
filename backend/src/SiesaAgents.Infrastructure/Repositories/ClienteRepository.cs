@@ -11,4 +11,11 @@ public class ClienteRepository(AppDbContext context) : IClienteRepository
     {
         return await context.Clientes.ToListAsync(ct);
     }
+
+    public async Task<ClienteEntity?> GetByIdAsync(Guid id, CancellationToken ct = default)
+    {
+        return await context.Clientes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Id == id, ct);
+    }
 }

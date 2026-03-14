@@ -103,6 +103,52 @@ public class ClienteEndpointsTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task GetClienteById_WhenExists_Returns200WithShape()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+
+        Guid clienteId;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var entity = new ClienteEntity
+            {
+                Nombre = "Empresa Detail Test",
+                Nit = "999-detail-1",
+                Ciudad = "Medellín",
+                Telefono = "3001234567",
+            };
+            db.Clientes.Add(entity);
+            await db.SaveChangesAsync();
+            clienteId = entity.Id;
+        }
+
+        var client = factory.CreateClient();
+        var response = await client.GetAsync($"/api/v1/clientes/{clienteId}");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var json = await response.Content.ReadAsStringAsync();
+        var cliente = JsonSerializer.Deserialize<ClienteDto>(json, JsonOptions);
+        Assert.NotNull(cliente);
+        Assert.Equal("Empresa Detail Test", cliente.Nombre);
+        Assert.Equal(clienteId, cliente.Id);
+        Assert.Equal("999-detail-1", cliente.Nit);
+    }
+
+    [Fact]
+    public async Task GetClienteById_WhenNotFound_Returns404()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+        var client = factory.CreateClient();
+
+        var response = await client.GetAsync($"/api/v1/clientes/{Guid.NewGuid()}");
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
     public async Task GetClientes_EnforcesUniqueNit_DuplicateNitThrowsOnSave()
     {
         await using var factory = CreateFactory();
