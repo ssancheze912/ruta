@@ -52,23 +52,23 @@ development_status:
   # Epic 2 — Gestión de Clientes
   epic-2: in-progress
   epic-2-source: _bmad-output/planning-artifacts/epics/epic-02-gestion-de-clientes.md
-  epic-2-last-update: 14-03-2026
+  epic-2-last-update: 15-03-2026
   2-1-client-list-search: done
   2-2-client-detail-view: done
   2-3-create-client: done
   2-4-edit-client: done
-  2-5-delete-client: backlog
+  2-5-delete-client: in-progress
   epic-2-retrospective: optional
 
   # Epic 3 — Gestión de Contactos
   epic-3: in-progress
   epic-3-source: _bmad-output/planning-artifacts/epics/epic-03-gestion-de-contactos.md
-  epic-3-last-update: 14-03-2026
+  epic-3-last-update: 15-03-2026
   3-1-contact-list-search: done
   3-2-contact-detail-view: done
   3-3-create-contact: done
   3-4-edit-contact: done
-  3-5-delete-contact: backlog
+  3-5-delete-contact: ready-for-dev
   epic-3-retrospective: optional
 
   # Epic 4 — Asociación Cliente-Contacto
