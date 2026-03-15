@@ -207,6 +207,72 @@ public class ClienteEndpointsTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task PutCliente_WithValidData_Returns200WithUpdatedDto()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+
+        Guid clienteId;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var e = new ClienteEntity { Nombre = "Original", Nit = "900-update-1", Telefono = "300", Ciudad = "Cali" };
+            db.Clientes.Add(e);
+            await db.SaveChangesAsync();
+            clienteId = e.Id;
+        }
+
+        var client = factory.CreateClient();
+        var payload = new { nombre = "Actualizado", nit = "900-update-1", telefono = "3009999999", ciudad = "Bogotá" };
+        var response = await client.PutAsJsonAsync($"/api/v1/clientes/{clienteId}", payload);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var json = await response.Content.ReadAsStringAsync();
+        var dto = JsonSerializer.Deserialize<ClienteDto>(json, JsonOptions);
+        Assert.NotNull(dto);
+        Assert.Equal("Actualizado", dto!.Nombre);
+        Assert.Equal("Bogotá", dto.Ciudad);
+        Assert.True(dto.UpdatedAt > dto.CreatedAt, "UpdatedAt should be bumped after update");
+    }
+
+    [Fact]
+    public async Task PutCliente_WithNonExistentId_Returns404()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+        var client = factory.CreateClient();
+        var payload = new { nombre = "X", nit = "Y", telefono = "Z", ciudad = "W" };
+
+        var response = await client.PutAsJsonAsync($"/api/v1/clientes/{Guid.NewGuid()}", payload);
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task PutCliente_WithDuplicateNitOfOtherClient_Returns409()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+
+        Guid targetId;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            db.Clientes.Add(new ClienteEntity { Nombre = "Ocupado", Nit = "nit-taken" });
+            var target = new ClienteEntity { Nombre = "Target", Nit = "nit-target" };
+            db.Clientes.Add(target);
+            await db.SaveChangesAsync();
+            targetId = target.Id;
+        }
+
+        var client = factory.CreateClient();
+        var payload = new { nombre = "Target", nit = "nit-taken", telefono = "300", ciudad = "Cali" };
+        var response = await client.PutAsJsonAsync($"/api/v1/clientes/{targetId}", payload);
+
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+    }
+
+    [Fact]
     public async Task GetClientes_EnforcesUniqueNit_DuplicateNitThrowsOnSave()
     {
         await using var factory = CreateFactory();

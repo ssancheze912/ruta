@@ -59,6 +59,43 @@ public static class ClienteEndpoints
         .ProducesProblem(StatusCodes.Status409Conflict)
         .ProducesValidationProblem();
 
+        group.MapPut("/clientes/{id:guid}", async (
+            Guid id,
+            UpdateClienteRequest request,
+            IValidator<UpdateClienteCommand> validator,
+            UpdateClienteCommandHandler handler,
+            CancellationToken ct) =>
+        {
+            var command = new UpdateClienteCommand(
+                id, request.Nombre, request.Nit, request.Telefono, request.Ciudad);
+
+            var validation = await validator.ValidateAsync(command, ct);
+            if (!validation.IsValid)
+                return Results.ValidationProblem(validation.ToDictionary());
+
+            var result = await handler.HandleAsync(command, ct);
+
+            if (result.IsNotFound)
+                return Results.Problem(
+                    statusCode: StatusCodes.Status404NotFound,
+                    title: "Not Found",
+                    detail: "Cliente no encontrado.");
+
+            if (result.IsNitConflict)
+                return Results.Problem(
+                    statusCode: StatusCodes.Status409Conflict,
+                    title: "Conflict",
+                    detail: "El NIT/RUC ya está registrado.");
+
+            return Results.Ok(result.Dto);
+        })
+        .WithName("UpdateCliente")
+        .WithSummary("Actualiza un cliente existente")
+        .Produces<ClienteDto>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .ProducesProblem(StatusCodes.Status409Conflict)
+        .ProducesValidationProblem();
+
         return group;
     }
 }
