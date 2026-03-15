@@ -246,4 +246,92 @@ public class ContactoEndpointsTests : IAsyncLifetime
 
         Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
     }
+
+    [Fact]
+    public async Task UpdateContacto_WithValidData_Returns200WithUpdatedValues()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+
+        Guid contactoId;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var entity = new ContactoEntity
+            {
+                Nombre = "Ana García",
+                Cargo = "Analista",
+                Telefono = "3001234567",
+                Email = "ana@test.com",
+                ClienteId = null,
+            };
+            db.Contactos.Add(entity);
+            await db.SaveChangesAsync();
+            contactoId = entity.Id;
+        }
+
+        var client = factory.CreateClient();
+        var request = new { Nombre = "Ana Actualizada", Cargo = "Senior Analista", Telefono = "3009999999", Email = "ana.nueva@test.com" };
+        var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+
+        var response = await client.PutAsync($"/api/v1/contactos/{contactoId}", content);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var json = await response.Content.ReadAsStringAsync();
+        var contacto = JsonSerializer.Deserialize<ContactoDto>(json, JsonOptions);
+        Assert.NotNull(contacto);
+        Assert.Equal("Ana Actualizada", contacto.Nombre);
+        Assert.Equal("Senior Analista", contacto.Cargo);
+        Assert.Equal("3009999999", contacto.Telefono);
+        Assert.Equal("ana.nueva@test.com", contacto.Email);
+        Assert.Equal(contactoId, contacto.Id);
+    }
+
+    [Fact]
+    public async Task UpdateContacto_WithNonExistentId_Returns404()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+        var client = factory.CreateClient();
+
+        var request = new { Nombre = "Test", Cargo = "Test", Telefono = "123", Email = "test@test.com" };
+        var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+
+        var response = await client.PutAsync($"/api/v1/contactos/{Guid.NewGuid()}", content);
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+    }
+
+    [Fact]
+    public async Task UpdateContacto_WithEmptyNombre_Returns422()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+
+        Guid contactoId;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var entity = new ContactoEntity
+            {
+                Nombre = "Original",
+                Cargo = "Analista",
+                Telefono = "3001234567",
+                Email = "original@test.com",
+                ClienteId = null,
+            };
+            db.Contactos.Add(entity);
+            await db.SaveChangesAsync();
+            contactoId = entity.Id;
+        }
+
+        var client = factory.CreateClient();
+        var request = new { Nombre = "", Cargo = "Analista", Telefono = "3001234567", Email = "original@test.com" };
+        var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+
+        var response = await client.PutAsync($"/api/v1/contactos/{contactoId}", content);
+
+        Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
+    }
 }

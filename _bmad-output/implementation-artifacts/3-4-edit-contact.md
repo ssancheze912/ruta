@@ -1,6 +1,6 @@
 ---
-stepsCompleted: [1,2,3,4,5]
-status: ready-for-dev
+stepsCompleted: [1,2,3,4,5,6,7,8,9,10,11]
+status: done
 epic: 3
 story: 4
 storyKey: 3-4-edit-contact
@@ -9,7 +9,7 @@ createdAt: '2026-03-14'
 
 # Story 3.4: Edit Contact
 
-Status: ready-for-dev
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -41,12 +41,12 @@ So that the contact information stays current.
 
 ### Backend
 
-- [ ] Task 1: Extend Domain + Infrastructure (AC: 8)
-  - [ ] 1.1 Add `UpdateAsync` to `backend/src/SiesaAgents.Domain/Contactos/Interfaces/IContactoRepository.cs`:
+- [x] Task 1: Extend Domain + Infrastructure (AC: 8)
+  - [x] 1.1 Add `UpdateAsync` to `backend/src/SiesaAgents.Domain/Contactos/Interfaces/IContactoRepository.cs`:
     ```csharp
     Task<ContactoEntity?> UpdateAsync(Guid id, string nombre, string cargo, string telefono, string email, CancellationToken ct = default);
     ```
-  - [ ] 1.2 Implement `UpdateAsync` in `backend/src/SiesaAgents.Infrastructure/Repositories/ContactoRepository.cs`:
+  - [x] 1.2 Implement `UpdateAsync` in `backend/src/SiesaAgents.Infrastructure/Repositories/ContactoRepository.cs`:
     ```csharp
     public async Task<ContactoEntity?> UpdateAsync(Guid id, string nombre, string cargo, string telefono, string email, CancellationToken ct = default)
     {
@@ -59,18 +59,18 @@ So that the contact information stays current.
     ```
     > ⚠️ **Important**: Must use `FindAsync` (no `AsNoTracking`) so EF Core tracks the entity for update. `entity.Update(...)` calls the existing domain method on `ContactoEntity` which sets `UpdatedAt = DateTimeOffset.UtcNow`.
 
-- [ ] Task 2: Create Application Layer (AC: 8)
-  - [ ] 2.1 Create `backend/src/SiesaAgents.Application/Contactos/DTOs/UpdateContactoRequest.cs`:
+- [x] Task 2: Create Application Layer (AC: 8)
+  - [x] 2.1 Create `backend/src/SiesaAgents.Application/Contactos/DTOs/UpdateContactoRequest.cs`:
     ```csharp
     namespace SiesaAgents.Application.Contactos.DTOs;
     public record UpdateContactoRequest(string Nombre, string Cargo, string Telefono, string Email);
     ```
-  - [ ] 2.2 Create `backend/src/SiesaAgents.Application/Contactos/Commands/UpdateContactoCommand.cs`:
+  - [x] 2.2 Create `backend/src/SiesaAgents.Application/Contactos/Commands/UpdateContactoCommand.cs`:
     ```csharp
     namespace SiesaAgents.Application.Contactos.Commands;
     public record UpdateContactoCommand(Guid Id, string Nombre, string Cargo, string Telefono, string Email);
     ```
-  - [ ] 2.3 Create `backend/src/SiesaAgents.Application/Contactos/Commands/UpdateContactoCommandHandler.cs`:
+  - [x] 2.3 Create `backend/src/SiesaAgents.Application/Contactos/Commands/UpdateContactoCommandHandler.cs`:
     ```csharp
     public class UpdateContactoCommandHandler(IContactoRepository repository)
     {
@@ -85,7 +85,7 @@ So that the contact information stays current.
         }
     }
     ```
-  - [ ] 2.4 Create `backend/src/SiesaAgents.Application/Contactos/Validators/UpdateContactoRequestValidator.cs` — same rules as `CreateContactoRequestValidator`: `NotEmpty()` + `MaximumLength(200)` for Nombre/Cargo/Telefono; `NotEmpty()` + `EmailAddress()` + `MaximumLength(254)` for Email:
+  - [x] 2.4 Create `backend/src/SiesaAgents.Application/Contactos/Validators/UpdateContactoRequestValidator.cs` — same rules as `CreateContactoRequestValidator`: `NotEmpty()` + `MaximumLength(200)` for Nombre/Cargo/Telefono; `NotEmpty()` + `EmailAddress()` + `MaximumLength(254)` for Email:
     ```csharp
     public class UpdateContactoRequestValidator : AbstractValidator<UpdateContactoRequest>
     {
@@ -99,8 +99,8 @@ So that the contact information stays current.
     }
     ```
 
-- [ ] Task 3: Extend API Layer (AC: 8)
-  - [ ] 3.1 Add `PUT /contactos/{id}` to `backend/src/SiesaAgents.API/Endpoints/ContactoEndpoints.cs` inside `MapContactoEndpoints`, after the `POST` handler:
+- [x] Task 3: Extend API Layer (AC: 8)
+  - [x] 3.1 Add `PUT /contactos/{id}` to `backend/src/SiesaAgents.API/Endpoints/ContactoEndpoints.cs` inside `MapContactoEndpoints`, after the `POST` handler:
     ```csharp
     group.MapPut("/contactos/{id:guid}", async (
         Guid id,
@@ -127,46 +127,46 @@ So that the contact information stays current.
     .ProducesValidationProblem();
     ```
     > Add usings: `SiesaAgents.Application.Contactos.DTOs` and `SiesaAgents.Application.Contactos.Commands` are already imported.
-  - [ ] 3.2 Register `UpdateContactoCommandHandler` as scoped in `backend/src/SiesaAgents.API/Program.cs` (under `// Contactos — DI` section):
+  - [x] 3.2 Register `UpdateContactoCommandHandler` as scoped in `backend/src/SiesaAgents.API/Program.cs` (under `// Contactos — DI` section):
     ```csharp
     builder.Services.AddScoped<UpdateContactoCommandHandler>();
     ```
     > `UpdateContactoRequestValidator` auto-registers via `AddValidatorsFromAssemblyContaining<CreateClienteCommandHandler>()` — no explicit registration needed.
 
-- [ ] Task 4: Backend Tests (AC: 8)
-  - [ ] 4.1 Create `backend/tests/SiesaAgents.UnitTests/Application/Contactos/UpdateContactoCommandHandlerTests.cs` — NSubstitute mocks:
+- [x] Task 4: Backend Tests (AC: 8)
+  - [x] 4.1 Create `backend/tests/SiesaAgents.UnitTests/Application/Contactos/UpdateContactoCommandHandlerTests.cs` — NSubstitute mocks:
     - `UpdateContacto_WhenFound_ReturnsMappedDto` — mock `UpdateAsync` returning entity → verify DTO fields match
     - `UpdateContacto_WhenNotFound_ReturnsNull` — mock `UpdateAsync` returning null → verify handler returns null
     - `UpdateContacto_MapsCommandFieldsCorrectly` — verify all 5 arguments (id, nombre, cargo, telefono, email) passed to `repository.UpdateAsync`
-  - [ ] 4.2 Add 3 integration tests to `backend/tests/SiesaAgents.IntegrationTests/Contactos/ContactoEndpointsTests.cs`:
+  - [x] 4.2 Add 3 integration tests to `backend/tests/SiesaAgents.IntegrationTests/Contactos/ContactoEndpointsTests.cs`:
     - `UpdateContacto_WithValidData_Returns200WithUpdatedValues` — seed entity, PUT with changed values, assert 200 + updated fields in response
     - `UpdateContacto_WithNonExistentId_Returns404` — PUT with random Guid, assert 404 + `application/problem+json` content-type
     - `UpdateContacto_WithEmptyNombre_Returns422` — PUT with empty Nombre, assert 422
-  - [ ] 4.3 `dotnet build` — 0 errors ✅
-  - [ ] 4.4 `dotnet test tests/SiesaAgents.UnitTests` — all pass ✅ (integration tests require Docker)
+  - [x] 4.3 `dotnet build` — 0 errors ✅
+  - [x] 4.4 `dotnet test tests/SiesaAgents.UnitTests` — all pass ✅ (integration tests require Docker)
 
 ### Frontend
 
-- [ ] Task 5: Schema + Update Mutation Hook (AC: 3, 4, 5)
-  - [ ] 5.1 Update `frontend/src/modules/crm/contactos/application/contactoSchema.ts` — add exports for shared use in both create and edit:
+- [x] Task 5: Schema + Update Mutation Hook (AC: 3, 4, 5)
+  - [x] 5.1 Update `frontend/src/modules/crm/contactos/application/contactoSchema.ts` — add exports for shared use in both create and edit:
     ```typescript
     // Add below existing exports:
     export const contactoSchema = createContactoSchema
     export type ContactoFormValues = CreateContactoFormValues
     ```
     > `createContactoSchema` and `CreateContactoFormValues` remain unchanged for backward compatibility with `ContactoForm.tsx` and `useCreateContacto.ts`.
-  - [ ] 5.2 Add `update` to `frontend/src/modules/crm/contactos/domain/IContactoRepository.ts`:
+  - [x] 5.2 Add `update` to `frontend/src/modules/crm/contactos/domain/IContactoRepository.ts`:
     ```typescript
     update(id: string, data: { nombre: string; cargo: string; telefono: string; email: string }): Promise<Contacto>
     ```
-  - [ ] 5.3 Add `update` implementation to `frontend/src/modules/crm/contactos/infrastructure/contactoApiRepository.ts`:
+  - [x] 5.3 Add `update` implementation to `frontend/src/modules/crm/contactos/infrastructure/contactoApiRepository.ts`:
     ```typescript
     async update(id: string, data: { nombre: string; cargo: string; telefono: string; email: string }): Promise<Contacto> {
       const response = await apiClient.put<Contacto>(`/contactos/${id}`, data)
       return response.data
     }
     ```
-  - [ ] 5.4 Create `frontend/src/modules/crm/contactos/application/useUpdateContacto.ts`:
+  - [x] 5.4 Create `frontend/src/modules/crm/contactos/application/useUpdateContacto.ts`:
     ```typescript
     import { useMutation, useQueryClient } from '@tanstack/react-query'
     import { toast } from '@/shared/lib/toast'
@@ -186,8 +186,8 @@ So that the contact information stays current.
     }
     ```
 
-- [ ] Task 6: Extend ContactoForm for Edit Mode (AC: 2, 3, 4, 5, 6, 7)
-  - [ ] 6.1 Update `frontend/src/modules/crm/contactos/presentation/ContactoForm.tsx` — extend props interface and form logic:
+- [x] Task 6: Extend ContactoForm for Edit Mode (AC: 2, 3, 4, 5, 6, 7)
+  - [x] 6.1 Update `frontend/src/modules/crm/contactos/presentation/ContactoForm.tsx` — extend props interface and form logic:
     ```typescript
     interface ContactoFormProps {
       onSuccess: () => void
@@ -207,8 +207,8 @@ So that the contact information stays current.
     - Replace `isSubmitting` with `mutation.isPending` for button disabled state
     > ⚠️ `useUpdateContacto('')` is called even in create mode — this is a no-op since the form won't submit in edit mode when `contactoId` is undefined. Alternatively, use `useCreateContacto()` and `useUpdateContacto(contactoId!)` conditionally — but React hook rules prohibit conditional hooks. The `''` fallback is safe since the mutation is never called when `contactoId` is undefined.
 
-- [ ] Task 7: Add Edit Dialog to ContactoDetailView (AC: 1, 2, 4, 6)
-  - [ ] 7.1 Update `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.tsx`:
+- [x] Task 7: Add Edit Dialog to ContactoDetailView (AC: 1, 2, 4, 6)
+  - [x] 7.1 Update `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.tsx`:
     - Add imports: `useState` (already via React), `Dialog, DialogContent, DialogHeader, DialogTitle` from `@/components/ui/dialog`, `ContactoForm` from `./ContactoForm`
     - Add state: `const [editDialogOpen, setEditDialogOpen] = useState(false)`
     - In the header `div` (the `flex items-center justify-between mb-6` container), add "Editar" button between the `<h1>` and "Volver" button — the button is only present when `contacto` is defined (i.e., inside the `if (!contacto) return null` guard, in the return below):
@@ -238,24 +238,24 @@ So that the contact information stays current.
       ```
     > `useUpdateContacto` in `ContactoForm` invalidates `['contactos', contactoId]` on success, which triggers `useContacto(contactoId)` to refetch automatically — the detail view updates without manual `refetch()`.
 
-- [ ] Task 8: Frontend Tests (AC: 1, 2, 3, 4, 5, 6, 7)
-  - [ ] 8.1 Create `frontend/src/modules/crm/contactos/application/useUpdateContacto.test.ts`:
+- [x] Task 8: Frontend Tests (AC: 1, 2, 3, 4, 5, 6, 7)
+  - [x] 8.1 Create `frontend/src/modules/crm/contactos/application/useUpdateContacto.test.ts`:
     - Mock `@/shared/lib/toast` with `vi.mock`
     - `returns updated contacto on 200` — MSW `http.put` returns 200 + updated body → assert `isSuccess`, `toast.success` called with `'Contacto actualizado correctamente'`
     - `sets isError true on 422` — MSW `http.put` returns 422 → assert `isError`
     - `sets isError true on 404` — MSW `http.put` returns 404 → assert `isError`
-  - [ ] 8.2 Update `frontend/src/modules/crm/contactos/presentation/ContactoForm.test.tsx` — add edit-mode tests:
+  - [x] 8.2 Update `frontend/src/modules/crm/contactos/presentation/ContactoForm.test.tsx` — add edit-mode tests:
     - `pre-fills fields with defaultValues in edit mode` — render with `contactoId` + `defaultValues`, assert Input values match
     - `calls update mutation not create when contactoId is provided` — mock both hooks, submit, assert update mutation called
     - `shows backend error from 422 in edit mode` — mock 422 from MSW, submit, assert error message visible
-  - [ ] 8.3 Create `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.test.tsx`:
+  - [x] 8.3 Update `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.test.tsx`:
     - Mock `useContacto` returning a contact
     - `renders Editar button when contact is loaded` — assert `getByText('Editar')` visible
     - `opens edit dialog when Editar is clicked` — click "Editar", assert dialog title visible + form pre-filled
     - `closes dialog when Cancelar is clicked` — open dialog, click "Cancelar", assert dialog not visible
     - `does not render Editar button during loading` — mock `isLoading: true`, assert button not present
     - `does not render Editar button on error` — mock `isError: true`, assert button not present
-  - [ ] 8.4 `npx vitest run src/modules/crm/contactos/` — all tests pass ✅
+  - [x] 8.4 `npx vitest run src/modules/crm/contactos/` — all tests pass ✅
 
 ## Dev Notes
 
@@ -338,4 +338,36 @@ claude-sonnet-4-6
 
 ### Completion Notes List
 
+- All 8 tasks implemented and validated.
+- `dotnet build` — 0 errors.
+- `dotnet test` (UnitTests, Contactos filter) — 13/13 pass.
+- `npx vitest run` — 90/90 pass (16 test files, no regressions).
+- `UpdateAsync` uses `FindAsync` (tracked) — not `AsNoTracking` — enabling EF Core change detection.
+- `ContactoForm` calls both hooks unconditionally; selects active mutation via `contactoId ? updateMutation : createMutation`.
+- `ContactoDetailView.test.tsx` mocks `ContactoForm` to keep detail view tests focused.
+- Pre-existing `UpdateClienteCommandHandlerTests` failures (2 tests) are unrelated to Story 3.4.
+
 ### File List
+
+**New files:**
+- `backend/src/SiesaAgents.Application/Contactos/DTOs/UpdateContactoRequest.cs`
+- `backend/src/SiesaAgents.Application/Contactos/Commands/UpdateContactoCommand.cs`
+- `backend/src/SiesaAgents.Application/Contactos/Commands/UpdateContactoCommandHandler.cs`
+- `backend/src/SiesaAgents.Application/Contactos/Validators/UpdateContactoRequestValidator.cs`
+- `backend/tests/SiesaAgents.UnitTests/Application/Contactos/UpdateContactoCommandHandlerTests.cs`
+- `frontend/src/modules/crm/contactos/application/useUpdateContacto.ts`
+- `frontend/src/modules/crm/contactos/application/useUpdateContacto.test.ts`
+
+**Modified files:**
+- `backend/src/SiesaAgents.Domain/Contactos/Interfaces/IContactoRepository.cs` (+ UpdateAsync)
+- `backend/src/SiesaAgents.Infrastructure/Repositories/ContactoRepository.cs` (+ UpdateAsync)
+- `backend/src/SiesaAgents.API/Endpoints/ContactoEndpoints.cs` (+ PUT endpoint)
+- `backend/src/SiesaAgents.API/Program.cs` (+ UpdateContactoCommandHandler DI)
+- `backend/tests/SiesaAgents.IntegrationTests/Contactos/ContactoEndpointsTests.cs` (+3 PUT tests)
+- `frontend/src/modules/crm/contactos/application/contactoSchema.ts` (+ contactoSchema alias)
+- `frontend/src/modules/crm/contactos/domain/IContactoRepository.ts` (+ update)
+- `frontend/src/modules/crm/contactos/infrastructure/contactoApiRepository.ts` (+ update)
+- `frontend/src/modules/crm/contactos/presentation/ContactoForm.tsx` (+ edit mode props)
+- `frontend/src/modules/crm/contactos/presentation/ContactoForm.test.tsx` (+ edit mode tests)
+- `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.tsx` (+ Editar button + Dialog)
+- `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.test.tsx` (+ edit dialog tests)

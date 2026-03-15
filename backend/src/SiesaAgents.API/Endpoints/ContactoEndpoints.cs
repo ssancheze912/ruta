@@ -53,6 +53,30 @@ public static class ContactoEndpoints
         .Produces<ContactoDto>(StatusCodes.Status201Created)
         .ProducesValidationProblem();
 
+        group.MapPut("/contactos/{id:guid}", async (
+            Guid id,
+            UpdateContactoRequest request,
+            IValidator<UpdateContactoRequest> validator,
+            UpdateContactoCommandHandler handler,
+            CancellationToken ct) =>
+        {
+            var validation = await validator.ValidateAsync(request, ct);
+            if (!validation.IsValid)
+                return Results.ValidationProblem(validation.ToDictionary());
+
+            var result = await handler.HandleAsync(
+                new UpdateContactoCommand(id, request.Nombre, request.Cargo, request.Telefono, request.Email), ct);
+
+            return result is null
+                ? Results.Problem(statusCode: StatusCodes.Status404NotFound, title: "Not Found", detail: "Contacto no encontrado.")
+                : Results.Ok(result);
+        })
+        .WithName("UpdateContacto")
+        .WithSummary("Actualiza un contacto existente")
+        .Produces<ContactoDto>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .ProducesValidationProblem();
+
         return group;
     }
 }

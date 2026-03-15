@@ -24,4 +24,13 @@ public class ContactoRepository(AppDbContext context) : IContactoRepository
         await context.SaveChangesAsync(ct);
         return entity;
     }
+
+    public async Task<ContactoEntity?> UpdateAsync(Guid id, string nombre, string cargo, string telefono, string email, CancellationToken ct = default)
+    {
+        var entity = await context.Contactos.FindAsync([id], ct);
+        if (entity is null) return null;
+        entity.Update(nombre, cargo, telefono, email, entity.ClienteId);
+        await context.SaveChangesAsync(ct);
+        return entity;
+    }
 }
