@@ -47,6 +47,7 @@ builder.Services.AddScoped<GetClientesQueryHandler>();
 builder.Services.AddScoped<GetClienteByIdQueryHandler>();
 builder.Services.AddScoped<CreateClienteCommandHandler>();
 builder.Services.AddScoped<UpdateClienteCommandHandler>();
+builder.Services.AddScoped<DeleteClienteCommandHandler>();
 
 // Contactos — DI
 builder.Services.AddScoped<IContactoRepository, ContactoRepository>();
@@ -54,6 +55,7 @@ builder.Services.AddScoped<GetContactosQueryHandler>();
 builder.Services.AddScoped<GetContactoByIdQueryHandler>();
 builder.Services.AddScoped<CreateContactoCommandHandler>();
 builder.Services.AddScoped<UpdateContactoCommandHandler>();
+builder.Services.AddScoped<DeleteContactoCommandHandler>();
 
 // OpenAPI (for Scalar — NOT Swagger)
 builder.Services.AddOpenApi();

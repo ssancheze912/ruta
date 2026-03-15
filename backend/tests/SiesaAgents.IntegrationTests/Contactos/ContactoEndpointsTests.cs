@@ -334,4 +334,47 @@ public class ContactoEndpointsTests : IAsyncLifetime
 
         Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
     }
+
+    [Fact]
+    public async Task DeleteContacto_WithValidId_Returns204()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+
+        Guid contactoId;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var entity = new ContactoEntity
+            {
+                Nombre = "Ana García",
+                Cargo = "Analista",
+                Telefono = "3001234567",
+                Email = "ana@test.com",
+                ClienteId = null,
+            };
+            db.Contactos.Add(entity);
+            await db.SaveChangesAsync();
+            contactoId = entity.Id;
+        }
+
+        var client = factory.CreateClient();
+        var response = await client.DeleteAsync($"/api/v1/contactos/{contactoId}");
+
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        Assert.Null(response.Content.Headers.ContentLength);
+    }
+
+    [Fact]
+    public async Task DeleteContacto_WithNonExistentId_Returns404()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+        var client = factory.CreateClient();
+
+        var response = await client.DeleteAsync($"/api/v1/contactos/{Guid.NewGuid()}");
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+    }
 }

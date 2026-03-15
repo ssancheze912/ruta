@@ -77,6 +77,21 @@ public static class ContactoEndpoints
         .ProducesProblem(StatusCodes.Status404NotFound)
         .ProducesValidationProblem();
 
+        group.MapDelete("/contactos/{id:guid}", async (
+            Guid id,
+            DeleteContactoCommandHandler handler,
+            CancellationToken ct) =>
+        {
+            var deleted = await handler.HandleAsync(new DeleteContactoCommand(id), ct);
+            return deleted
+                ? Results.NoContent()
+                : Results.Problem(statusCode: StatusCodes.Status404NotFound, title: "Not Found", detail: "Contacto no encontrado.");
+        })
+        .WithName("DeleteContacto")
+        .WithSummary("Elimina un contacto")
+        .Produces(StatusCodes.Status204NoContent)
+        .ProducesProblem(StatusCodes.Status404NotFound);
+
         return group;
     }
 }

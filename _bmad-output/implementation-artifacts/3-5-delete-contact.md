@@ -1,6 +1,6 @@
 ---
 stepsCompleted: []
-status: ready-for-dev
+status: done
 epic: 3
 story: 5
 storyKey: 3-5-delete-contact
@@ -9,7 +9,7 @@ createdAt: '2026-03-15'
 
 # Story 3.5: Delete Contact
 
-Status: ready-for-dev
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -37,12 +37,12 @@ so that the contact list only contains relevant records.
 
 ### Backend
 
-- [ ] Task 1: Extend Domain + Infrastructure (AC: 6)
-  - [ ] 1.1 Add `DeleteAsync` to `backend/src/SiesaAgents.Domain/Contactos/Interfaces/IContactoRepository.cs`:
+- [x] Task 1: Extend Domain + Infrastructure (AC: 6)
+  - [x] 1.1 Add `DeleteAsync` to `backend/src/SiesaAgents.Domain/Contactos/Interfaces/IContactoRepository.cs`:
     ```csharp
     Task<bool> DeleteAsync(Guid id, CancellationToken ct = default);
     ```
-  - [ ] 1.2 Implement `DeleteAsync` in `backend/src/SiesaAgents.Infrastructure/Repositories/ContactoRepository.cs`:
+  - [x] 1.2 Implement `DeleteAsync` in `backend/src/SiesaAgents.Infrastructure/Repositories/ContactoRepository.cs`:
     ```csharp
     public async Task<bool> DeleteAsync(Guid id, CancellationToken ct = default)
     {
@@ -55,13 +55,13 @@ so that the contact list only contains relevant records.
     ```
     > ⚠️ Use `FindAsync` (tracked) so EF Core can call `Remove()` on the tracked entity. Returns `true` if deleted, `false` if not found.
 
-- [ ] Task 2: Create Application Layer (AC: 6)
-  - [ ] 2.1 Create `backend/src/SiesaAgents.Application/Contactos/Commands/DeleteContactoCommand.cs`:
+- [x] Task 2: Create Application Layer (AC: 6)
+  - [x] 2.1 Create `backend/src/SiesaAgents.Application/Contactos/Commands/DeleteContactoCommand.cs`:
     ```csharp
     namespace SiesaAgents.Application.Contactos.Commands;
     public record DeleteContactoCommand(Guid Id);
     ```
-  - [ ] 2.2 Create `backend/src/SiesaAgents.Application/Contactos/Commands/DeleteContactoCommandHandler.cs`:
+  - [x] 2.2 Create `backend/src/SiesaAgents.Application/Contactos/Commands/DeleteContactoCommandHandler.cs`:
     ```csharp
     namespace SiesaAgents.Application.Contactos.Commands;
 
@@ -75,8 +75,8 @@ so that the contact list only contains relevant records.
     ```
     > No validator needed — DELETE has no request body.
 
-- [ ] Task 3: Extend API Layer (AC: 6)
-  - [ ] 3.1 Add `DELETE /contactos/{id}` to `backend/src/SiesaAgents.API/Endpoints/ContactoEndpoints.cs` inside `MapContactoEndpoints`, after the `PUT` handler (before `return group;`):
+- [x] Task 3: Extend API Layer (AC: 6)
+  - [x] 3.1 Add `DELETE /contactos/{id}` to `backend/src/SiesaAgents.API/Endpoints/ContactoEndpoints.cs` inside `MapContactoEndpoints`, after the `PUT` handler (before `return group;`):
     ```csharp
     group.MapDelete("/contactos/{id:guid}", async (
         Guid id,
@@ -93,37 +93,37 @@ so that the contact list only contains relevant records.
     .Produces(StatusCodes.Status204NoContent)
     .ProducesProblem(StatusCodes.Status404NotFound);
     ```
-  - [ ] 3.2 Register `DeleteContactoCommandHandler` as scoped in `backend/src/SiesaAgents.API/Program.cs` (under `// Contactos — DI` section, below the `UpdateContactoCommandHandler` line):
+  - [x] 3.2 Register `DeleteContactoCommandHandler` as scoped in `backend/src/SiesaAgents.API/Program.cs` (under `// Contactos — DI` section, below the `UpdateContactoCommandHandler` line):
     ```csharp
     builder.Services.AddScoped<DeleteContactoCommandHandler>();
     ```
     > No `DeleteContactoRequestValidator` exists — no registration needed.
 
-- [ ] Task 4: Backend Tests (AC: 6)
-  - [ ] 4.1 Create `backend/tests/SiesaAgents.UnitTests/Application/Contactos/DeleteContactoCommandHandlerTests.cs` — NSubstitute mocks:
+- [x] Task 4: Backend Tests (AC: 6)
+  - [x] 4.1 Create `backend/tests/SiesaAgents.UnitTests/Application/Contactos/DeleteContactoCommandHandlerTests.cs` — NSubstitute mocks:
     - `DeleteContacto_WhenFound_ReturnsTrue` — mock `DeleteAsync` returning `true` → verify handler returns `true`
     - `DeleteContacto_WhenNotFound_ReturnsFalse` — mock `DeleteAsync` returning `false` → verify handler returns `false`
     - `DeleteContacto_PassesCorrectIdToRepository` — verify `repository.DeleteAsync(command.Id, ct)` called with exact command Id
-  - [ ] 4.2 Add 2 integration tests to `backend/tests/SiesaAgents.IntegrationTests/Contactos/ContactoEndpointsTests.cs`:
+  - [x] 4.2 Add 2 integration tests to `backend/tests/SiesaAgents.IntegrationTests/Contactos/ContactoEndpointsTests.cs`:
     - `DeleteContacto_WithValidId_Returns204` — seed entity, DELETE by id, assert 204 + no body
     - `DeleteContacto_WithNonExistentId_Returns404` — DELETE with random Guid, assert 404 + `application/problem+json` content-type
-  - [ ] 4.3 `dotnet build` — 0 errors ✅
-  - [ ] 4.4 `dotnet test tests/SiesaAgents.UnitTests` — all pass ✅ (integration tests require Docker)
+  - [x] 4.3 `dotnet build` — 0 errors ✅
+  - [x] 4.4 `dotnet test tests/SiesaAgents.UnitTests` — all pass ✅ (integration tests require Docker)
 
 ### Frontend
 
-- [ ] Task 5: Delete Mutation Hook (AC: 3, 4, 5)
-  - [ ] 5.1 Add `delete` to `frontend/src/modules/crm/contactos/domain/IContactoRepository.ts`:
+- [x] Task 5: Delete Mutation Hook (AC: 3, 4, 5)
+  - [x] 5.1 Add `delete` to `frontend/src/modules/crm/contactos/domain/IContactoRepository.ts`:
     ```typescript
     delete(id: string): Promise<void>
     ```
-  - [ ] 5.2 Add `delete` implementation to `frontend/src/modules/crm/contactos/infrastructure/contactoApiRepository.ts`:
+  - [x] 5.2 Add `delete` implementation to `frontend/src/modules/crm/contactos/infrastructure/contactoApiRepository.ts`:
     ```typescript
     async delete(id: string): Promise<void> {
       await apiClient.delete(`/contactos/${id}`)
     }
     ```
-  - [ ] 5.3 Create `frontend/src/modules/crm/contactos/application/useDeleteContacto.ts`:
+  - [x] 5.3 Create `frontend/src/modules/crm/contactos/application/useDeleteContacto.ts`:
     ```typescript
     import { useMutation, useQueryClient } from '@tanstack/react-query'
     import { toast } from '@/shared/lib/toast'
@@ -143,8 +143,8 @@ so that the contact list only contains relevant records.
     ```
     > `removeQueries` on the single-contact key prevents a stale 404 refetch after deletion. The list key uses `invalidateQueries` to force a fresh fetch. Navigation is handled by the component after `mutateAsync()` resolves.
 
-- [ ] Task 6: Add Delete Dialog to ContactoDetailView (AC: 1, 2, 3, 4, 5)
-  - [ ] 6.1 Update `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.tsx`:
+- [x] Task 6: Add Delete Dialog to ContactoDetailView (AC: 1, 2, 3, 4, 5)
+  - [x] 6.1 Update `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.tsx`:
     - Add imports: `DialogDescription`, `DialogFooter` from `@/components/ui/dialog` (add to existing dialog import), `useDeleteContacto` from `../application/useDeleteContacto`
     - Add state: `const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)`
     - Add hook call (unconditional, top of component body):
@@ -186,12 +186,12 @@ so that the contact list only contains relevant records.
       ```
     > `deleteMutation` is called unconditionally at the component top level (React Hook Rules compliance). `useDeleteContacto` always receives `contactoId` (available from props). Navigation fires after `mutateAsync()` resolves (post-`onSuccess`).
 
-- [ ] Task 7: Frontend Tests (AC: 1, 2, 3, 4, 5)
-  - [ ] 7.1 Create `frontend/src/modules/crm/contactos/application/useDeleteContacto.test.ts`:
+- [x] Task 7: Frontend Tests (AC: 1, 2, 3, 4, 5)
+  - [x] 7.1 Create `frontend/src/modules/crm/contactos/application/useDeleteContacto.test.ts`:
     - Mock `@/shared/lib/toast` with `vi.mock`
     - `deletes contacto and fires toast on 204` — MSW `http.delete` returns 204 → assert `isSuccess`, `toast.success` called with `'Contacto eliminado correctamente'`, `queryClient.invalidateQueries` called with `['contactos']`
     - `sets isError true on 404` — MSW `http.delete` returns 404 → assert `isError`
-  - [ ] 7.2 Update `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.test.tsx`:
+  - [x] 7.2 Update `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.test.tsx`:
     - Add `vi.mock('../application/useDeleteContacto')` and a `mockDeleteMutation()` helper (mirrors `mockUpdateMutation` pattern)
     - Add to the `vi.mock('./ContactoForm', ...)` — no change needed (form mock is already present)
     - Add tests:
@@ -201,7 +201,7 @@ so that the contact list only contains relevant records.
       - `calls delete mutation and navigates when Confirmar is clicked` — mock `mutateAsync` resolves, click "Confirmar", assert `mutateAsync` called, `mockNavigate` called with `{ to: '/contactos' }`
       - `does not render Eliminar button during loading` — mock `isLoading: true`, assert button not present
       - `does not render Eliminar button on error` — mock `isError: true`, assert button not present
-  - [ ] 7.3 `npx vitest run src/modules/crm/contactos/` — all tests pass ✅
+  - [x] 7.3 `npx vitest run src/modules/crm/contactos/` — all tests pass ✅
 
 ## Dev Notes
 
@@ -282,4 +282,32 @@ claude-sonnet-4-6
 
 ### Completion Notes List
 
+- All 7 tasks implemented and validated.
+- `dotnet build` — 0 errors.
+- `dotnet test` (UnitTests, Contactos filter) — 16/16 pass (includes 3 new DeleteContactoCommandHandlerTests).
+- `npx vitest run` — 107/107 pass (19 test files, 0 regressions).
+- `DeleteAsync` uses `FindAsync` (tracked) — same pattern as `UpdateAsync` — enabling EF Core `Remove()`.
+- `useDeleteContacto` uses `removeQueries` for single-contact cache (not `invalidateQueries`) to prevent stale 404 refetch after deletion.
+- `ContactoDetailView` calls `useDeleteContacto(contactoId)` unconditionally (before early returns) — React Hook Rules compliant.
+- Navigation (`navigate({ to: '/contactos' })`) fires in component `onClick` after `mutateAsync()` resolves, not inside the hook.
+- `mockDeleteMutation()` added to `beforeEach` in `ContactoDetailView.test.tsx` — required because hook is called before all early returns.
+
 ### File List
+
+**New files:**
+- `backend/src/SiesaAgents.Application/Contactos/Commands/DeleteContactoCommand.cs`
+- `backend/src/SiesaAgents.Application/Contactos/Commands/DeleteContactoCommandHandler.cs`
+- `backend/tests/SiesaAgents.UnitTests/Application/Contactos/DeleteContactoCommandHandlerTests.cs`
+- `frontend/src/modules/crm/contactos/application/useDeleteContacto.ts`
+- `frontend/src/modules/crm/contactos/application/useDeleteContacto.test.ts`
+
+**Modified files:**
+- `backend/src/SiesaAgents.Domain/Contactos/Interfaces/IContactoRepository.cs` (+ DeleteAsync)
+- `backend/src/SiesaAgents.Infrastructure/Repositories/ContactoRepository.cs` (+ DeleteAsync)
+- `backend/src/SiesaAgents.API/Endpoints/ContactoEndpoints.cs` (+ DELETE endpoint)
+- `backend/src/SiesaAgents.API/Program.cs` (+ DeleteContactoCommandHandler DI)
+- `backend/tests/SiesaAgents.IntegrationTests/Contactos/ContactoEndpointsTests.cs` (+2 DELETE tests)
+- `frontend/src/modules/crm/contactos/domain/IContactoRepository.ts` (+ delete)
+- `frontend/src/modules/crm/contactos/infrastructure/contactoApiRepository.ts` (+ delete)
+- `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.tsx` (+ Eliminar button + delete dialog)
+- `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.test.tsx` (+ delete tests + mockDeleteMutation)

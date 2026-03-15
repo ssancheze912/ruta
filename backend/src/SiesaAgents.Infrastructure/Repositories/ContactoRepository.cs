@@ -33,4 +33,18 @@ public class ContactoRepository(AppDbContext context) : IContactoRepository
         await context.SaveChangesAsync(ct);
         return entity;
     }
+
+    public async Task<int> CountByClienteIdAsync(Guid clienteId, CancellationToken ct = default)
+    {
+        return await context.Contactos.CountAsync(c => c.ClienteId == clienteId, ct);
+    }
+
+    public async Task<bool> DeleteAsync(Guid id, CancellationToken ct = default)
+    {
+        var entity = await context.Contactos.FindAsync([id], ct);
+        if (entity is null) return false;
+        context.Contactos.Remove(entity);
+        await context.SaveChangesAsync(ct);
+        return true;
+    }
 }
