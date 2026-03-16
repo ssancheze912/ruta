@@ -78,7 +78,7 @@ development_status:
   4-1-view-associated-contacts-in-client-detail: done
   4-2-associate-disassociate-contacts-from-client: done
   4-3-navigate-from-client-detail-to-contact-detail: done
-  4-4-view-associated-client-from-contact-detail: backlog
+  4-4-view-associated-client-from-contact-detail: review
   4-5-orphan-contacts-filter: backlog
   4-6-reassign-contact-to-different-client: backlog
   epic-4-retrospective: optional
