@@ -34,6 +34,14 @@ public class ContactoRepository(AppDbContext context) : IContactoRepository
         return entity;
     }
 
+    public async Task<IEnumerable<ContactoEntity>> GetByClienteIdAsync(Guid clienteId, CancellationToken ct = default)
+    {
+        return await context.Contactos
+            .AsNoTracking()
+            .Where(c => c.ClienteId == clienteId)
+            .ToListAsync(ct);
+    }
+
     public async Task<int> CountByClienteIdAsync(Guid clienteId, CancellationToken ct = default)
     {
         return await context.Contactos.CountAsync(c => c.ClienteId == clienteId, ct);

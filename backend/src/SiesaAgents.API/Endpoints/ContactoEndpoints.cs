@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using SiesaAgents.Application.Contactos.Commands;
 using SiesaAgents.Application.Contactos.DTOs;
 using SiesaAgents.Application.Contactos.Queries;
@@ -9,13 +10,16 @@ public static class ContactoEndpoints
 {
     public static RouteGroupBuilder MapContactoEndpoints(this RouteGroupBuilder group)
     {
-        group.MapGet("/contactos", async (GetContactosQueryHandler handler, CancellationToken ct) =>
+        group.MapGet("/contactos", async (
+            [FromQuery] Guid? clienteId,
+            GetContactosQueryHandler handler,
+            CancellationToken ct) =>
         {
-            var result = await handler.HandleAsync(new GetContactosQuery(), ct);
+            var result = await handler.HandleAsync(new GetContactosQuery(clienteId), ct);
             return Results.Ok(result);
         })
         .WithName("GetContactos")
-        .WithSummary("Lista todos los contactos")
+        .WithSummary("Lista todos los contactos, con filtro opcional por clienteId")
         .Produces<IEnumerable<ContactoDto>>();
 
         group.MapGet("/contactos/{id:guid}", async (

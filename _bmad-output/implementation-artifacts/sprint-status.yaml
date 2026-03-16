@@ -72,10 +72,10 @@ development_status:
   epic-3-retrospective: optional
 
   # Epic 4 — Asociación Cliente-Contacto
-  epic-4: backlog
+  epic-4: in-progress
   epic-4-source: _bmad-output/planning-artifacts/epics/epic-04-asociacion-cliente-contacto.md
-  epic-4-last-update: 2026-03-13
-  4-1-view-associated-contacts-in-client-detail: backlog
+  epic-4-last-update: 15-03-2026
+  4-1-view-associated-contacts-in-client-detail: done
   4-2-associate-disassociate-contacts-from-client: backlog
   4-3-navigate-from-client-detail-to-contact-detail: backlog
   4-4-view-associated-client-from-contact-detail: backlog

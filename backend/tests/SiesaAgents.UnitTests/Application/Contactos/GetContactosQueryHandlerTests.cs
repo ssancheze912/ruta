@@ -101,4 +101,26 @@ public class GetContactosQueryHandlerTests
         // Assert
         Assert.Null(result.ClienteId);
     }
+
+    [Fact]
+    public async Task HandleAsync_WithClienteId_CallsGetByClienteIdAsync()
+    {
+        // Arrange
+        var clienteId = Guid.NewGuid();
+        var contactos = new List<ContactoEntity>
+        {
+            new() { Nombre = "Contacto A", Cargo = "Gerente", Telefono = "300111", Email = "a@emp.com", ClienteId = clienteId },
+            new() { Nombre = "Contacto B", Cargo = "Analista", Telefono = "300222", Email = "b@emp.com", ClienteId = clienteId },
+        };
+        _repository.GetByClienteIdAsync(clienteId, Arg.Any<CancellationToken>()).Returns(contactos);
+
+        // Act
+        var result = (await _handler.HandleAsync(new GetContactosQuery(clienteId))).ToList();
+
+        // Assert
+        Assert.Equal(2, result.Count);
+        Assert.All(result, r => Assert.Equal(clienteId, r.ClienteId));
+        await _repository.Received(1).GetByClienteIdAsync(clienteId, Arg.Any<CancellationToken>());
+        await _repository.DidNotReceive().GetAllAsync(Arg.Any<CancellationToken>());
+    }
 }

@@ -1,3 +1,3 @@
 namespace SiesaAgents.Application.Contactos.Queries;
 
-public record GetContactosQuery;
+public record GetContactosQuery(Guid? ClienteId = null);
