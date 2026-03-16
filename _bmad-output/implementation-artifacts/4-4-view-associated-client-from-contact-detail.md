@@ -1,6 +1,6 @@
 ---
 stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-status: review
+status: done
 epic: 4
 story: 4
 storyKey: 4-4-view-associated-client-from-contact-detail
@@ -9,7 +9,7 @@ createdAt: '2026-03-16'
 
 # Story 4.4: View Associated Client from Contact Detail
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
