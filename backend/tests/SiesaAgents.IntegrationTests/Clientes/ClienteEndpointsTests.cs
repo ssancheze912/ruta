@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SiesaAgents.Application.Clientes.DTOs;
 using SiesaAgents.Domain.Clientes.Entities;
+using SiesaAgents.Domain.Contactos.Entities;
 using SiesaAgents.Infrastructure.Data;
 using Testcontainers.PostgreSql;
 
@@ -270,6 +271,80 @@ public class ClienteEndpointsTests : IAsyncLifetime
         var response = await client.PutAsJsonAsync($"/api/v1/clientes/{targetId}", payload);
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task DeleteCliente_Existing_WithNoContacts_Returns200WithZeroCount()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+
+        Guid clienteId;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var e = new ClienteEntity { Nombre = "Para Borrar", Nit = "nit-del-1", Telefono = "300", Ciudad = "Cali" };
+            db.Clientes.Add(e);
+            await db.SaveChangesAsync();
+            clienteId = e.Id;
+        }
+
+        var client = factory.CreateClient();
+        var response = await client.DeleteAsync($"/api/v1/clientes/{clienteId}");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var json = await response.Content.ReadAsStringAsync();
+        using var doc = JsonDocument.Parse(json);
+        Assert.Equal(0, doc.RootElement.GetProperty("contactosDesasociados").GetInt32());
+    }
+
+    [Fact]
+    public async Task DeleteCliente_Existing_WithAssociatedContacts_Returns200WithCount()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+
+        Guid clienteId;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var cliente = new ClienteEntity { Nombre = "Con Contactos", Nit = "nit-del-2", Telefono = "300", Ciudad = "Medellín" };
+            db.Clientes.Add(cliente);
+            await db.SaveChangesAsync();
+            clienteId = cliente.Id;
+
+            db.Contactos.Add(new ContactoEntity { Nombre = "C1", Cargo = "CEO", Telefono = "300", Email = "c1@del.com", ClienteId = clienteId });
+            db.Contactos.Add(new ContactoEntity { Nombre = "C2", Cargo = "CTO", Telefono = "301", Email = "c2@del.com", ClienteId = clienteId });
+            await db.SaveChangesAsync();
+        }
+
+        var client = factory.CreateClient();
+        var response = await client.DeleteAsync($"/api/v1/clientes/{clienteId}");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var json = await response.Content.ReadAsStringAsync();
+        using var doc = JsonDocument.Parse(json);
+        Assert.Equal(2, doc.RootElement.GetProperty("contactosDesasociados").GetInt32());
+
+        // Verify contacts are now unassigned (clienteId = null)
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var orphanCount = await db.Contactos.CountAsync(c => c.ClienteId == null && (c.Email == "c1@del.com" || c.Email == "c2@del.com"));
+            Assert.Equal(2, orphanCount);
+        }
+    }
+
+    [Fact]
+    public async Task DeleteCliente_NonExistent_Returns404()
+    {
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+        var client = factory.CreateClient();
+
+        var response = await client.DeleteAsync($"/api/v1/clientes/{Guid.NewGuid()}");
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
     [Fact]

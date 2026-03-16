@@ -37,4 +37,13 @@ public class ClienteRepository(AppDbContext context) : IClienteRepository
         context.Clientes.Update(entity);
         await context.SaveChangesAsync(ct);
     }
+
+    public async Task<bool> DeleteAsync(Guid id, CancellationToken ct = default)
+    {
+        var entity = await context.Clientes.FindAsync([id], ct);
+        if (entity is null) return false;
+        context.Clientes.Remove(entity);
+        await context.SaveChangesAsync(ct);
+        return true;
+    }
 }

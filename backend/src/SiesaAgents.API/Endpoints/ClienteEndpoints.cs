@@ -96,6 +96,26 @@ public static class ClienteEndpoints
         .ProducesProblem(StatusCodes.Status409Conflict)
         .ProducesValidationProblem();
 
+        group.MapDelete("/clientes/{id:guid}", async (
+            Guid id,
+            DeleteClienteCommandHandler handler,
+            CancellationToken ct) =>
+        {
+            var result = await handler.HandleAsync(new DeleteClienteCommand(id), ct);
+
+            if (result.IsNotFound)
+                return Results.Problem(
+                    statusCode: StatusCodes.Status404NotFound,
+                    title: "Not Found",
+                    detail: "Cliente no encontrado.");
+
+            return Results.Ok(new { contactosDesasociados = result.ContactosDesasociados });
+        })
+        .WithName("DeleteCliente")
+        .WithSummary("Elimina un cliente y desasocia sus contactos")
+        .Produces(StatusCodes.Status200OK)
+        .ProducesProblem(StatusCodes.Status404NotFound);
+
         return group;
     }
 }

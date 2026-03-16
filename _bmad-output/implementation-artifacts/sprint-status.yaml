@@ -57,7 +57,7 @@ development_status:
   2-2-client-detail-view: done
   2-3-create-client: done
   2-4-edit-client: done
-  2-5-delete-client: review
+  2-5-delete-client: done
   epic-2-retrospective: optional
 
   # Epic 3 — Gestión de Contactos
