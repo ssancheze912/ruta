@@ -47,6 +47,15 @@ public class ContactoRepository(AppDbContext context) : IContactoRepository
         return await context.Contactos.CountAsync(c => c.ClienteId == clienteId, ct);
     }
 
+    public async Task<ContactoEntity?> AssignClienteAsync(Guid id, Guid? clienteId, CancellationToken ct = default)
+    {
+        var entity = await context.Contactos.FindAsync([id], ct);
+        if (entity is null) return null;
+        entity.AssignCliente(clienteId);
+        await context.SaveChangesAsync(ct);
+        return entity;
+    }
+
     public async Task<bool> DeleteAsync(Guid id, CancellationToken ct = default)
     {
         var entity = await context.Contactos.FindAsync([id], ct);

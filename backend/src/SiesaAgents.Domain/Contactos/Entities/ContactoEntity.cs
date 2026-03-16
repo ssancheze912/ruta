@@ -20,4 +20,10 @@ public class ContactoEntity
         ClienteId = clienteId;
         UpdatedAt = DateTimeOffset.UtcNow;
     }
+
+    public void AssignCliente(Guid? clienteId)
+    {
+        ClienteId = clienteId;
+        UpdatedAt = DateTimeOffset.UtcNow;
+    }
 }

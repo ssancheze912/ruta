@@ -96,6 +96,28 @@ public static class ContactoEndpoints
         .Produces(StatusCodes.Status204NoContent)
         .ProducesProblem(StatusCodes.Status404NotFound);
 
+        group.MapPut("/contactos/{id:guid}/cliente", async (
+            Guid id,
+            [FromBody] AssignContactoClienteRequest request,
+            IValidator<AssignContactoClienteRequest> validator,
+            AssignContactoClienteCommandHandler handler,
+            CancellationToken ct) =>
+        {
+            var validation = await validator.ValidateAsync(request, ct);
+            if (!validation.IsValid)
+                return Results.ValidationProblem(validation.ToDictionary());
+
+            var result = await handler.HandleAsync(new AssignContactoClienteCommand(id, request.ClienteId), ct);
+            return result is null
+                ? Results.Problem(statusCode: StatusCodes.Status404NotFound, title: "Not Found", detail: "Contacto o cliente no encontrado.")
+                : Results.Ok(result);
+        })
+        .WithName("AssignContactoCliente")
+        .WithSummary("Asigna o desasigna el cliente de un contacto (clienteId: uuid | null)")
+        .Produces<ContactoDto>()
+        .ProducesProblem(StatusCodes.Status404NotFound)
+        .ProducesValidationProblem();
+
         return group;
     }
 }

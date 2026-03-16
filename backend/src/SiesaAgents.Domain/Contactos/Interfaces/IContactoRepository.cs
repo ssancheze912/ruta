@@ -10,5 +10,6 @@ public interface IContactoRepository
     Task<ContactoEntity?> UpdateAsync(Guid id, string nombre, string cargo, string telefono, string email, CancellationToken ct = default);
     Task<IEnumerable<ContactoEntity>> GetByClienteIdAsync(Guid clienteId, CancellationToken ct = default);
     Task<int> CountByClienteIdAsync(Guid clienteId, CancellationToken ct = default);
+    Task<ContactoEntity?> AssignClienteAsync(Guid id, Guid? clienteId, CancellationToken ct = default);
     Task<bool> DeleteAsync(Guid id, CancellationToken ct = default);
 }

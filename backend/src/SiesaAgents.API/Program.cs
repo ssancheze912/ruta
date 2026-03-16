@@ -56,6 +56,7 @@ builder.Services.AddScoped<GetContactoByIdQueryHandler>();
 builder.Services.AddScoped<CreateContactoCommandHandler>();
 builder.Services.AddScoped<UpdateContactoCommandHandler>();
 builder.Services.AddScoped<DeleteContactoCommandHandler>();
+builder.Services.AddScoped<AssignContactoClienteCommandHandler>();
 
 // OpenAPI (for Scalar — NOT Swagger)
 builder.Services.AddOpenApi();
