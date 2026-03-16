@@ -1,6 +1,6 @@
 ---
-stepsCompleted: [1, 2, 3, 4, 5]
-status: ready-for-dev
+stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+status: review
 epic: 4
 story: 5
 storyKey: 4-5-orphan-contacts-filter
@@ -9,7 +9,7 @@ createdAt: '2026-03-16'
 
 # Story 4.5: Orphan Contacts Filter
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -35,8 +35,8 @@ so that I can quickly identify and manage unassigned contacts without scrolling 
 
 ### Frontend
 
-- [ ] Task 1: Add `showOrphansOnly` state and extend `filteredContactos` useMemo (AC: 1, 2, 4, 5)
-  - [ ] 1.1 In `frontend/src/modules/crm/contactos/presentation/ContactoListView.tsx`:
+- [x] Task 1: Add `showOrphansOnly` state and extend `filteredContactos` useMemo (AC: 1, 2, 4, 5)
+  - [x] 1.1 In `frontend/src/modules/crm/contactos/presentation/ContactoListView.tsx`:
     - Add state: `const [showOrphansOnly, setShowOrphansOnly] = useState(false)`
     - Add orphan count: `const orphanCount = useMemo(() => contactos.filter(c => c.clienteId === null).length, [contactos])`
     - Extend `filteredContactos` useMemo to chain both filters:
@@ -54,8 +54,8 @@ so that I can quickly identify and manage unassigned contacts without scrolling 
       }, [contactos, showOrphansOnly, searchTerm])
       ```
 
-- [ ] Task 2: Add toggle button UI to `ContactoListView` (AC: 1, 2, 4)
-  - [ ] 2.1 In the header `<div className="flex items-center justify-between px-6 pt-6 mb-4">`, add the toggle button next to "Nuevo contacto":
+- [x] Task 2: Add toggle button UI to `ContactoListView` (AC: 1, 2, 4)
+  - [x] 2.1 In the header `<div className="flex items-center justify-between px-6 pt-6 mb-4">`, add the toggle button next to "Nuevo contacto":
     ```tsx
     <Button
       type={showOrphansOnly ? 'outline-solid' : undefined}
@@ -67,8 +67,8 @@ so that I can quickly identify and manage unassigned contacts without scrolling 
     ```
     ⚠️ Place the toggle to the left of "Nuevo contacto" within the same flex row, or in the search row — keep layout consistent with existing header structure.
 
-- [ ] Task 3: Handle empty state when orphan filter active with no results (AC: 3)
-  - [ ] 3.1 Update the empty state conditional logic in `ContactoListView.tsx`:
+- [x] Task 3: Handle empty state when orphan filter active with no results (AC: 3)
+  - [x] 3.1 Update the empty state conditional logic in `ContactoListView.tsx`:
     - Current: `!isLoading && !isError && contactos.length === 0` → "No hay contactos aún."
     - Current: `!isLoading && !isError && contactos.length > 0 && filteredContactos.length === 0` → "Sin resultados para tu búsqueda."
     - New logic for the second empty state:
@@ -84,8 +84,8 @@ so that I can quickly identify and manage unassigned contacts without scrolling 
       )}
       ```
 
-- [ ] Task 4: Unit tests for orphan filter (AC: 1, 2, 3, 4, 5)
-  - [ ] 4.1 In `frontend/src/modules/crm/contactos/presentation/ContactoListView.test.tsx`:
+- [x] Task 4: Unit tests for orphan filter (AC: 1, 2, 3, 4, 5)
+  - [x] 4.1 In `frontend/src/modules/crm/contactos/presentation/ContactoListView.test.tsx`:
     - Add test: `"shows orphan count in toggle button"` — render with mockContactos (1 orphan), assert `screen.getByText('Sin cliente (1)')` is in document
     - Add test: `"activates orphan filter on button click"` — click toggle, assert only orphan contact (Carlos López) shown, Ana García not shown
     - Add test: `"deactivates orphan filter on second click"` — click toggle twice, assert both contacts shown
@@ -207,8 +207,19 @@ frontend/src/modules/crm/contactos/presentation/ContactoListView.test.tsx ← ad
 
 ### Agent Model Used
 
+claude-sonnet-4-6
+
 ### Debug Log References
 
 ### Completion Notes List
 
+- Task 1: Added `showOrphansOnly` boolean state and `orphanCount` useMemo to `ContactoListView`. Extended `filteredContactos` useMemo to chain both predicates: orphan filter applied first, then search term filter. Both compose independently on the full `contactos` array.
+- Task 2: Added `Button` toggle in header flex row alongside "Nuevo contacto". Uses `type="outline-solid"` when active, default when inactive. No `disabled` prop — button always clickable so AC3 empty state is always reachable (per elicitation "opcionalmente"). Button label shows `Sin cliente ({orphanCount})` with real-time count.
+- Task 3: Updated empty state conditional. When `showOrphansOnly && !searchTerm.trim()` and `filteredContactos.length === 0`, shows "Todos los contactos tienen cliente asignado". Otherwise falls back to "Sin resultados para tu búsqueda." General empty state for `contactos.length === 0` unchanged.
+- Task 4: Added 6 new tests in `ContactoListView.test.tsx`. Updated `Button` mock to accept and forward `disabled` prop. All 18/18 tests pass (12 pre-existing + 6 new). Full suite: 145/151 (6 pre-existing failures unrelated to this story).
+- Design decision: removed `disabled={orphanCount === 0}` from toggle button — the "optional" disable per elicitation created a contradiction with AC3 (filter active + no orphans). Keeping button always enabled ensures AC3 empty state is reachable by the user at any time.
+
 ### File List
+
+- `frontend/src/modules/crm/contactos/presentation/ContactoListView.tsx` — modified: added `showOrphansOnly` state, `orphanCount` memo, extended `filteredContactos` useMemo, toggle Button in header, updated empty state logic
+- `frontend/src/modules/crm/contactos/presentation/ContactoListView.test.tsx` — modified: updated Button mock to accept `disabled`, added 6 new orphan filter tests
