@@ -1,6 +1,6 @@
 ---
 stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-status: review
+status: done
 epic: 4
 story: 5
 storyKey: 4-5-orphan-contacts-filter
@@ -9,7 +9,7 @@ createdAt: '2026-03-16'
 
 # Story 4.5: Orphan Contacts Filter
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -21,7 +21,7 @@ so that I can quickly identify and manage unassigned contacts without scrolling 
 
 ## Acceptance Criteria
 
-1. **AC1 — Filter toggle with count**: Given the user is on `/contactos`, when the page loads, then a toggle button "Sin cliente (N)" is always visible in the header area showing the total count of orphan contacts (`clienteId === null`). If orphan count is 0, the button is disabled.
+1. **AC1 — Filter toggle with count**: Given the user is on `/contactos`, when the page loads, then a toggle button "Sin cliente (N)" is always visible in the header area showing the total count of orphan contacts (`clienteId === null`). ~~If orphan count is 0, the button is disabled.~~ **[Design override]** Button is always enabled regardless of count — disabling when count=0 contradicts AC3 (user cannot reach "Todos los contactos tienen cliente asignado" empty state if button is disabled). Keeps button interactive at all times.
 
 2. **AC2 — Activate orphan filter**: Given the user clicks "Sin cliente (N)", when the filter is activated, then the table shows only contacts whose `clienteId === null` (FR25). The filter composes with any active `searchTerm` — both predicates apply together on the full contacts list.
 
@@ -218,6 +218,7 @@ claude-sonnet-4-6
 - Task 3: Updated empty state conditional. When `showOrphansOnly && !searchTerm.trim()` and `filteredContactos.length === 0`, shows "Todos los contactos tienen cliente asignado". Otherwise falls back to "Sin resultados para tu búsqueda." General empty state for `contactos.length === 0` unchanged.
 - Task 4: Added 6 new tests in `ContactoListView.test.tsx`. Updated `Button` mock to accept and forward `disabled` prop. All 18/18 tests pass (12 pre-existing + 6 new). Full suite: 145/151 (6 pre-existing failures unrelated to this story).
 - Design decision: removed `disabled={orphanCount === 0}` from toggle button — the "optional" disable per elicitation created a contradiction with AC3 (filter active + no orphans). Keeping button always enabled ensures AC3 empty state is reachable by the user at any time.
+- Code review fixes (MED-1, LOW-1–4): AC1 text annotated with design override rationale; `== null` → `=== null` in Badge column render; added `aria-pressed={showOrphansOnly}` to toggle button; added `expect(toggleBtn).not.toBeDisabled()` to "allows activation" test; added AC5 deactivation direction test. Total: 19/19 tests pass.
 
 ### File List
 
