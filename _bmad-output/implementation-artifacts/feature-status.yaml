@@ -17,5 +17,5 @@ features:
     last_update: "15-03-2026"
   - id: feature-4
     epic_source: "_bmad-output/planning-artifacts/epics/epic-04-asociacion-cliente-contacto.md"
-    status: in-progress
-    last_update: "15-03-2026"
+    status: done
+    last_update: "17-03-2026"
