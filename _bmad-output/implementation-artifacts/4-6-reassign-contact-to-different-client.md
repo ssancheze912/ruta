@@ -1,6 +1,6 @@
 ---
 stepsCompleted: []
-status: review
+status: done
 epic: 4
 story: 6
 storyKey: 4-6-reassign-contact-to-different-client
@@ -9,7 +9,7 @@ createdAt: '2026-03-16'
 
 # Story 4.6: Reassign Contact to Different Client
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -327,6 +327,6 @@ claude-sonnet-4-6
 - `frontend/src/modules/crm/contactos/application/useReassignContactoCliente.ts` — new: mutation hook with 3 query key invalidations
 - `frontend/src/modules/crm/contactos/application/useReassignContactoCliente.test.ts` — new: 4 tests
 - `frontend/src/modules/crm/contactos/presentation/ReasignarClienteDialog.tsx` — new: siesa-ui-kit Select dialog
-- `frontend/src/modules/crm/contactos/presentation/ReasignarClienteDialog.test.tsx` — new: 7 tests
+- `frontend/src/modules/crm/contactos/presentation/ReasignarClienteDialog.test.tsx` — new: 9 tests (2 added by code-review: "closes dialog on successful mutation", "resets selection when dialog closes")
 - `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.tsx` — modified: reassign button + dialog
 - `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.test.tsx` — modified: mock + 3 new tests
