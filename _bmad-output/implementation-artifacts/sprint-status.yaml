@@ -41,7 +41,7 @@ story_location: _bmad-output/implementation-artifacts
 
 development_status:
   # Epic 1 — Foundation
-  epic-1: in-progress
+  epic-1: done
   epic-1-source: _bmad-output/planning-artifacts/epics/epic-01-foundation.md
   epic-1-last-update: 13-03-2026
   1-1-project-initialization-repository-structure: done
@@ -50,7 +50,7 @@ development_status:
   epic-1-retrospective: optional
 
   # Epic 2 — Gestión de Clientes
-  epic-2: in-progress
+  epic-2: done
   epic-2-source: _bmad-output/planning-artifacts/epics/epic-02-gestion-de-clientes.md
   epic-2-last-update: 15-03-2026
   2-1-client-list-search: done
@@ -61,7 +61,7 @@ development_status:
   epic-2-retrospective: optional
 
   # Epic 3 — Gestión de Contactos
-  epic-3: in-progress
+  epic-3: done
   epic-3-source: _bmad-output/planning-artifacts/epics/epic-03-gestion-de-contactos.md
   epic-3-last-update: 15-03-2026
   3-1-contact-list-search: done
@@ -72,7 +72,7 @@ development_status:
   epic-3-retrospective: optional
 
   # Epic 4 — Asociación Cliente-Contacto
-  epic-4: in-progress
+  epic-4: done
   epic-4-source: _bmad-output/planning-artifacts/epics/epic-04-asociacion-cliente-contacto.md
   epic-4-last-update: 16-03-2026
   4-1-view-associated-contacts-in-client-detail: done
