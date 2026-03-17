@@ -1,6 +1,6 @@
 ---
 stepsCompleted: []
-status: ready-for-dev
+status: review
 epic: 4
 story: 6
 storyKey: 4-6-reassign-contact-to-different-client
@@ -9,7 +9,7 @@ createdAt: '2026-03-16'
 
 # Story 4.6: Reassign Contact to Different Client
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -39,8 +39,8 @@ so that I can correct associations or reflect organizational changes without nav
 
 ### Frontend
 
-- [ ] Task 1: Create `useReassignContactoCliente` mutation hook (AC: 3, 5)
-  - [ ] 1.1 Create `frontend/src/modules/crm/contactos/application/useReassignContactoCliente.ts`:
+- [x] Task 1: Create `useReassignContactoCliente` mutation hook (AC: 3, 5)
+  - [x] 1.1 Create `frontend/src/modules/crm/contactos/application/useReassignContactoCliente.ts`:
     ```typescript
     interface ReassignParams {
       contactoId: string
@@ -66,8 +66,8 @@ so that I can correct associations or reflect organizational changes without nav
     }
     ```
 
-- [ ] Task 2: Create `ReasignarClienteDialog` component (AC: 2, 3, 4)
-  - [ ] 2.1 Create `frontend/src/modules/crm/contactos/presentation/ReasignarClienteDialog.tsx`:
+- [x] Task 2: Create `ReasignarClienteDialog` component (AC: 2, 3, 4)
+  - [x] 2.1 Create `frontend/src/modules/crm/contactos/presentation/ReasignarClienteDialog.tsx`:
     - Props: `contactoId: string`, `currentClienteId: string`, `open: boolean`, `onOpenChange: (open: boolean) => void`
     - Uses `useClientes()` for client list
     - Uses `useReassignContactoCliente()` for mutation
@@ -77,7 +77,7 @@ so that I can correct associations or reflect organizational changes without nav
     - "Cancelar" button: calls `onOpenChange(false)`
     - Wrap in `Dialog` + `DialogContent` from `@/components/ui/dialog`
     - Reset `selectedClienteId` to `undefined` when dialog closes (`onOpenChange(false)`)
-  - [ ] 2.2 Full implementation structure:
+  - [x] 2.2 Full implementation structure:
     ```tsx
     import { useState } from 'react'
     import { Button, Select } from 'siesa-ui-kit'
@@ -141,8 +141,8 @@ so that I can correct associations or reflect organizational changes without nav
     }
     ```
 
-- [ ] Task 3: Modify `ContactoDetailView` to wire the reassign flow (AC: 1, 2, 3, 4)
-  - [ ] 3.1 In `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.tsx`:
+- [x] Task 3: Modify `ContactoDetailView` to wire the reassign flow (AC: 1, 2, 3, 4)
+  - [x] 3.1 In `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.tsx`:
     - Add import: `import { ReasignarClienteDialog } from './ReasignarClienteDialog'`
     - Add state: `const [reassignDialogOpen, setReassignDialogOpen] = useState(false)`
     - Add button in header `<div className="flex gap-2">` — only when `contacto.clienteId !== null`:
@@ -163,20 +163,20 @@ so that I can correct associations or reflect organizational changes without nav
       )}
       ```
 
-- [ ] Task 4: Unit tests (AC: 1, 2, 3, 4, 5)
-  - [ ] 4.1 Create `frontend/src/modules/crm/contactos/application/useReassignContactoCliente.test.ts`:
+- [x] Task 4: Unit tests (AC: 1, 2, 3, 4, 5)
+  - [x] 4.1 Create `frontend/src/modules/crm/contactos/application/useReassignContactoCliente.test.ts`:
     - Test: "calls assignCliente with correct contactoId and newClienteId"
     - Test: "invalidates contactos, old clienteId, and new clienteId on success"
     - Test: "shows success toast on success"
     - Test: "shows error toast on failure"
-  - [ ] 4.2 Create `frontend/src/modules/crm/contactos/presentation/ReasignarClienteDialog.test.tsx`:
+  - [x] 4.2 Create `frontend/src/modules/crm/contactos/presentation/ReasignarClienteDialog.test.tsx`:
     - Test: "renders Select with all clients except current one"
     - Test: "Guardar button disabled until client is selected"
     - Test: "calls mutation with correct params on confirm"
     - Test: "closes dialog on successful mutation"
     - Test: "calls onOpenChange(false) when Cancelar is clicked"
     - Test: "resets selection when dialog closes"
-  - [ ] 4.3 Extend `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.test.tsx`:
+  - [x] 4.3 Extend `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.test.tsx`:
     - Test: "shows 'Reasignar cliente' button when contact has clienteId"
     - Test: "does not show 'Reasignar cliente' button when contact has no clienteId"
     - Test: "opens ReasignarClienteDialog when button is clicked"
@@ -317,4 +317,16 @@ claude-sonnet-4-6
 
 ### Completion Notes List
 
+- Task 1: Created `useReassignContactoCliente` hook. Calls `contactoRepository.assignCliente(contactoId, newClienteId)`. On success invalidates 3 query keys: `['contactos']`, `['contactos', { clienteId: oldClienteId }]`, `['contactos', { clienteId: newClienteId }]`. Toast: "Contacto reasignado correctamente". Separate from `useAssignContactoCliente` to avoid regression in existing flows.
+- Task 2: Created `ReasignarClienteDialog` using siesa-ui-kit `Select` + `Button`, wrapped in shadcn `Dialog`. Options = all clients except current one. `handleClose` resets `selectedClienteId` state. `handleConfirm` calls `mutate(...)` with `onSuccess: handleClose` in mutation options. Select disabled during loading or pending.
+- Task 3: Modified `ContactoDetailView` — added `reassignDialogOpen` state, "Reasignar cliente" button (only when `contacto.clienteId !== null`), and `ReasignarClienteDialog` component after delete dialog.
+- Task 4: Created 4 hook tests (PUT call, 3 invalidations, success toast, error toast), 7 dialog tests (options exclusion, disabled states, mutation params, cancel), 3 ContactoDetailView tests (button visible, not visible, opens dialog). 88/88 tests pass.
+
 ### File List
+
+- `frontend/src/modules/crm/contactos/application/useReassignContactoCliente.ts` — new: mutation hook with 3 query key invalidations
+- `frontend/src/modules/crm/contactos/application/useReassignContactoCliente.test.ts` — new: 4 tests
+- `frontend/src/modules/crm/contactos/presentation/ReasignarClienteDialog.tsx` — new: siesa-ui-kit Select dialog
+- `frontend/src/modules/crm/contactos/presentation/ReasignarClienteDialog.test.tsx` — new: 7 tests
+- `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.tsx` — modified: reassign button + dialog
+- `frontend/src/modules/crm/contactos/presentation/ContactoDetailView.test.tsx` — modified: mock + 3 new tests
