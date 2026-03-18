@@ -4,11 +4,43 @@
 
 ---
 
-## 1. DETECCIÓN DE ÉPICAS RECIÉN COMPLETADAS
+## 1. AUTO-COMPLETAR ÉPICAS Y DETECCIÓN DE ÉPICAS COMPLETADAS
 
-Después de ejecutar el **Step 2** del `instructions.md` (parse de `sprint-status.yaml`), detectar si alguna épica acaba de quedar completa pero su feature no refleja ese estado en `feature-status.yaml`.
+Después de ejecutar el **Step 2** del `instructions.md` (parse de `sprint-status.yaml`), ejecutar dos acciones en orden:
 
-**LÓGICA:**
+### 1.1 Auto-completar épicas cuyas stories están todas en done
+
+Antes de cualquier otra lógica, verificar si alguna épica tiene status distinto de `done` pero **todas sus stories sí están en `done`**. Si es así, avanzar automáticamente la épica a `done` en `sprint-status.yaml`.
+
+```
+FUNCTION auto_complete_epics():
+  epics_advanced = []
+
+  FOR each epic_key IN development_status:
+    IF epic_key MATCHES "epic-{N}" (not source, not retrospective):
+      IF development_status[epic_key] != "done":
+        stories = [key for key in development_status
+                   if key STARTS WITH "{N}-"
+                   AND NOT key ends with "-source"
+                   AND NOT key ends with "-retrospective"]
+
+        IF stories IS NOT EMPTY AND ALL stories have status "done":
+          development_status[epic_key] = "done"
+          epics_advanced.APPEND(N)
+
+  IF epics_advanced IS NOT EMPTY:
+    Guardar sprint-status.yaml con los cambios
+    Reportar en Step 4:
+      "**Épicas auto-completadas:** epic-{N} → done (todas las stories en done)"
+
+  RETURN epics_advanced
+```
+
+**Regla:** Solo avanza épicas — nunca retrocede. Si una épica ya está en `done`, no se toca.
+
+### 1.2 Detectar épicas completadas (para sincronizar feature-status)
+
+Después de §1.1, recopilar todas las épicas que quedaron en `done` (incluidas las que ya lo estaban antes):
 
 ```
 FUNCTION detect_completed_epics():
@@ -17,10 +49,7 @@ FUNCTION detect_completed_epics():
   FOR each epic_key IN development_status:
     IF epic_key MATCHES "epic-{N}" (not source, not retrospective):
       IF development_status[epic_key] == "done":
-        // Verificar que todas sus stories también estén done
-        stories = [key for key in development_status if key STARTS WITH "{N}-"]
-        IF ALL stories have status "done":
-          completed_epics.APPEND(N)
+        completed_epics.APPEND(N)
 
   RETURN completed_epics
 ```
