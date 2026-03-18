@@ -29,9 +29,31 @@ FUNCTION detect_completed_epics():
 
 ## 2. SINCRONIZACIÓN AUTOMÁTICA DE FEATURE-STATUS
 
-**TRIGGER:** Ejecutar **siempre al final del Step 2**, antes de continuar al Step 3.
+**TRIGGER:** Ejecutar **siempre al final del Step 2**, antes de continuar al Step 3, **pero solo si la épica completada es la última de su feature** (ver §2.1).
 
-### 2.1 Cargar feature-status.yaml
+### 2.1 Condición de activación — épica es la última de su feature
+
+Antes de sincronizar, verificar si la épica completada es la **única épica** que mapea al `epic_source` del feature en `feature-status.yaml`. Si hay épicas de ese mismo feature que aún no están en `done`, no ejecutar la sincronización todavía.
+
+```
+FUNCTION is_last_epic_of_feature(epic_N, feature):
+  // Encontrar todas las épicas que apuntan al mismo epic_source
+  sibling_epics = []
+  FOR each key IN sprint_status.development_status:
+    IF key MATCHES "epic-{M}-source" AND value == feature.epic_source:
+      sibling_epics.APPEND(M)
+
+  // La épica es la última si todas las hermanas están done
+  FOR each M IN sibling_epics:
+    IF M != epic_N AND development_status["epic-{M}"] != "done":
+      RETURN false  // aún hay épicas hermanas pendientes
+
+  RETURN true  // todas las épicas del feature están done
+```
+
+Solo continuar con §2.2 si `is_last_epic_of_feature()` retorna `true` para al menos una épica completada.
+
+### 2.2 Cargar feature-status.yaml
 
 - Leer `{implementation_artifacts}/feature-status.yaml`
 - Si no existe, no ejecutar esta sección (el archivo lo genera sprint-planning)
@@ -108,4 +130,6 @@ Si no hubo cambios, no mostrar nada (silencioso).
 
 **NUNCA** retroceder un status (e.g., de `in-progress` a `backlog`).
 
-**SIEMPRE** ejecutar esta sincronización, incluso si el usuario eligió la opción 4 (Exit) en el Step 5 — la sincronización ocurre antes de mostrar las opciones.
+**SOLO** ejecutar la sincronización cuando la épica completada sea la última de su feature (`is_last_epic_of_feature() == true`). Si el feature tiene más épicas pendientes, no tocar `feature-status.yaml`.
+
+La verificación ocurre siempre al final del Step 2, antes de mostrar las opciones al usuario.
