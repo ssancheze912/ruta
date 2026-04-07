@@ -1,0 +1,17 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+  // Note: compilerOptions here exist ONLY to satisfy the shadcn@latest init validator,
+  // which reads the root tsconfig.json for the "@/*" path alias.
+  // Canonical TypeScript configuration is in tsconfig.app.json.
+  // Do NOT add project-wide compiler options here.
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}

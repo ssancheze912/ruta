@@ -9,12 +9,11 @@ using SiesaAgents.API.Middleware;
 namespace SiesaAgents.IntegrationTests.API.Middleware;
 
 /// <summary>
-/// Tests for ExceptionHandlingMiddleware (API layer).
-/// Located in IntegrationTests per Clean Architecture boundary:
-/// SiesaAgents.UnitTests → Application + Domain only
-/// SiesaAgents.IntegrationTests → API layer (middleware, endpoints)
+/// Unit-style tests for ExceptionHandlingMiddleware using DefaultHttpContext directly.
+/// These isolate the middleware class without a running HTTP pipeline.
+/// For full HTTP pipeline coverage see ExceptionHandlingMiddlewareIntegrationTests.cs.
 /// </summary>
-public class ExceptionHandlingMiddlewareTests
+public class ExceptionHandlingMiddlewareUnitTests
 {
     [Fact]
     public async Task InvokeAsync_WhenExceptionThrown_Returns500ProblemDetails()

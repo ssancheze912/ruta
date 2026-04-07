@@ -25,7 +25,8 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
         policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
-              .AllowAnyMethod());
+              // ⚠️ Production: restrict to actual methods used by the API — no PATCH, OPTIONS, etc.
+              .WithMethods("GET", "POST", "PUT", "DELETE"));
 });
 
 // Database — PostgreSQL via EF Core
@@ -71,6 +72,17 @@ app.UseCors();
 // Scalar API docs at /scalar — NEVER UseSwagger
 app.MapOpenApi();
 app.MapScalarApiReference();
+
+// Development-only test endpoint — allows acceptance tests to exercise ExceptionHandlingMiddleware
+// through the full HTTP pipeline. NOT available in production.
+if (app.Environment.IsDevelopment())
+{
+    // ExcludeFromDescription: this dev-only endpoint must not appear in the OpenAPI/Scalar docs
+    app.MapGet("/api/dev/trigger-error", () =>
+    {
+        throw new InvalidOperationException("Intentional test exception");
+    }).ExcludeFromDescription();
+}
 
 // API endpoints
 app.MapGroup("/api/v1")
