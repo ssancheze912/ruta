@@ -6,8 +6,7 @@ export const createContactoSchema = z.object({
   telefono: z.string().min(1, 'El teléfono es requerido'),
   email: z
     .string()
-    .min(1, 'El email es requerido')
-    .email('Formato de email inválido'),
+    .min(1, 'El email es requerido'),
 })
 
 export type CreateContactoFormValues = z.infer<typeof createContactoSchema>

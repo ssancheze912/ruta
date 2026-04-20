@@ -1,0 +1,54 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - img "Siesa" [ref=e6]
+  - generic [ref=e8]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - button "Clientes" [ref=e13] [cursor=pointer]:
+          - img [ref=e16]
+        - button "Contactos" [ref=e18] [cursor=pointer]:
+          - img [ref=e21]
+      - generic [ref=e23]:
+        - separator [ref=e24]
+        - button "Expandir" [ref=e26]:
+          - img [ref=e28]
+    - generic [ref=e32]:
+      - generic [ref=e33]:
+        - heading "SANTIAGO SANCHEZ ESQUIVEL" [level=1] [ref=e34]
+        - generic [ref=e35]:
+          - button "Editar" [ref=e36]:
+            - generic [ref=e37]: Editar
+          - button "Eliminar" [ref=e38]:
+            - generic [ref=e39]: Eliminar
+          - button "Volver" [ref=e40]:
+            - generic [ref=e41]: Volver
+      - generic [ref=e42]:
+        - paragraph [ref=e44]: Nombre
+        - paragraph [ref=e46]: SANTIAGO SANCHEZ ESQUIVEL
+      - generic [ref=e47]:
+        - paragraph [ref=e49]: NIT/RUC
+        - paragraph [ref=e51]: "12331233"
+      - generic [ref=e52]:
+        - paragraph [ref=e54]: Teléfono
+        - paragraph [ref=e56]: "3186287645"
+      - generic [ref=e57]:
+        - paragraph [ref=e59]: Ciudad
+        - paragraph [ref=e61]: CALI
+      - generic [ref=e62]:
+        - heading "Contactos asociados" [level=2] [ref=e63]
+        - generic [ref=e64]:
+          - button "Asociar contacto" [ref=e66]:
+            - generic [ref=e67]: Asociar contacto
+          - generic [ref=e69]:
+            - button "Nombre" [ref=e70] [cursor=pointer]:
+              - generic [ref=e71]: Nombre
+            - generic [ref=e75]: Cargo
+            - generic [ref=e77]: Teléfono
+            - generic [ref=e79]: Email
+            - generic [ref=e81]:
+              - generic [ref=e83]: test
+              - generic [ref=e85]: Director
+              - generic [ref=e87]: "3186287645"
+              - generic [ref=e89]: santiago.esqssssuivel@correounivalle.edu.co
+              - button "Desasociar" [ref=e92]:
+                - generic [ref=e93]: Desasociar

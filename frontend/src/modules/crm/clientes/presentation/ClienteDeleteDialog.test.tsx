@@ -20,9 +20,9 @@ describe('ClienteDeleteDialog', () => {
     expect(screen.getByText(/Empresa Test S\.A\./)).toBeInTheDocument()
   })
 
-  it('calls onConfirm when Confirmar is clicked', async () => {
+  it('calls onConfirm when Eliminar is clicked', async () => {
     render(<ClienteDeleteDialog {...defaultProps} />)
-    await userEvent.click(screen.getByRole('button', { name: /confirmar/i }))
+    await userEvent.click(screen.getByRole('button', { name: /eliminar/i }))
     expect(defaultProps.onConfirm).toHaveBeenCalledOnce()
   })
 
@@ -32,9 +32,9 @@ describe('ClienteDeleteDialog', () => {
     expect(defaultProps.onOpenChange).toHaveBeenCalledWith(false)
   })
 
-  it('disables buttons and shows Eliminando when isPending is true', () => {
+  it('disables confirm and cancel buttons when isPending is true', () => {
     render(<ClienteDeleteDialog {...defaultProps} isPending={true} />)
-    expect(screen.getByRole('button', { name: /eliminando/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /eliminar/i })).toBeDisabled()
     expect(screen.getByRole('button', { name: /cancelar/i })).toBeDisabled()
   })
 })

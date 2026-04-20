@@ -25,6 +25,7 @@ export function ContactoListView() {
   const { data: contactos = [], isLoading, isError, refetch } = useContactos()
   const { clientes = [] } = useClientes()
   const [searchTerm, setSearchTerm] = useState('')
+  const [showOrphansOnly, setShowOrphansOnly] = useState(false)
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [editingContacto, setEditingContacto] = useState<Contacto | null>(null)
   const [deletingContacto, setDeletingContacto] = useState<Contacto | null>(null)
@@ -48,14 +49,17 @@ export function ContactoListView() {
   )
 
   const filteredContactos = useMemo(() => {
-    if (!searchTerm.trim()) return contactos
-    const q = searchTerm.toLowerCase()
-    return contactos.filter(
-      (c) =>
-        c.nombre.toLowerCase().includes(q) ||
-        c.email.toLowerCase().includes(q),
-    )
-  }, [contactos, searchTerm])
+    let result = showOrphansOnly ? contactos.filter((c) => c.clienteId === null) : contactos
+    if (searchTerm.trim()) {
+      const q = searchTerm.toLowerCase()
+      result = result.filter(
+        (c) =>
+          c.nombre.toLowerCase().includes(q) ||
+          c.email.toLowerCase().includes(q),
+      )
+    }
+    return result
+  }, [contactos, searchTerm, showOrphansOnly])
 
   const columns: TableColumn<Contacto>[] = [
     { header: 'Nombre', accessor: 'nombre', sortable: true },
@@ -119,10 +123,14 @@ export function ContactoListView() {
       <div className="flex items-center justify-between px-6 pt-6 mb-4">
         <div className="flex items-center gap-3">
           <h1 className="text-xl font-semibold text-slate-900">Contactos</h1>
-          {!isLoading && orphanCount > 0 && (
-            <span className="text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-0.5">
-              {orphanCount} sin cliente
-            </span>
+          {!isLoading && (
+            <Button
+              type={showOrphansOnly ? 'outline-solid' : 'plain'}
+              size="xs"
+              onClick={() => setShowOrphansOnly((prev) => !prev)}
+            >
+              {`Sin cliente (${orphanCount})`}
+            </Button>
           )}
         </div>
         <Button onClick={() => setIsCreateOpen(true)}>Nuevo contacto</Button>
@@ -157,7 +165,11 @@ export function ContactoListView() {
         <EmptyState message="No hay contactos aún. Crea el primer contacto." />
       )}
 
-      {!isLoading && !isError && contactos.length > 0 && filteredContactos.length === 0 && (
+      {!isLoading && !isError && contactos.length > 0 && filteredContactos.length === 0 && showOrphansOnly && (
+        <EmptyState message="Todos los contactos tienen cliente asignado" />
+      )}
+
+      {!isLoading && !isError && contactos.length > 0 && filteredContactos.length === 0 && !showOrphansOnly && (
         <EmptyState message="Sin resultados para tu búsqueda." />
       )}
 

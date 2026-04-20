@@ -1,0 +1,42 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - img "Siesa" [ref=e6]
+  - generic [ref=e8]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - button "Clientes" [ref=e13] [cursor=pointer]:
+          - img [ref=e16]
+        - button "Contactos" [ref=e18] [cursor=pointer]:
+          - img [ref=e21]
+      - generic [ref=e23]:
+        - separator [ref=e24]
+        - button "Expandir" [ref=e26]:
+          - img [ref=e28]
+    - generic [ref=e145]:
+      - generic [ref=e146]:
+        - heading "testttt" [level=1] [ref=e147]
+        - generic [ref=e148]:
+          - button "Editar" [ref=e149]:
+            - generic [ref=e150]: Editar
+          - button "Eliminar" [ref=e151]:
+            - generic [ref=e152]: Eliminar
+          - button "Volver" [ref=e153]:
+            - generic [ref=e154]: Volver
+      - generic [ref=e155]:
+        - paragraph [ref=e157]: Nombre
+        - paragraph [ref=e159]: testttt
+      - generic [ref=e160]:
+        - paragraph [ref=e162]: NIT/RUC
+        - paragraph [ref=e164]: "1233123"
+      - generic [ref=e165]:
+        - paragraph [ref=e167]: Teléfono
+        - paragraph [ref=e169]: "1233213"
+      - generic [ref=e170]:
+        - paragraph [ref=e172]: Ciudad
+        - paragraph [ref=e174]: Calidfdfdf
+      - generic [ref=e175]:
+        - heading "Contactos asociados" [level=2] [ref=e176]
+        - generic [ref=e177]:
+          - button "Asociar contacto" [ref=e179]:
+            - generic [ref=e180]: Asociar contacto
+          - paragraph [ref=e181]: Sin contactos asociados aún.

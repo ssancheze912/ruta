@@ -16,3 +16,26 @@ user_name: SiesaTeam
 communication_language: Spanish
 document_output_language: English
 output_folder: "{project-root}/_bmad-output"
+
+# AgileTest Integration
+# Secretos: definir como variables de entorno ANTES de ejecutar el script
+#   JIRA_API_TOKEN           → token personal de Jira (ver Jira > Profile > API tokens)
+#   AGILETEST_CLIENT_ID      → client_id de AgileTest API key
+#   AGILETEST_CLIENT_SECRET  → client_secret de AgileTest API key
+agiletest:
+  jira_base_url: "https://siesa-test-sandbox.atlassian.net"
+  jira_project_key: "PJIB"
+  jira_user_email: "ssancheze@siesa.com"
+  agiletest_base_url: "https://jira.agiletest.app"
+  agiletest_project_id: "10436"
+  # Issue type IDs — siesa-test-sandbox
+  issue_type_task: "10050"
+  issue_type_test_case: "10247"
+  issue_type_test_plan: "10244"
+  issue_type_test_execution: "10243"
+  # Mapeo prioridad BMAD → nombre en Jira (English — sandbox)
+  priority_map:
+    P0: "Highest"
+    P1: "High"
+    P2: "Medium"
+    P3: "Low"

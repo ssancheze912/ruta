@@ -1,6 +1,6 @@
 ---
 name: 'step-03-generate-test-cases'
-description: 'GENERATE test cases automatically from FRs/Epics/Stories, populate test-cases.csv, create summary, and calculate coverage'
+description: 'GENERATE test cases automatically from FRs/Features/Stories, populate test-cases.csv, create summary, and calculate coverage'
 
 # Path Definitions
 workflow_path: '{project-root}/_bmad/bmm/workflows/4-implementation/traceability-and-testing'
@@ -20,13 +20,13 @@ testCaseSummaryTemplate: '{workflow_path}/templates/test-cases-summary-template.
 
 ## STEP GOAL:
 
-To GENERATE test cases automatically from the project's FRs/Epics/Stories/Tasks, populate test-cases.csv with generated cases, create test-cases-summary.md, map all test cases to the traceability hierarchy, calculate coverage metrics, and identify testing gaps.
+To GENERATE test cases automatically from the project's FRs/Features/Stories/Tasks, populate test-cases.csv with generated cases, create test-cases-summary.md, map all test cases to the traceability hierarchy, calculate coverage metrics, and identify testing gaps.
 
 ## MANDATORY EXECUTION RULES (READ FIRST):
 
 ### Universal Rules:
 
-- 🤖 ALWAYS generate test cases automatically based on FRs/Epics/Stories
+- 🤖 ALWAYS generate test cases automatically based on FRs/Features/Stories
 - 📖 CRITICAL: Read the complete step file before taking any action
 - 🔄 CRITICAL: When loading next step with 'C', ensure entire file is read
 - 🚫 NEVER ask user for options or choices - execute automatically
@@ -42,7 +42,7 @@ To GENERATE test cases automatically from the project's FRs/Epics/Stories/Tasks,
 
 ### Step-Specific Rules:
 
-- 🤖 GENERATE test cases automatically for each FR/Epic
+- 🤖 GENERATE test cases automatically for each FR/Feature
 - 📝 POPULATE test-cases.csv with generated test cases
 - 🚫 NEVER ask user for options - handle all cases automatically
 - 📊 Calculate precise coverage metrics per Epic
@@ -50,7 +50,7 @@ To GENERATE test cases automatically from the project's FRs/Epics/Stories/Tasks,
 
 ## EXECUTION PROTOCOLS:
 
-- 🤖 Generate test cases from FRs/Epics/Stories
+- 🤖 Generate test cases from FRs/Features/Stories
 - 💾 Populate test-cases.csv with generated cases
 - 💾 Create test-cases-summary.md
 - 💾 Update traceability-map.md with sections 5-7
@@ -59,10 +59,10 @@ To GENERATE test cases automatically from the project's FRs/Epics/Stories/Tasks,
 
 ## CONTEXT BOUNDARIES:
 
-- Input data from step 02 frontmatter (FRs, Epics, Stories, statistics)
+- Input data from step 02 frontmatter (FRs, Features, Stories, statistics)
 - Traceability hierarchy from sections 1-3 in traceability-map.md
 - Test case structure knowledge from test-cases-structure.md
-- **Focus on GENERATING new test cases automatically from FRs/Epics/Stories**
+- **Focus on GENERATING new test cases automatically from FRs/Features/Stories**
 
 ---
 
@@ -75,17 +75,17 @@ Read frontmatter from {traceabilityMapFile}:
 ```yaml
 stepsCompleted: [1, 2]
 testGenerationMode: "ui-functional" | "backend-api"
-epicSelection: "all" | "single" | "range"
-selectedEpics: [1, 2, 3] or [5] or []  # Array of epic numbers processed
+featureSelection: "all" | "single" | "range"
+selectedFeatures: ["feature-1", "feature-2"] or ["feature-3"] or []  # Array of feature IDs processed
 statistics:
   totalFRs: X
-  totalEpics: Y
+  totalFeatures: Y
   totalStories: Z
   totalTasks: W
   coverageRate: P%
 ```
 
-**CRITICAL:** Load the `testGenerationMode` and `epicSelection` from frontmatter. These determine:
+**CRITICAL:** Load the `testGenerationMode` and `featureSelection` from frontmatter. These determine:
 1. How test cases will be generated (mode-specific guidelines)
 2. The naming convention for the output folder
 
@@ -106,10 +106,10 @@ testcases-{tipo}-{alcance}-{fecha}-{hora}
    - If `testGenerationMode === "ui-functional"` → `tipo = "ui"`
    - If `testGenerationMode === "backend-api"` → `tipo = "backend"`
 
-2. **{alcance}** - Extract from `epicSelection` and `selectedEpics`:
-   - If `epicSelection === "all"` → `alcance = "all-epics"`
-   - If `epicSelection === "single"` → `alcance = "epic-{epic_number}"` (e.g., "epic-3")
-   - If `epicSelection === "range"` → `alcance = "epics-{first}-to-{last}"` (e.g., "epics-1-to-5")
+2. **{alcance}** - Extract from `featureSelection` and `selectedFeatures`:
+   - If `featureSelection === "all"` → `alcance = "all-features"`
+   - If `featureSelection === "single"` → `alcance = "feature-{feature_id}"` (e.g., "feature-3")
+   - If `featureSelection === "range"` → `alcance = "features-{first}-to-{last}"` (e.g., "features-1-to-5")
 
 3. **{fecha}** - Current date in format `YYYYMMDD`:
    - Example: `20260129` for January 29, 2026
@@ -119,9 +119,9 @@ testcases-{tipo}-{alcance}-{fecha}-{hora}
 
 **Example folder names:**
 ```
-testcases-ui-all-epics-20260129-143025
-testcases-backend-epics-1-to-5-20260129-143025
-testcases-ui-epic-3-20260129-143025
+testcases-ui-all-features-20260129-143025
+testcases-backend-features-1-to-5-20260129-143025
+testcases-ui-feature-3-20260129-143025
 ```
 
 **Generate timestamp and folder name:**
@@ -134,12 +134,12 @@ hora = current_datetime.strftime("%H%M%S")    # e.g., "143025"
 tipo = "ui" if testGenerationMode == "ui-functional" else "backend"
 
 # Build alcance
-if epicSelection == "all":
-    alcance = "all-epics"
-elif epicSelection == "single":
-    alcance = f"epic-{selectedEpics[0]}"
-elif epicSelection == "range":
-    alcance = f"epics-{min(selectedEpics)}-to-{max(selectedEpics)}"
+if featureSelection == "all":
+    alcance = "all-features"
+elif featureSelection == "single":
+    alcance = f"feature-{selectedFeatures[0]}"
+elif featureSelection == "range":
+    alcance = f"features-{min(selectedFeatures)}-to-{max(selectedFeatures)}"
 
 # Construct folder name
 folder_name = f"testcases-{tipo}-{alcance}-{fecha}-{hora}"
@@ -164,7 +164,7 @@ Display:
 
 📊 Jerarquía de trazabilidad cargada:
 - {totalFRs} Requerimientos Funcionales
-- {totalEpics} Épicas
+- {totalFeatures} Features
 - {totalStories} Historias de Usuario
 - {totalTasks} Tareas (si disponibles)
 
@@ -508,9 +508,9 @@ This workflow generates **FUNCTIONAL-LEVEL tests and above** (Funcional, Integra
    - **Negative test case:** Validate error handling
    - **Edge case test:** Validate boundary conditions
 
-**FOR EACH Epic in the project:**
+**FOR EACH Feature in the project:**
 
-1. Analyze the Epic scope and acceptance criteria
+1. Analyze the Feature scope and acceptance criteria
 2. Generate appropriate test cases by type:
 
    **Functional tests:**
@@ -532,7 +532,7 @@ For each FR/Epic, generate test cases following this format:
 
 **Base CSV Structure (13 columns):**
 ```
-Epic ID: EPIC-[MODULE]-[YEAR]-[NUMBER] (e.g., EPIC-FACT-2025-01)
+Feature ID: FEAT-[MODULE]-[YEAR]-[NUMBER] (e.g., FEAT-FACT-2025-01)
 Test Case ID: TC-[MODULE]-### (e.g., TC-FACT-001)
 Title: Clear, descriptive test case name
 Description: What functionality is being tested
@@ -707,8 +707,8 @@ else:
 
 ✅ FR-001: {count} casos generados
 ✅ FR-002: {count} casos generados
-✅ Epic 1: {count} casos de integración generados
-✅ Epic 2: {count} casos funcionales generados
+✅ feature-1: {count} casos de integración generados
+✅ feature-2: {count} casos funcionales generados
 ...
 
 📊 Total de casos generados: {total_count}"
@@ -868,8 +868,8 @@ Using template {testCaseSummaryTemplate}:
      - Funcional: {functional_count}
      - Integración: {integration_count}
      - E2E: {e2e_count}
-   - Por Épica:
-     {for each Epic: - Epic {number}: {count} casos}
+   - Por Feature:
+     {for each Feature: - {feature.id}: {count} casos}
    ```
 
    **Casos de Prueba por Tipo (DETALLES COMPLETOS):**
@@ -913,10 +913,10 @@ Using template {testCaseSummaryTemplate}:
 
    **Tabla Resumen (Referencia Rápida):**
    ```markdown
-   | ID | Título | Tipo | Suite | Épica | Estado |
-   |----|--------|------|-------|-------|--------|
-   | TC001 | ... | Funcional | Suite Name | Epic 1 | No iniciada |
-   | TC002 | ... | Integración | Suite Name | Epic 2 | No iniciada |
+   | ID | Título | Tipo | Suite | Feature | Estado |
+   |----|--------|------|-------|---------|--------|
+   | TC001 | ... | Funcional | Suite Name | feature-1 | No iniciada |
+   | TC002 | ... | Integración | Suite Name | feature-2 | No iniciada |
    ```
 
 4. **Write to {testCasesSummaryFile}**
@@ -937,7 +937,7 @@ Display:
 ### 5. Update workflow progress
 
 **IMPORTANT:** Do NOT add test case information to traceability-map.md.
-The traceability map contains ONLY the implementation hierarchy (PRD→FR→Epic→Story→Task), not test information.
+The traceability map contains ONLY the implementation hierarchy (PRD→FR→Feature→Story→Task), not test information.
 
 **Only update frontmatter of step tracking:**
 
@@ -975,7 +975,7 @@ Display:
 
 📈 **Cobertura de Pruebas:**
 - FRs cubiertos: {frs_with_tests}/{total_frs} ({percentage}%)
-- Épicas cubiertas: {epics_with_tests}/{total_epics} ({percentage}%)
+- Features cubiertos: {features_with_tests}/{total_features} ({percentage}%)
 
 💡 **Nota:** Los archivos están organizados en una carpeta con timestamp que indica el tipo de pruebas ({tipo}), alcance ({alcance}), y momento de generación.
 
@@ -1002,7 +1002,7 @@ Display: **Confirma para [C] continuar:**
 
 ## CRITICAL STEP COMPLETION NOTE
 
-ONLY WHEN C is selected, all information is saved, and frontmatter is updated with `stepsCompleted: [1, 2, 3]`, will you then load, read entire file, then execute {nextStepFile} to generate epic test plans.
+ONLY WHEN C is selected, all information is saved, and frontmatter is updated with `stepsCompleted: [1, 2, 3]`, will you then load, read entire file, then execute {nextStepFile} to generate feature test plans.
 
 ---
 
@@ -1010,7 +1010,7 @@ ONLY WHEN C is selected, all information is saved, and frontmatter is updated wi
 
 ### ✅ SUCCESS:
 
-- Test cases generated automatically from all FRs/Epics/Stories
+- Test cases generated automatically from all FRs/Features/Stories
 - test-cases.csv populated successfully using Write tool (REQUIRED)
 - test-cases-summary.md created with complete summary (CRITICAL - contains all test case data)
 - Workflow progress updated (stepsCompleted: [1, 2, 3])
@@ -1018,7 +1018,7 @@ ONLY WHEN C is selected, all information is saved, and frontmatter is updated wi
 - Coverage metrics calculated correctly
 - User confirmed generation is complete
 
-**IMPORTANT:** traceability-map.md is NOT updated in this step. It contains only pure traceability (PRD→FR→Epic→Story→Task), not test information.
+**IMPORTANT:** traceability-map.md is NOT updated in this step. It contains only pure traceability (PRD→FR→Feature→Story→Task), not test information.
 
 ### ⚠️ ACCEPTABLE (with workaround):
 
@@ -1040,7 +1040,7 @@ ONLY WHEN C is selected, all information is saved, and frontmatter is updated wi
 - Adding test information to traceability-map.md (WRONG - that file is for implementation hierarchy only)
 
 **Master Rule:** The workflow MUST:
-1. Generate test cases automatically from FRs/Epics/Stories
+1. Generate test cases automatically from FRs/Features/Stories
 2. Attempt to populate test-cases.csv using Write tool (NOT bash)
 3. Create complete test-cases-summary.md with ALL test case details
 4. Continue workflow even if CSV population fails (summary.md is sufficient)

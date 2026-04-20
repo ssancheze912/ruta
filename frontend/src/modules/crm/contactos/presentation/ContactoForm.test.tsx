@@ -1,13 +1,35 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createElement } from 'react'
+import React, { createElement } from 'react'
 import { ContactoForm } from './ContactoForm'
 import * as useCreateContactoModule from '../application/useCreateContacto'
 import * as useUpdateContactoModule from '../application/useUpdateContacto'
 
 vi.mock('../application/useCreateContacto')
 vi.mock('../application/useUpdateContacto')
+vi.mock('../application/useAssignContactoCliente', () => ({
+  useAssignContactoCliente: () => ({ mutateAsync: vi.fn(), isPending: false }),
+}))
+vi.mock('@/shared/lib/lookupFetcher', () => ({
+  lookupFetcher: vi.fn().mockResolvedValue({ data: [] }),
+  contactoOrphanFetcher: vi.fn().mockResolvedValue({ data: [] }),
+}))
+vi.mock('siesa-ui-kit', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Input: ({ label, error, errorMessage, ...props }: any) => (
+    <div>
+      <label htmlFor={props.name}>{label}</label>
+      <input id={props.name} {...props} type="text" />
+      {error && errorMessage && <span>{errorMessage}</span>}
+    </div>
+  ),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Button: ({ children, onClick, disabled, htmlType }: any) => (
+    <button type={htmlType ?? 'button'} onClick={onClick} disabled={disabled}>{children}</button>
+  ),
+  LookupField: () => null,
+}))
 
 function renderForm(props?: {
   onSuccess?: () => void
@@ -191,6 +213,23 @@ describe('ContactoForm', () => {
     })
     expect(createMutateAsync).not.toHaveBeenCalled()
     expect(onSuccess).toHaveBeenCalledOnce()
+  })
+
+  it('shows email format error for invalid email', async () => {
+    mockCreateMutation()
+    mockUpdateMutation()
+    renderForm()
+
+    fireEvent.change(screen.getByLabelText(/nombre/i), { target: { value: 'Ana García' } })
+    fireEvent.change(screen.getByLabelText(/cargo/i), { target: { value: 'Analista' } })
+    fireEvent.change(screen.getByLabelText(/teléfono/i), { target: { value: '3001234567' } })
+    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'not-an-email' } })
+
+    fireEvent.click(screen.getByText('Guardar'))
+
+    await waitFor(() => {
+      expect(screen.getByText('Formato de email inválido')).toBeInTheDocument()
+    })
   })
 
   it('shows backend error from 422 in edit mode', async () => {

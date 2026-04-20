@@ -1,6 +1,6 @@
 ---
 name: 'step-02-build-traceability'
-description: 'Build complete FR→Epic→Story→Task hierarchy with validation and coverage analysis'
+description: 'Build complete FR→Feature→Story→Task hierarchy with validation and coverage analysis'
 
 # Path Definitions
 workflow_path: '{project-root}/_bmad/bmm/workflows/4-implementation/traceability-and-testing'
@@ -16,7 +16,7 @@ outputFile: '{implementation_artifacts}/traceability-artifacts/traceability-map.
 
 ## STEP GOAL:
 
-To construct the complete FR→Epic→Story→Task hierarchy, validate all relationships, generate traceability matrices, and calculate coverage statistics.
+To construct the complete FR→Feature→Story→Task hierarchy, validate all relationships, generate traceability matrices, and calculate coverage statistics.
 
 ## MANDATORY EXECUTION RULES (READ FIRST):
 
@@ -45,15 +45,15 @@ To construct the complete FR→Epic→Story→Task hierarchy, validate all relat
 
 ## EXECUTION PROTOCOLS:
 
-- 🎯 Build hierarchy systematically from FR → Epic → Story → Task
+- 🎯 Build hierarchy systematically from FR → Feature → Story → Task
 - 💾 Update traceability-map.md with sections 1-3
 - 📖 Update frontmatter with `stepsCompleted: [1, 2]` and statistics
 - 🚫 FORBIDDEN to load next step until traceability is complete and validated
 
 ## CONTEXT BOUNDARIES:
 
-- Input data from step 01 frontmatter (FRs, Epics, Stories)
-- epics.md content for FR Coverage Map and Story details
+- Input data from step 01 frontmatter (FRs, Features, Stories)
+- Feature epic_source files for FR Coverage Map and Story details
 - Optional story files for task extraction
 - Focus on requirements traceability, NOT test cases yet
 
@@ -65,41 +65,41 @@ Read frontmatter from {outputFile}:
 
 ```yaml
 stepsCompleted: [1]
-epicScopeMode: "all" | "multiple"
-targetEpicNumbers: null | [1, 3, 5]  # Array of selected epic numbers
-epicCount: {number}  # Number of epics being processed
-frs: [FR-001, FR-002, ...]  # Already filtered if multiple epic mode
-epics: [Epic 1, Epic 2, ...]  # Already filtered if multiple epic mode
-stories: [1.1, 1.2, 2.1, ...]  # Already filtered if multiple epic mode
+featureScopeMode: "all" | "multiple"
+targetFeatureIds: null | ["feature-1", "feature-3"]  # Array of selected feature IDs
+featureCount: {number}  # Number of features being processed
+frs: [FR-001, FR-002, ...]  # Already filtered if multiple feature mode
+selectedFeatures: ["feature-1", "feature-2", ...]  # Already filtered if multiple feature mode
+stories: [1.1, 1.2, 2.1, ...]  # Already filtered if multiple feature mode
 inputDocuments: [...]
 ```
 
 **Display scope-aware message:**
 
 ```
-{if epicScopeMode === "all":
+{if featureScopeMode === "all":
   "Construyendo el mapa de trazabilidad para **{projectName}**...
 
   📊 Elementos a procesar:
   - {count_frs} Requerimientos Funcionales
-  - {count_epics} Épicas
+  - {count_features} Features
   - {count_stories} Historias de Usuario
 
-  🎯 **Alcance:** Todas las épicas
+  🎯 **Alcance:** Todos los features
 
   Comenzando construcción de jerarquía..."
 else:
-  "Construyendo el mapa de trazabilidad para **{projectName}** ({epicCount} épica(s) seleccionada(s))...
+  "Construyendo el mapa de trazabilidad para **{projectName}** ({featureCount} feature(s) seleccionado(s))...
 
   📊 Elementos a procesar:
-  - {count_frs} Requerimientos Funcionales (relacionados a las épicas seleccionadas)
-  - {epicCount} Épica(s):
-    {for each epic_number in targetEpicNumbers:
-      \"  • Epic {epic_number}: {epic_title}\"
+  - {count_frs} Requerimientos Funcionales (relacionados a los features seleccionados)
+  - {featureCount} Feature(s):
+    {for each feature_id in targetFeatureIds:
+      \"  • {feature_id}: {feature_title}\"
     }
   - {count_stories} Historias de Usuario
 
-  🎯 **Alcance:** {epicCount} épica(s) seleccionada(s)
+  🎯 **Alcance:** {featureCount} feature(s) seleccionado(s)
 
   💡 Esta agrupación permite generar trazabilidad coherente para funcionalidades completas.
 
@@ -107,59 +107,59 @@ else:
 }
 ```
 
-**Note:** The FRs, Epics, and Stories arrays were already filtered in Step 01 if multiple epic mode was selected, so no additional filtering is needed in this step.
+**Note:** The FRs, Features, and Stories arrays were already filtered in Step 01 if multiple feature mode was selected, so no additional filtering is needed in this step.
 
 ---
 
-### 2. Build FR → Epic Mapping
+### 2. Build FR → Feature Mapping
 
-Read epics.md and locate the "FR Coverage Map" section.
+For each feature in `selectedFeatures`, read its `epic_source` file and locate the "FR Coverage Map" section or FR references.
 
-**Extract FR→Epic relationships:**
+**Extract FR→Feature relationships:**
 
 Parse lines like:
 ```
-FR1 → Epic 1
-FR2 → Epic 1, Epic 2
-FR3 → Epic 3
+FR1 → feature-1
+FR2 → feature-1, feature-2
+FR3 → feature-3
 ```
 
 Build bidirectional mapping:
 ```javascript
-fr_to_epic = {
-  "FR-001": ["Epic 1"],
-  "FR-002": ["Epic 1", "Epic 2"],
-  "FR-003": ["Epic 3"]
+fr_to_feature = {
+  "FR-001": ["feature-1"],
+  "FR-002": ["feature-1", "feature-2"],
+  "FR-003": ["feature-3"]
 }
 
-epic_to_frs = {
-  "Epic 1": ["FR-001", "FR-002"],
-  "Epic 2": ["FR-002"],
-  "Epic 3": ["FR-003"]
+feature_to_frs = {
+  "feature-1": ["FR-001", "FR-002"],
+  "feature-2": ["FR-002"],
+  "feature-3": ["FR-003"]
 }
 ```
 
 ---
 
-### 3. Build Epic → Story Hierarchy
+### 3. Build Feature → Story Hierarchy
 
-For each Epic section in epics.md, extract all Stories:
+For each feature in `selectedFeatures`, read its `epic_source` file and extract all Stories:
 
 ```
-## Epic 1: User Management
+## Feature 1: User Management
   ### Story 1.1: User Registration
   ### Story 1.2: User Profile Management
 
-## Epic 2: Authentication
+## Feature 2: Authentication
   ### Story 2.1: Login Functionality
   ### Story 2.2: Password Reset
 ```
 
 Build mapping:
 ```javascript
-epic_to_stories = {
-  "Epic 1": ["Story 1.1", "Story 1.2"],
-  "Epic 2": ["Story 2.1", "Story 2.2"]
+feature_to_stories = {
+  "feature-1": ["Story 1.1", "Story 1.2"],
+  "feature-2": ["Story 2.1", "Story 2.2"]
 }
 ```
 
@@ -192,7 +192,7 @@ story_to_tasks = {
 
 **If no story files:**
 
-"ℹ️ No se encontraron archivos de historias individuales con tareas. La trazabilidad se limitará a FR→Epic→Story."
+"ℹ️ No se encontraron archivos de historias individuales con tareas. La trazabilidad se limitará a FR→Feature→Story."
 
 ---
 
@@ -200,50 +200,50 @@ story_to_tasks = {
 
 Perform validation checks:
 
-**Validation 1: All FRs have Epic coverage**
+**Validation 1: All FRs have Feature coverage**
 
 ```javascript
-frs_without_epics = []
+frs_without_features = []
 for fr in all_frs:
-    if fr not in fr_to_epic or len(fr_to_epic[fr]) == 0:
-        frs_without_epics.append(fr)
+    if fr not in fr_to_feature or len(fr_to_feature[fr]) == 0:
+        frs_without_features.append(fr)
 ```
 
 **If gaps found:**
 
-"⚠️ **Alerta: Requerimientos sin cobertura de Épica**
+"⚠️ **Alerta: Requerimientos sin cobertura de Feature**
 
-Los siguientes FRs no están cubiertos por ninguna Épica:
-{list frs_without_epics}
+Los siguientes FRs no están cubiertos por ningún Feature:
+{list frs_without_features}
 
 Esto puede indicar:
-1. Falta actualizar el FR Coverage Map en epics.md
-2. Estos FRs no fueron considerados en la planificación de épicas
+1. Falta actualizar el FR Coverage Map en los archivos epic_source de los features
+2. Estos FRs no fueron considerados en la planificación de features
 3. Error en la extracción de datos
 
-**Recomendación:** Revisar y actualizar epics.md antes de continuar.
+**Recomendación:** Revisar los archivos epic_source de los features antes de continuar.
 
 ¿Deseas continuar de todos modos o corregir esto primero?"
 
-**Validation 2: All Epics have Stories**
+**Validation 2: All Features have Stories**
 
 ```javascript
-epics_without_stories = []
-for epic in all_epics:
-    if epic not in epic_to_stories or len(epic_to_stories[epic]) == 0:
-        epics_without_stories.append(epic)
+features_without_stories = []
+for feature in all_features:
+    if feature not in feature_to_stories or len(feature_to_stories[feature]) == 0:
+        features_without_stories.append(feature)
 ```
 
 **If gaps found:**
 
-"⚠️ **Alerta: Épicas sin Historias de Usuario**
+"⚠️ **Alerta: Features sin Historias de Usuario**
 
-Las siguientes Épicas no contienen Historias:
-{list epics_without_stories}
+Los siguientes Features no contienen Historias:
+{list features_without_stories}
 
-Esto es un problema crítico ya que las Épicas deben descomponerse en Historias para ser implementables.
+Esto es un problema crítico ya que los Features deben descomponerse en Historias para ser implementables.
 
-**Acción requerida:** Revisar epics.md y agregar historias para estas épicas."
+**Acción requerida:** Revisar los archivos epic_source de los features y agregar historias para estos features."
 
 **Validation 3: No duplicate IDs**
 
@@ -273,7 +273,7 @@ Create hierarchical tree representation:
 
 ```
 FR-001: User Management and Authentication
- └─ Epic 1: User Management System
+ └─ feature-1: User Management System
     ├─ Story 1.1: User Registration
     │  ├─ Task 1.1-1: Create registration API endpoint
     │  └─ Task 1.1-2: Implement email validation
@@ -281,11 +281,11 @@ FR-001: User Management and Authentication
        └─ Task 1.2-1: Build profile update UI
 
 FR-002: User Authentication
- ├─ Epic 1: User Management System
+ ├─ feature-1: User Management System
  │  └─ Story 1.3: Login Functionality
  │     ├─ Task 1.3-1: Implement OAuth integration
  │     └─ Task 1.3-2: Create session management
- └─ Epic 2: Security Controls
+ └─ feature-2: Security Controls
     └─ Story 2.1: Multi-factor Authentication
        └─ Task 2.1-1: Implement 2FA with SMS
 ```
@@ -305,15 +305,15 @@ Compute metrics:
 ```javascript
 statistics = {
   totalFRs: count(all_frs),
-  totalEpics: count(all_epics),
+  totalFeatures: count(all_features),
   totalStories: count(all_stories),
   totalTasks: count(all_tasks),
 
-  frsWithEpicCoverage: count(frs with ≥1 epic),
-  epicsWithStories: count(epics with ≥1 story),
+  frsWithFeatureCoverage: count(frs with ≥1 feature),
+  featuresWithStories: count(features with ≥1 story),
 
-  coverageRate: (frsWithEpicCoverage / totalFRs) * 100,
-  avgStoriesPerEpic: totalStories / totalEpics,
+  coverageRate: (frsWithFeatureCoverage / totalFRs) * 100,
+  avgStoriesPerFeature: totalStories / totalFeatures,
   avgTasksPerStory: totalTasks / totalStories (if tasks exist)
 }
 ```
@@ -327,17 +327,17 @@ statistics = {
 
 ### Cobertura de Requerimientos Funcionales
 - Total de RFs: {totalFRs}
-- RFs con cobertura de Épica: {frsWithEpicCoverage}
-- RFs sin cobertura de Épica: {totalFRs - frsWithEpicCoverage}
+- RFs con cobertura de Feature: {frsWithFeatureCoverage}
+- RFs sin cobertura de Feature: {totalFRs - frsWithFeatureCoverage}
 - Tasa de cobertura: {coverageRate}%
 
 {If coverage < 100%}
-⚠️ **Advertencia:** {percent}% de los RFs carecen de cobertura de Épica
+⚠️ **Advertencia:** {percent}% de los RFs carecen de cobertura de Feature
 
-### Descomposición de Épicas
-- Total de Épicas: {totalEpics}
+### Descomposición de Features
+- Total de Features: {totalFeatures}
 - Total de Historias: {totalStories}
-- Promedio de Historias por Épica: {avgStoriesPerEpic}
+- Promedio de Historias por Feature: {avgStoriesPerFeature}
 - Total de Tareas identificadas: {totalTasks} {if available}
 
 {If tasks available}
@@ -370,7 +370,7 @@ Update {outputFile} by appending sections 1-3:
 ### FR-001: {Description}
 
 **Cubierto por:**
-- **Epic 1:** {Title}
+- **feature-1:** {Title}
   - Story 1.1: {Title}
     - AC1: {Acceptance Criteria}
     - AC2: {Acceptance Criteria}
@@ -393,7 +393,7 @@ Update frontmatter in {outputFile}:
 stepsCompleted: [1, 2]
 statistics:
   totalFRs: {X}
-  totalEpics: {Y}
+  totalFeatures: {Y}
   totalStories: {Z}
   totalTasks: {W}
   coverageRate: {P}%
@@ -407,13 +407,13 @@ statistics:
 
 📊 **Estadísticas Generales:**
 - Requerimientos Funcionales: {totalFRs}
-- Épicas: {totalEpics}
+- Features: {totalFeatures}
 - Historias de Usuario: {totalStories}
 - Tareas identificadas: {totalTasks}
 
 📈 **Cobertura:**
-- FRs con cobertura de Épica: {frsWithEpicCoverage}/{totalFRs} ({coverageRate}%)
-- Épicas con Historias: {epicsWithStories}/{totalEpics}
+- FRs con cobertura de Feature: {frsWithFeatureCoverage}/{totalFRs} ({coverageRate}%)
+- Features con Historias: {featuresWithStories}/{totalFeatures}
 
 {If warnings exist}
 ⚠️ **Alertas:**
@@ -461,10 +461,10 @@ ONLY WHEN C is selected, all sections (1-3) are written to {outputFile}, and fro
 ### ✅ SUCCESS:
 
 - Context loaded correctly from step 01 frontmatter
-- FR→Epic mapping extracted from epics.md
-- Epic→Story hierarchy built correctly
+- FR→Feature mapping extracted from feature epic_source files
+- Feature→Story hierarchy built correctly
 - Story→Task relationships extracted (if available)
-- All validations performed (FRs coverage, Epics with Stories, no duplicate IDs)
+- All validations performed (FRs coverage, Features with Stories, no duplicate IDs)
 - Warnings displayed for any gaps
 - Traceability tree generated in ASCII format
 - Coverage statistics calculated accurately
@@ -475,8 +475,8 @@ ONLY WHEN C is selected, all sections (1-3) are written to {outputFile}, and fro
 ### ❌ SYSTEM FAILURE:
 
 - Not loading context from step 01
-- Incomplete extraction of FR→Epic mapping
-- Missing Epic→Story hierarchy
+- Incomplete extraction of FR→Feature mapping
+- Missing Feature→Story hierarchy
 - Validations not performed or skipped
 - Gaps not reported to user
 - Tree not generated

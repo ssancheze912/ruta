@@ -1,0 +1,60 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - navigation [ref=e4]:
+      - img "Siesa" [ref=e6]
+    - generic [ref=e8]:
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - button "Clientes" [ref=e13] [cursor=pointer]:
+            - img [ref=e16]
+          - button "Contactos" [ref=e18] [cursor=pointer]:
+            - img [ref=e21]
+        - generic [ref=e23]:
+          - separator [ref=e24]
+          - button "Expandir" [ref=e26]:
+            - img [ref=e28]
+      - generic [ref=e145]:
+        - generic [ref=e146]:
+          - heading "testttt" [level=1] [ref=e147]
+          - generic [ref=e148]:
+            - button "Editar" [ref=e149]:
+              - generic [ref=e150]: Editar
+            - button "Eliminar" [ref=e151]:
+              - generic [ref=e152]: Eliminar
+            - button "Volver" [ref=e153]:
+              - generic [ref=e154]: Volver
+        - generic [ref=e155]:
+          - paragraph [ref=e157]: Nombre
+          - paragraph [ref=e159]: testttt
+        - generic [ref=e160]:
+          - paragraph [ref=e162]: NIT/RUC
+          - paragraph [ref=e164]: "1233123"
+        - generic [ref=e165]:
+          - paragraph [ref=e167]: Teléfono
+          - paragraph [ref=e169]: "1233213"
+        - generic [ref=e170]:
+          - paragraph [ref=e172]: Ciudad
+          - paragraph [ref=e174]: Calidfdfdf
+        - generic [ref=e175]:
+          - heading "Contactos asociados" [level=2] [ref=e176]
+          - generic [ref=e177]:
+            - button "Asociar contacto" [ref=e179]:
+              - generic [ref=e180]: Asociar contacto
+            - generic [ref=e193]:
+              - button "Nombre" [ref=e194] [cursor=pointer]:
+                - generic [ref=e195]: Nombre
+              - generic [ref=e199]: Cargo
+              - generic [ref=e201]: Teléfono
+              - generic [ref=e203]: Email
+              - generic [ref=e205]:
+                - generic [ref=e207]: test
+                - generic [ref=e209]: Director
+                - generic [ref=e211]: "3186287645"
+                - generic [ref=e213]: santiago.esqssssuivel@correounivalle.edu.co
+                - button "Desasociar" [ref=e216]:
+                  - generic [ref=e217]: Desasociar
+  - alert [ref=e219]:
+    - img [ref=e221]
+    - generic [ref=e223]: Contacto asociado correctamente
+    - button "Cerrar notificación" [ref=e224]:
+      - img [ref=e225]

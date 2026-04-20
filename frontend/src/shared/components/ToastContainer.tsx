@@ -21,10 +21,11 @@ export function ToastContainer() {
     }
 
     window.addEventListener(TOAST_EVENT, handler)
+    const currentTimers = timers.current
     return () => {
       window.removeEventListener(TOAST_EVENT, handler)
-      timers.current.forEach(clearTimeout)
-      timers.current.clear()
+      currentTimers.forEach(clearTimeout)
+      currentTimers.clear()
     }
   }, [])
 

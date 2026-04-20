@@ -1,0 +1,104 @@
+═══════════════════════════════════════════════════════════════
+  DEMO BMAD V6.0 + AgileTest — Comandos de Referencia
+  Lab QA: Creación Automatizada de Ciclos de Prueba
+  Fecha demo: 2026-04-10
+═══════════════════════════════════════════════════════════════
+
+  NOTA: Todos los pasos se ejecutan desde Claude Code.
+  Solo indicar "Paso A", "Paso B", etc. y Claude ejecuta
+  el comando completo (sin exponer tokens en pantalla).
+
+───────────────────────────────────────────────────────────────
+  PASO A: Borrar issues existentes
+───────────────────────────────────────────────────────────────
+  Qué hace:  Lee bmad_state_SEGM_SEGMT.json, extrae los keys
+             de Jira (stories, TCs, plans, ejecuciones) y los
+             elimina via API REST de Jira en orden inverso
+             (ejecuciones → planes → TCs → stories).
+  Resultado: Issues borrados de Jira/AgileTest.
+
+───────────────────────────────────────────────────────────────
+  PASO B: Limpiar state file
+───────────────────────────────────────────────────────────────
+  Qué hace:  Resetea bmad_state_SEGM_SEGMT.json a {} (vacío).
+             Esto le dice al script que no hay nada creado,
+             permitiendo recrear desde cero sin duplicados.
+  Resultado: State file limpio, listo para recreación.
+
+───────────────────────────────────────────────────────────────
+  PASO C: Recrear feature completo (cronometrado)
+───────────────────────────────────────────────────────────────
+  Comando:   time python bmad_to_agiletest.py --create
+  Qué hace:  Parsea el diseño BMAD V6.0 del feature Segments
+             completo y ejecuta los 8 pasos de creación:
+               1. Crear 27 requisitos (stories) en Jira
+               2. Crear 50 test cases en Jira
+               3. Crear 5 plans + 5 ejecuciones en Jira
+               4. Registrar 60 entidades en AgileTest
+               5. Crear 132 links (TC→Req, TC→Plan, TC→Exec)
+               6. Agregar 98 steps a los 50 test cases
+               7. Vincular TCs a Plans/Executions en AgileTest
+               8. Guardar state file
+  Resultado: 87 issues creados en ~5 minutos.
+             Estado guardado en bmad_state_SEGM_SEGMT.json
+
+───────────────────────────────────────────────────────────────
+  PASO D: Verificar en AgileTest
+───────────────────────────────────────────────────────────────
+  Abrir en navegador el key de ejecución creado.
+  Ejemplo: https://siesa-team.atlassian.net/browse/CON-XXXX
+  (El key exacto aparece en la salida del Paso C)
+
+  Verificar:
+    - Plan de ejecución con TCs asignados
+    - Cada TC tiene pasos (acción + resultado esperado)
+    - Links de trazabilidad TC → Requisito
+    - Botón "Ejecutar" disponible en cada TC
+
+═══════════════════════════════════════════════════════════════
+  RESUMEN DE LA DEMO (Feature Segments completo)
+═══════════════════════════════════════════════════════════════
+
+  Artefacto               | Cantidad | Rango Jira
+  ────────────────────────|──────────|─────────────────────
+  Requisitos (Stories)    |    27    | CON-6440 → CON-6466
+  Test Cases              |    50    | CON-6467 → CON-6516
+  Test Plans (PPR)        |     5    | CON-6517, 6519, 6521, 6523, 6525
+  Ejecuciones (PEP)       |     5    | CON-6518, 6520, 6522, 6524, 6526
+  ────────────────────────|──────────|─────────────────────
+  Total issues            |    87    |
+  Links de trazabilidad   |   132    |
+  Steps de prueba         |    98    |
+  Tiempo total            | ~5 min   |
+
+  Distribución de TCs por prioridad:
+    P0 (Muy Alta):  12 TCs
+    P1 (Alta):      20 TCs
+    P2 (Media):      9 TCs
+    P3 (Baja):       9 TCs
+
+  Planes de prueba:
+    F1 - CRUD     → 17 TCs
+    F2 - Tree     →  9 TCs
+    F3 - Search   → 14 TCs
+    F4 - Events   →  4 TCs
+    F5 - UI       →  6 TCs
+
+═══════════════════════════════════════════════════════════════
+  DATOS CLAVE
+═══════════════════════════════════════════════════════════════
+
+  - 13 features en el catálogo, ~486 TCs totales
+  - Manual: ~15 días | Automatizado: ~1.5 horas (98.8% reducción)
+  - Gobernanza: "La IA acelera, el humano dirige y autoriza"
+  - Script idempotente: borrar y recrear sin efectos secundarios
+  - Fuente: documento BMAD V6.0 (Secciones I, IV, Apéndice)
+
+═══════════════════════════════════════════════════════════════
+  ARCHIVOS NECESARIOS
+═══════════════════════════════════════════════════════════════
+
+  1. bmad_to_agiletest.py         → Script principal
+  2. bmad-v6-segment-test-design.md → Insumo (diseño BMAD V6.0)
+  3. agiletest-mapping.md          → Mapeo BMAD ↔ AgileTest/Jira
+  4. bmad_state_SEGM_SEGMT.json    → State file (control de idempotencia)

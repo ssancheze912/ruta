@@ -11,7 +11,7 @@ workflowFile: '{workflow_path}/workflow.md'
 outputFileSpanish: '{output_folder}/documentation-artifacts/user-guide/es/{audience}-guide.md'
 
 # Step files (for reading completed steps)
-step02File: '{workflow_path}/steps/step-02-seleccion-epicas.md'
+step02File: '{workflow_path}/steps/step-02-seleccion-features.md'
 step03File: '{workflow_path}/steps/step-03-analisis-fuentes.md'
 step04File: '{workflow_path}/steps/step-04-elicitacion.md'
 step05File: '{workflow_path}/steps/step-05-generacion-espanol.md'
@@ -128,7 +128,7 @@ Based on `stepsCompleted` array:
 
 | Last Step | Next Step File | Next Step Description |
 |-----------|----------------|------------------------|
-| 1 | step-02-seleccion-epicas.md | Seleccionar épicas a documentar |
+| 1 | step-02-seleccion-features.md | Seleccionar features a documentar |
 | 2 | step-03-analisis-fuentes.md | Analizar artefactos del proyecto |
 | 3 | step-04-elicitacion.md | Elicitar información adicional |
 | 4 | step-05-generacion-espanol.md | Generar contenido en español |
@@ -149,7 +149,7 @@ He detectado que tenemos un workflow de guía de usuario en progreso para **{pro
 - Audiencia objetivo: **{target_audience_name}**
 - Steps completados: **{count} de 7**
 - Último step: **{last_step_description}**
-- Épicas seleccionadas: **{epics_selected_count}**
+- Features seleccionadas: **{features_selected_count}**
 - Features documentadas: **{features_documented}** (si aplica)
 - Estado: **{review_status}**
 
@@ -181,13 +181,13 @@ Offer optional review:
        - Audiencia: {target_audience}
        - Fecha inicio: {generated_date}
 
-    2. Selección de Épicas (step-02):
-       - Épicas incluidas: {epics_selected}
-       - Épicas excluidas: {epics_excluded}
+    2. Selección de Features (step-02):
+       - Features incluidas: {features_selected}
+       - Features excluidas: {features_excluded}
 
     3. Análisis de Fuentes (step-03):
        - PRDs encontrados: {prd_docs_count}
-       - Épicas analizadas: {epics_count}
+       - Features analizadas: {features_count}
        - Arquitectura: {architecture_docs_count}
 
     4. Elicitación (step-04):
@@ -206,7 +206,7 @@ Offer optional review:
 - **IF M (Modificar):**
   - "¿Qué deseas modificar?
     - [A] Audiencia objetivo
-    - [E] Épicas seleccionadas
+    - [E] Features seleccionadas
     - [P] Preferencias (nivel técnico, troubleshooting)
     - [X] Cancelar modificaciones"
   - Handle modifications (may require re-running some steps)

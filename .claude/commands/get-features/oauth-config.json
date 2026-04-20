@@ -1,0 +1,17 @@
+{
+  "client_id": "dh5IIb7q12LwM20EmZawtFF5IoKdnfyF",
+  "client_secret": "ATOAXFei31kZDErZH7UmiFrtdv5oP-ZRroQge3CU5mee2Fg5quACmNpYES5I0xcaGWoE09354D07",
+  "redirect_uri": "http://localhost:3000/callback",
+  "scopes": "read:jira-work read:jira-user offline_access",
+  "cloud_id": "50a1ceab-71e1-4f5b-a7f0-d319d949efd0",
+  "jira_base_url": "https://api.atlassian.com/ex/jira/50a1ceab-71e1-4f5b-a7f0-d319d949efd0/rest/api/3",
+  "default_instance": {
+    "id": "50a1ceab-71e1-4f5b-a7f0-d319d949efd0",
+    "name": "siesa-team",
+    "url": "https://siesa-team.atlassian.net"
+  },
+  "default_project": {
+    "key": "PPS",
+    "name": "PS - Platform Services"
+  }
+}

@@ -1,6 +1,8 @@
 using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SiesaAgents.Application.Contactos.DTOs;
@@ -135,5 +137,55 @@ public class GetContactosByClienteIdTests : IAsyncLifetime
         var json = await response.Content.ReadAsStringAsync();
         var contactos = JsonSerializer.Deserialize<List<ContactoDto>>(json, JsonOptions)!;
         Assert.Equal(2, contactos.Count);
+    }
+
+    [Fact]
+    public async Task GetContactosByCliente_AfterReassign_ReflectsNewAssignment()
+    {
+        // GIVEN: Two clients and one contact initially assigned to clienteA
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+
+        var clienteIdA = await SeedClienteAsync(factory);
+        var clienteIdB = await SeedClienteAsync(factory);
+
+        Guid contactoId;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var contacto = new ContactoEntity
+            {
+                Nombre = "Contacto Reasignar",
+                Cargo = "Cargo",
+                Telefono = "123456",
+                Email = "reasignar@test.com",
+                ClienteId = clienteIdA,
+            };
+            db.Contactos.Add(contacto);
+            await db.SaveChangesAsync();
+            contactoId = contacto.Id;
+        }
+
+        var client = factory.CreateClient();
+
+        // WHEN: The contact is reassigned to clienteB
+        var reassignResponse = await client.PutAsJsonAsync(
+            $"/api/v1/contactos/{contactoId}/cliente",
+            new { clienteId = clienteIdB });
+        Assert.Equal(HttpStatusCode.OK, reassignResponse.StatusCode);
+
+        // THEN: Old client's query no longer includes the contact
+        var responseA = await client.GetAsync($"/api/v1/contactos?clienteId={clienteIdA}");
+        Assert.Equal(HttpStatusCode.OK, responseA.StatusCode);
+        var jsonA = await responseA.Content.ReadAsStringAsync();
+        var contactosA = JsonSerializer.Deserialize<List<ContactoDto>>(jsonA, JsonOptions)!;
+        Assert.DoesNotContain(contactosA, c => c.Id == contactoId);
+
+        // AND: New client's query now includes the contact
+        var responseB = await client.GetAsync($"/api/v1/contactos?clienteId={clienteIdB}");
+        Assert.Equal(HttpStatusCode.OK, responseB.StatusCode);
+        var jsonB = await responseB.Content.ReadAsStringAsync();
+        var contactosB = JsonSerializer.Deserialize<List<ContactoDto>>(jsonB, JsonOptions)!;
+        Assert.Contains(contactosB, c => c.Id == contactoId);
     }
 }

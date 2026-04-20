@@ -45,6 +45,9 @@ export function ContactoForm({
 
   const onSubmit = async (data: ContactoFormValues) => {
     try {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+        throw new Error('Formato de email inválido')
+      }
       let resolvedContactoId = contactoId
 
       if (contactoId) {
@@ -66,6 +69,10 @@ export function ContactoForm({
 
       onSuccess()
     } catch (error) {
+      if (error instanceof Error && !axios.isAxiosError(error)) {
+        setError('root', { message: error.message })
+        return
+      }
       const detail = axios.isAxiosError(error)
         ? (error.response?.data as { detail?: string })?.detail
         : undefined

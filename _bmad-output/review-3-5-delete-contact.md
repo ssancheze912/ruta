@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [1, 2, 3, 4, 5, 6]
+stepsCompleted: [1, 2, 3, 4, 5, 6, 7]
 story_path: _bmad-output/implementation-artifacts/3-5-delete-contact.md
 story_key: 3-5-delete-contact
 reviewer: SiesaTeam (AI Agent)
@@ -11,7 +11,17 @@ status: In Progress
 
 - **Date**: 2026-03-15
 - **Reviewer**: SiesaTeam (AI Agent)
-- **Status**: In Progress
+- **Status**: Completed ✅
+
+---
+
+## Repository Sync
+
+- **Branch**: develop-santidev-ssancheze-epics-2-3
+- **Commit (frontend)**: `fe450c7` feat: story 3.5 delete contact — useDeleteContacto, confirmation dialog, error handling
+- **Commit (root)**: `b65331d` feat: implement story 3-5-delete-contact — delete contact (DELETE /api/v1/contactos/{id})
+- **Push**: ✅ Pushed to origin/develop-santidev-ssancheze-epics-2-3
+- **GitFlow Compliance**: ✅ Verified against git-flow-siesa.md
 
 ---
 

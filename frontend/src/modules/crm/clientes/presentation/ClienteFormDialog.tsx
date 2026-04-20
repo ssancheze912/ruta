@@ -17,7 +17,7 @@ import { lookupFetcher } from '@/shared/lib/lookupFetcher'
 import { getHttpStatus } from '@/shared/lib/httpError'
 
 const schema = z.object({
-  nombre:   z.string().min(1, 'Nombre es requerido'),
+  nombre:   z.string().trim().min(1, 'Nombre es requerido'),
   nit:      z.string().min(1, 'NIT/RUC es requerido'),
   telefono: z.string().min(1, 'Teléfono es requerido'),
   ciudad:   z.string().min(1, 'Ciudad es requerida'),
@@ -62,7 +62,7 @@ export function ClienteFormDialog({
   useEffect(() => {
     if (open) {
       reset(defaultValues ?? emptyValues)
-      setNewClienteId(null)
+      setNewClienteId(null) // eslint-disable-line react-hooks/set-state-in-effect
       setSelectedContactoId(null)
     }
   }, [open]) // eslint-disable-line react-hooks/exhaustive-deps

@@ -1,0 +1,57 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - img "Siesa" [ref=e6]
+  - generic [ref=e8]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - button "Clientes" [ref=e13] [cursor=pointer]:
+          - img [ref=e16]
+        - button "Contactos" [active] [ref=e18] [cursor=pointer]:
+          - img [ref=e21]
+      - generic [ref=e23]:
+        - separator [ref=e24]
+        - button "Expandir" [ref=e26]:
+          - img [ref=e28]
+    - generic [ref=e216]:
+      - generic [ref=e217]:
+        - generic [ref=e218]:
+          - heading "Contactos" [level=1] [ref=e219]
+          - button "Sin cliente (1)" [ref=e220]:
+            - generic [ref=e221]: Sin cliente (1)
+        - button "Nuevo contacto" [ref=e222]:
+          - generic [ref=e223]: Nuevo contacto
+      - textbox "Buscar contactos" [ref=e227]:
+        - /placeholder: Buscar por nombre o email
+      - generic [ref=e230]:
+        - button "Nombre" [ref=e231] [cursor=pointer]:
+          - generic [ref=e232]: Nombre
+        - generic [ref=e236]: Cargo
+        - generic [ref=e238]: Teléfono
+        - generic [ref=e240]: Email
+        - generic [ref=e242]: Cliente
+        - generic [ref=e244]:
+          - generic [ref=e246]: test
+          - generic [ref=e248]: Director
+          - generic [ref=e250]: "3186287645"
+          - generic [ref=e252]: santiago.esqssssuivel@correounivalle.edu.co
+          - generic [ref=e256]: Sin cliente
+          - generic [ref=e259]:
+            - button "Ver" [ref=e260]:
+              - generic [ref=e261]: Ver
+            - button "Editar" [ref=e262]:
+              - generic [ref=e263]: Editar
+            - button "Eliminar" [ref=e264]:
+              - generic [ref=e265]: Eliminar
+        - generic [ref=e266]:
+          - generic [ref=e268]: contactofff
+          - generic [ref=e270]: Directorfff
+          - generic [ref=e272]: "123333"
+          - generic [ref=e274]: saantiago.esquivel@correounivalle.edu.co
+          - generic [ref=e277]: SANTIAGO SANCHEZ ESQUIVEL
+          - generic [ref=e280]:
+            - button "Ver" [ref=e281]:
+              - generic [ref=e282]: Ver
+            - button "Editar" [ref=e283]:
+              - generic [ref=e284]: Editar
+            - button "Eliminar" [ref=e285]:
+              - generic [ref=e286]: Eliminar

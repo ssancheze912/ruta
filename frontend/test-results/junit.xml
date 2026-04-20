@@ -1,0 +1,2240 @@
+<testsuites id="" name="" tests="324" failures="13" skipped="269" errors="7" time="618.1329499999999">
+<testsuite name="asociacion.spec.ts" timestamp="2026-04-15T20:55:52.006Z" hostname="chromium" tests="33" failures="8" skipped="0" time="613.539" errors="5">
+<testcase name="Asociación — Client Detail shows associated contacts › [P0] should show &quot;Contactos asociados&quot; section in client detail" classname="asociacion.spec.ts" time="14.324">
+</testcase>
+<testcase name="Asociación — Client Detail shows associated contacts › [P1] should show empty state when client has no contacts" classname="asociacion.spec.ts" time="21.566">
+</testcase>
+<testcase name="Asociación — Client Detail shows associated contacts › [P0] should display a contact that is associated with the client" classname="asociacion.spec.ts" time="16.788">
+</testcase>
+<testcase name="Asociación — Forward navigation (client → contact) › [P0] should navigate to contact detail from client detail in ≤2 clicks (NFR8)" classname="asociacion.spec.ts" time="49.422">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|asociacion-Asociación-—-Fo-faade-t-detail-in-≤2-clicks-NFR8--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|asociacion-Asociación-—-Fo-faade-t-detail-in-≤2-clicks-NFR8--chromium\video.webm]]
+
+[[ATTACHMENT|asociacion-Asociación-—-Fo-faade-t-detail-in-≤2-clicks-NFR8--chromium\error-context.md]]
+
+[[ATTACHMENT|asociacion-Asociación-—-Fo-faade-t-detail-in-≤2-clicks-NFR8--chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › asociacion.spec.ts:60:3 › Asociación — Forward navigation (client → contact) › [P0] should navigate to contact detail from client detail in ≤2 clicks (NFR8) 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/contactos\/8e01aff6-f103-4180-8ce3-bc0fb727b90b/
+    Received string:  "http://localhost:5173/clientes/c7666a8f-2068-4f63-8bfd-51b55af80be5"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 10000ms
+        13 × unexpected value "http://localhost:5173/clientes/c7666a8f-2068-4f63-8bfd-51b55af80be5"
+
+
+      74 |
+      75 |     // THEN: The contact detail page loads (≤2 clicks from client record → 1 click = NFR8 satisfied)
+    > 76 |     await expect(page).toHaveURL(new RegExp(`/contactos/${contacto.id}`))
+         |                        ^
+      77 |     await expect(page.getByRole('heading', { name: contacto.nombre })).toBeVisible()
+      78 |   })
+      79 | })
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\asociacion.spec.ts:76:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-Asociación-—-Fo-faade-t-detail-in-≤2-clicks-NFR8--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-Asociación-—-Fo-faade-t-detail-in-≤2-clicks-NFR8--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\asociacion-Asociación-—-Fo-faade-t-detail-in-≤2-clicks-NFR8--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-Asociación-—-Fo-faade-t-detail-in-≤2-clicks-NFR8--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\asociacion-Asociación-—-Fo-faade-t-detail-in-≤2-clicks-NFR8--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="Asociación — Back navigation (contact → client) › [P1] should navigate to client detail by clicking client name link in contact detail (FR24)" classname="asociacion.spec.ts" time="10.112">
+</testcase>
+<testcase name="Asociación — Back navigation (contact → client) › [P1] should show &quot;Sin cliente asignado&quot; for a contact with no client" classname="asociacion.spec.ts" time="15.949">
+</testcase>
+<testcase name="Asociación — Associate contact › [P1] should associate an orphan contact to a client via &quot;Asociar contacto&quot;" classname="asociacion.spec.ts" time="19.458">
+</testcase>
+<testcase name="Asociación — Disassociate contact › [P2] should disassociate a contact from client without deleting either record" classname="asociacion.spec.ts" time="25.865">
+</testcase>
+<testcase name="Asociación — Reassign contact › [P2] should reassign a contact to a different client (FR26, FR27)" classname="asociacion.spec.ts" time="23.892">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|asociacion-Asociación-—-Re-fc9bb-different-client-FR26-FR27--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|asociacion-Asociación-—-Re-fc9bb-different-client-FR26-FR27--chromium\video.webm]]
+
+[[ATTACHMENT|asociacion-Asociación-—-Re-fc9bb-different-client-FR26-FR27--chromium\error-context.md]]
+
+[[ATTACHMENT|asociacion-Asociación-—-Re-fc9bb-different-client-FR26-FR27--chromium\trace.zip]]
+]]>
+</system-out>
+<error message="locator.selectOption: Error: Element is not a &lt;select&gt; element" type="Error">
+<![CDATA[  [chromium] › asociacion.spec.ts:165:3 › Asociación — Reassign contact › [P2] should reassign a contact to a different client (FR26, FR27) 
+
+    Error: locator.selectOption: Error: Element is not a <select> element
+    Call log:
+      - waiting for getByLabel('Seleccionar cliente destino')
+        - locator resolved to <button type="button" aria-expanded="false" aria-haspopup="listbox" title="Seleccionar cliente..." aria-label="Seleccionar cliente destino" class="inline-flex items-center justify-between gap-3 w-full px-3 py-2 text-sm font-normal leading-5 rounded-lg border transition-all duration-150 w-full bg-bg-primary border-border-primary text-content-primary dark:bg-dark-bg-primary dark:border-dark-border-primary dark:text-dark-content-primary hover:border-[#f9f9f9] dark:hover:border-[#3a3a3f] focus:outline-hid…>…</button>
+      - attempting select option action
+        - waiting for element to be visible and enabled
+
+
+      180 |
+      181 |     // Select the new client from the dropdown
+    > 182 |     await page.getByLabel('Seleccionar cliente destino').selectOption({ label: clienteB.nombre })
+          |                                                          ^
+      183 |     await page.getByRole('button', { name: /^guardar$/i }).click()
+      184 |
+      185 |     // THEN: The contact now shows the new client's name
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\asociacion.spec.ts:182:58
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-Asociación-—-Re-fc9bb-different-client-FR26-FR27--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-Asociación-—-Re-fc9bb-different-client-FR26-FR27--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\asociacion-Asociación-—-Re-fc9bb-different-client-FR26-FR27--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-Asociación-—-Re-fc9bb-different-client-FR26-FR27--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\asociacion-Asociación-—-Re-fc9bb-different-client-FR26-FR27--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-01 [P2] ContactManager muestra contactos del cliente (FR21)" classname="asociacion.spec.ts" time="9.568">
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-02 [P3] ContactManager EmptyState cuando cliente sin contactos" classname="asociacion.spec.ts" time="6.674">
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-03 [P2] ContactManager ErrorPanel cuando BE falla" classname="asociacion.spec.ts" time="8.581">
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-04 [P0] CRÍTICO: Asociar contacto + cache invalidation" classname="asociacion.spec.ts" time="6.245">
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-05 [P1] Crear contacto desde ContactManager → auto-asociado (FR18)" classname="asociacion.spec.ts" time="26.288">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Co-e7669-nager-→-auto-asociado-FR18--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Co-e7669-nager-→-auto-asociado-FR18--chromium\video.webm]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Co-e7669-nager-→-auto-asociado-FR18--chromium\error-context.md]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Co-e7669-nager-→-auto-asociado-FR18--chromium\trace.zip]]
+]]>
+</system-out>
+<error message="locator.click: Timeout 15000ms exceeded." type="TimeoutError">
+<![CDATA[  [chromium] › asociacion.spec.ts:270:3 › EPIC-SA-F4 — ContactManager › TC-F4-05 [P1] Crear contacto desde ContactManager → auto-asociado (FR18) 
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: /nuevo contacto/i })
+
+
+      277 |
+      278 |     // WHEN: Create new contact from within ContactManager
+    > 279 |     await page.getByRole('button', { name: /nuevo contacto/i }).click()
+          |                                                                 ^
+      280 |     await page.getByLabel(/^nombre$/i).fill('Auto Asociado F4')
+      281 |     await page.getByLabel(/^cargo$/i).fill('Tester')
+      282 |     await page.getByLabel(/^email$/i).fill(`auto.asoc.f4.${Date.now()}@test.com`)
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\asociacion.spec.ts:279:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Co-e7669-nager-→-auto-asociado-FR18--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Co-e7669-nager-→-auto-asociado-FR18--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\asociacion-EPIC-SA-F4-—-Co-e7669-nager-→-auto-asociado-FR18--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Co-e7669-nager-→-auto-asociado-FR18--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\asociacion-EPIC-SA-F4-—-Co-e7669-nager-→-auto-asociado-FR18--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-06 [P0] CRÍTICO: Desasociar contacto — no elimina registros (FR20)" classname="asociacion.spec.ts" time="11.626">
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-07 [P2] Navegar de cliente a contacto en ≤2 clics (FR22, NFR8)" classname="asociacion.spec.ts" time="23.508">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-959a3-acto-en-≤2-clics-FR22-NFR8--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-959a3-acto-en-≤2-clics-FR22-NFR8--chromium\video.webm]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-959a3-acto-en-≤2-clics-FR22-NFR8--chromium\error-context.md]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-959a3-acto-en-≤2-clics-FR22-NFR8--chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › asociacion.spec.ts:312:3 › EPIC-SA-F4 — Navigation & Links › TC-F4-07 [P2] Navegar de cliente a contacto en ≤2 clics (FR22, NFR8) 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/contactos\/dca3975a-23d6-422a-94b7-275cae87e02a/
+    Received string:  "http://localhost:5173/clientes/2be7d7ba-e51b-4b84-9c63-e01d51bdf996"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 10000ms
+        13 × unexpected value "http://localhost:5173/clientes/2be7d7ba-e51b-4b84-9c63-e01d51bdf996"
+
+
+      326 |
+      327 |     // THEN: Navigates to /contactos/:id in exactly 1 click (NFR8 ≤2 satisfied)
+    > 328 |     await expect(page).toHaveURL(new RegExp(`/contactos/${contacto.id}`))
+          |                        ^
+      329 |     await expect(page.getByRole('heading', { name: contacto.nombre })).toBeVisible()
+      330 |   })
+      331 |
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\asociacion.spec.ts:328:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-959a3-acto-en-≤2-clics-FR22-NFR8--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-959a3-acto-en-≤2-clics-FR22-NFR8--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-959a3-acto-en-≤2-clics-FR22-NFR8--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-959a3-acto-en-≤2-clics-FR22-NFR8--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-959a3-acto-en-≤2-clics-FR22-NFR8--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-08 [P2] Botón atrás regresa al detalle del cliente" classname="asociacion.spec.ts" time="21.155">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-5c8f1-resa-al-detalle-del-cliente-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-5c8f1-resa-al-detalle-del-cliente-chromium\video.webm]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-5c8f1-resa-al-detalle-del-cliente-chromium\error-context.md]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-5c8f1-resa-al-detalle-del-cliente-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › asociacion.spec.ts:332:3 › EPIC-SA-F4 — Navigation & Links › TC-F4-08 [P2] Botón atrás regresa al detalle del cliente 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/contactos\/bd30bca5-7262-4d05-a63b-3894557398cd/
+    Received string:  "http://localhost:5173/clientes/87bfdc75-73e2-4e56-b4da-3500a6accd9c"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 10000ms
+        13 × unexpected value "http://localhost:5173/clientes/87bfdc75-73e2-4e56-b4da-3500a6accd9c"
+
+
+      341 |     await page.goto(`/clientes/${cliente.id}`)
+      342 |     await page.getByText(contacto.nombre).first().click()
+    > 343 |     await expect(page).toHaveURL(new RegExp(`/contactos/${contacto.id}`))
+          |                        ^
+      344 |
+      345 |     // WHEN: Press browser back button
+      346 |     await page.goBack()
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\asociacion.spec.ts:343:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-5c8f1-resa-al-detalle-del-cliente-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-5c8f1-resa-al-detalle-del-cliente-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-5c8f1-resa-al-detalle-del-cliente-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-5c8f1-resa-al-detalle-del-cliente-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-5c8f1-resa-al-detalle-del-cliente-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-09 [P2] Detalle de contacto muestra cliente asociado sin búsqueda (FR23, NFR9)" classname="asociacion.spec.ts" time="15.241">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-3f798-ado-sin-búsqueda-FR23-NFR9--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-3f798-ado-sin-búsqueda-FR23-NFR9--chromium\video.webm]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-3f798-ado-sin-búsqueda-FR23-NFR9--chromium\error-context.md]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-3f798-ado-sin-búsqueda-FR23-NFR9--chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [chromium] › asociacion.spec.ts:353:3 › EPIC-SA-F4 — Navigation & Links › TC-F4-09 [P2] Detalle de contacto muestra cliente asociado sin búsqueda (FR23, NFR9) 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Cliente Visible F4')
+    Expected: visible
+    Error: strict mode violation: getByText('Cliente Visible F4') resolved to 3 elements:
+        1) <h1 class="text-xl font-semibold text-slate-900">Contacto Cliente Visible F4</h1> aka getByRole('heading', { name: 'Contacto Cliente Visible F4' })
+        2) <p class="text-sm leading-5 text-content-primary dark:text-dark-content-primary font-normal">Contacto Cliente Visible F4</p> aka getByRole('paragraph').filter({ hasText: 'Contacto Cliente Visible F4' })
+        3) <span class="text-sm">Cliente Visible F4</span> aka getByRole('button', { name: 'Cliente Visible F4' })
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByText('Cliente Visible F4')
+
+
+      365 |
+      366 |     // THEN: Associated client name visible directly; no additional search required
+    > 367 |     await expect(page.getByText(cliente.nombre)).toBeVisible()
+          |                                                  ^
+      368 |   })
+      369 |
+      370 |   test('TC-F4-10 [P3] Clic en nombre del cliente navega a su detalle (FR24)', async ({
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\asociacion.spec.ts:367:50
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-3f798-ado-sin-búsqueda-FR23-NFR9--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-3f798-ado-sin-búsqueda-FR23-NFR9--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-3f798-ado-sin-búsqueda-FR23-NFR9--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-3f798-ado-sin-búsqueda-FR23-NFR9--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-3f798-ado-sin-búsqueda-FR23-NFR9--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-10 [P3] Clic en nombre del cliente navega a su detalle (FR24)" classname="asociacion.spec.ts" time="14.97">
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-11 [P3] Contacto huérfano muestra &quot;Sin cliente asignado&quot; en detalle" classname="asociacion.spec.ts" time="14.416">
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-23 [P2] Navegación profunda cliente→contacto×5 sin corrupción de historial" classname="asociacion.spec.ts" time="24.071">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-dff15-sin-corrupción-de-historial-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-dff15-sin-corrupción-de-historial-chromium\video.webm]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-dff15-sin-corrupción-de-historial-chromium\error-context.md]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Na-dff15-sin-corrupción-de-historial-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › asociacion.spec.ts:403:3 › EPIC-SA-F4 — Navigation & Links › TC-F4-23 [P2] Navegación profunda cliente→contacto×5 sin corrupción de historial 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/contactos\/d0bc610e-485c-4596-9916-8752b16ba0f4/
+    Received string:  "http://localhost:5173/clientes/275892b3-b2ad-4ad0-8976-a17121b361cc"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 10000ms
+        13 × unexpected value "http://localhost:5173/clientes/275892b3-b2ad-4ad0-8976-a17121b361cc"
+
+
+      420 |     for (let i = 0; i < 5; i++) {
+      421 |       await page.getByText(contacto.nombre).first().click()
+    > 422 |       await expect(page).toHaveURL(new RegExp(`/contactos/${contacto.id}`))
+          |                          ^
+      423 |       await page.goBack()
+      424 |       await expect(page).toHaveURL(new RegExp(`/clientes/${cliente.id}`))
+      425 |     }
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\asociacion.spec.ts:422:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-dff15-sin-corrupción-de-historial-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-dff15-sin-corrupción-de-historial-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-dff15-sin-corrupción-de-historial-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-dff15-sin-corrupción-de-historial-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\asociacion-EPIC-SA-F4-—-Na-dff15-sin-corrupción-de-historial-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="EPIC-SA-F4 — Orphan Filter › TC-F4-12 [P1] Filtro &quot;Sin cliente&quot; muestra solo contactos huérfanos (FR25)" classname="asociacion.spec.ts" time="22.871">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Or-72f5e-o-contactos-huérfanos-FR25--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Or-72f5e-o-contactos-huérfanos-FR25--chromium\video.webm]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Or-72f5e-o-contactos-huérfanos-FR25--chromium\error-context.md]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Or-72f5e-o-contactos-huérfanos-FR25--chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [chromium] › asociacion.spec.ts:433:3 › EPIC-SA-F4 — Orphan Filter › TC-F4-12 [P1] Filtro "Sin cliente" muestra solo contactos huérfanos (FR25) 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText(/sin cliente/i)
+    Expected: visible
+    Error: strict mode violation: getByText(/sin cliente/i) resolved to 40 elements:
+        1) <span class="text-xs">Sin cliente (39)</span> aka getByRole('button', { name: 'Sin cliente (39)' })
+        2) <span class="font-sans text-xs leading-4 text-amber-700">Sin cliente</span> aka getByText('Sin cliente').nth(1)
+        3) <span class="font-sans text-xs leading-4 text-amber-700">Sin cliente</span> aka getByText('Sin cliente').nth(2)
+        4) <span class="font-sans text-xs leading-4 text-amber-700">Sin cliente</span> aka getByText('Sin cliente').nth(3)
+        5) <span class="font-sans text-xs leading-4 text-amber-700">Sin cliente</span> aka getByText('Sin cliente').nth(4)
+        6) <span class="font-sans text-xs leading-4 text-amber-700">Sin cliente</span> aka getByText('Sin cliente').nth(5)
+        7) <span class="font-sans text-xs leading-4 text-amber-700">Sin cliente</span> aka getByText('Sin cliente', { exact: true }).nth(5)
+        8) <span class="font-sans text-xs leading-4 text-amber-700">Sin cliente</span> aka locator('div:nth-child(13) > div:nth-child(5) > .text-sm > .inline-flex > .font-sans')
+        9) <span class="font-sans text-xs leading-4 text-amber-700">Sin cliente</span> aka locator('div:nth-child(14) > div:nth-child(5) > .text-sm > .inline-flex > .font-sans')
+        10) <span class="font-sans text-xs leading-4 text-amber-700">Sin cliente</span> aka locator('div:nth-child(15) > div:nth-child(5) > .text-sm > .inline-flex > .font-sans')
+        ...
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByText(/sin cliente/i)
+
+
+      452 |     await expect(page.getByText(huerfano.nombre)).toBeVisible()
+      453 |     await expect(page.getByText(asignado.nombre)).not.toBeVisible()
+    > 454 |     await expect(page.getByText(/sin cliente/i)).toBeVisible()
+          |                                                  ^
+      455 |   })
+      456 |
+      457 |   test('TC-F4-13 [P3] EmptyState cuando todos los contactos están asignados', async ({
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\asociacion.spec.ts:454:50
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Or-72f5e-o-contactos-huérfanos-FR25--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Or-72f5e-o-contactos-huérfanos-FR25--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\asociacion-EPIC-SA-F4-—-Or-72f5e-o-contactos-huérfanos-FR25--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Or-72f5e-o-contactos-huérfanos-FR25--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\asociacion-EPIC-SA-F4-—-Or-72f5e-o-contactos-huérfanos-FR25--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="EPIC-SA-F4 — Orphan Filter › TC-F4-13 [P3] EmptyState cuando todos los contactos están asignados" classname="asociacion.spec.ts" time="23.846">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Or-4c0c3-s-contactos-están-asignados-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Or-4c0c3-s-contactos-están-asignados-chromium\video.webm]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Or-4c0c3-s-contactos-están-asignados-chromium\error-context.md]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Or-4c0c3-s-contactos-están-asignados-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [chromium] › asociacion.spec.ts:457:3 › EPIC-SA-F4 — Orphan Filter › TC-F4-13 [P3] EmptyState cuando todos los contactos están asignados 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText(/todos los contactos.*asignados|asignados a un cliente/i)
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByText(/todos los contactos.*asignados|asignados a un cliente/i)
+
+
+      471 |
+      472 |     // THEN: EmptyState "Todos los contactos están asignados a un cliente"
+    > 473 |     await expect(page.getByText(/todos los contactos.*asignados|asignados a un cliente/i)).toBeVisible()
+          |                                                                                            ^
+      474 |   })
+      475 |
+      476 |   test('TC-F4-14 [P3] Desactivar filtro restaura lista completa de contactos', async ({
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\asociacion.spec.ts:473:92
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Or-4c0c3-s-contactos-están-asignados-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Or-4c0c3-s-contactos-están-asignados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\asociacion-EPIC-SA-F4-—-Or-4c0c3-s-contactos-están-asignados-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Or-4c0c3-s-contactos-están-asignados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\asociacion-EPIC-SA-F4-—-Or-4c0c3-s-contactos-están-asignados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="EPIC-SA-F4 — Orphan Filter › TC-F4-14 [P3] Desactivar filtro restaura lista completa de contactos" classname="asociacion.spec.ts" time="19.194">
+</testcase>
+<testcase name="EPIC-SA-F4 — Orphan Filter › TC-F4-15 [P0] CRÍTICO: Huérfanos aparecen en filtro inmediatamente post-delete" classname="asociacion.spec.ts" time="33.602">
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-16 [P0] CRÍTICO: Reasignar contacto — 3 query keys invalidadas (FR26, FR27)" classname="asociacion.spec.ts" time="36.508">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Re-a276c-keys-invalidadas-FR26-FR27--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Re-a276c-keys-invalidadas-FR26-FR27--chromium\video.webm]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Re-a276c-keys-invalidadas-FR26-FR27--chromium\error-context.md]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Re-a276c-keys-invalidadas-FR26-FR27--chromium\trace.zip]]
+]]>
+</system-out>
+<error message="locator.selectOption: Error: Element is not a &lt;select&gt; element" type="Error">
+<![CDATA[  [chromium] › asociacion.spec.ts:531:3 › EPIC-SA-F4 — Reassign & Edge Cases › TC-F4-16 [P0] CRÍTICO: Reasignar contacto — 3 query keys invalidadas (FR26, FR27) 
+
+    Error: locator.selectOption: Error: Element is not a <select> element
+    Call log:
+      - waiting for getByLabel(/seleccionar cliente destino/i)
+        - locator resolved to <button type="button" aria-expanded="false" aria-haspopup="listbox" title="Seleccionar cliente..." aria-label="Seleccionar cliente destino" class="inline-flex items-center justify-between gap-3 w-full px-3 py-2 text-sm font-normal leading-5 rounded-lg border transition-all duration-150 w-full bg-bg-primary border-border-primary text-content-primary dark:bg-dark-bg-primary dark:border-dark-border-primary dark:text-dark-content-primary hover:border-[#f9f9f9] dark:hover:border-[#3a3a3f] focus:outline-hid…>…</button>
+      - attempting select option action
+        - waiting for element to be visible and enabled
+
+
+      545 |     await page.getByRole('button', { name: /reasignar cliente/i }).click()
+      546 |     await expect(page.getByRole('heading', { name: /reasignar a otro cliente/i })).toBeVisible()
+    > 547 |     await page.getByLabel(/seleccionar cliente destino/i).selectOption({ label: empresaB.nombre })
+          |                                                           ^
+      548 |     await page.getByRole('button', { name: /^guardar$/i }).click()
+      549 |
+      550 |     // THEN: Contact now shows Empresa B; toast shown
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\asociacion.spec.ts:547:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Re-a276c-keys-invalidadas-FR26-FR27--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Re-a276c-keys-invalidadas-FR26-FR27--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\asociacion-EPIC-SA-F4-—-Re-a276c-keys-invalidadas-FR26-FR27--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Re-a276c-keys-invalidadas-FR26-FR27--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\asociacion-EPIC-SA-F4-—-Re-a276c-keys-invalidadas-FR26-FR27--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-17 [P3] Cancelar reasignación — asociación sin cambios" classname="asociacion.spec.ts" time="13.587">
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-20 [P2] Reasignar contacto al mismo cliente (no-op)" classname="asociacion.spec.ts" time="35.338">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Re-37b01-cto-al-mismo-cliente-no-op--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Re-37b01-cto-al-mismo-cliente-no-op--chromium\video.webm]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Re-37b01-cto-al-mismo-cliente-no-op--chromium\error-context.md]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Re-37b01-cto-al-mismo-cliente-no-op--chromium\trace.zip]]
+]]>
+</system-out>
+<error message="locator.selectOption: Error: Element is not a &lt;select&gt; element" type="Error">
+<![CDATA[  [chromium] › asociacion.spec.ts:583:3 › EPIC-SA-F4 — Reassign & Edge Cases › TC-F4-20 [P2] Reasignar contacto al mismo cliente (no-op) 
+
+    Error: locator.selectOption: Error: Element is not a <select> element
+    Call log:
+      - waiting for getByLabel(/seleccionar cliente destino/i)
+        - locator resolved to <button type="button" aria-expanded="false" aria-haspopup="listbox" title="Seleccionar cliente..." aria-label="Seleccionar cliente destino" class="inline-flex items-center justify-between gap-3 w-full px-3 py-2 text-sm font-normal leading-5 rounded-lg border transition-all duration-150 w-full bg-bg-primary border-border-primary text-content-primary dark:bg-dark-bg-primary dark:border-dark-border-primary dark:text-dark-content-primary hover:border-[#f9f9f9] dark:hover:border-[#3a3a3f] focus:outline-hid…>…</button>
+      - attempting select option action
+        - waiting for element to be visible and enabled
+
+
+      595 |     // WHEN: Reassign to the same Empresa A
+      596 |     await page.getByRole('button', { name: /reasignar cliente/i }).click()
+    > 597 |     await page.getByLabel(/seleccionar cliente destino/i).selectOption({ label: empresaA.nombre })
+          |                                                           ^
+      598 |     await page.getByRole('button', { name: /^guardar$/i }).click()
+      599 |
+      600 |     // THEN: No error; contact still in Empresa A; PUT idempotent
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\asociacion.spec.ts:597:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Re-37b01-cto-al-mismo-cliente-no-op--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Re-37b01-cto-al-mismo-cliente-no-op--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\asociacion-EPIC-SA-F4-—-Re-37b01-cto-al-mismo-cliente-no-op--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Re-37b01-cto-al-mismo-cliente-no-op--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\asociacion-EPIC-SA-F4-—-Re-37b01-cto-al-mismo-cliente-no-op--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-21 [P0] Asociar contacto ya asignado a otro cliente — reasignación implícita" classname="asociacion.spec.ts" time="32.707">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Re-bfc4b-te-—-reasignación-implícita-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Re-bfc4b-te-—-reasignación-implícita-chromium\video.webm]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Re-bfc4b-te-—-reasignación-implícita-chromium\error-context.md]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-Re-bfc4b-te-—-reasignación-implícita-chromium\trace.zip]]
+]]>
+</system-out>
+<error message="locator.click: Timeout 15000ms exceeded." type="TimeoutError">
+<![CDATA[  [chromium] › asociacion.spec.ts:604:3 › EPIC-SA-F4 — Reassign & Edge Cases › TC-F4-21 [P0] Asociar contacto ya asignado a otro cliente — reasignación implícita 
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Contacto Implicita F4' })
+
+
+      617 |     await page.getByRole('button', { name: /asociar contacto/i }).click()
+      618 |     await expect(page.getByText(/seleccionar contacto/i)).toBeVisible()
+    > 619 |     await page.getByRole('button', { name: contacto.nombre }).click()
+          |                                                               ^
+      620 |
+      621 |     // THEN: Implicit reassignment; contact in Empresa B; disappears from Empresa A
+      622 |     await expect(page.getByText(contacto.nombre)).toBeVisible()
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\asociacion.spec.ts:619:63
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Re-bfc4b-te-—-reasignación-implícita-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Re-bfc4b-te-—-reasignación-implícita-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\asociacion-EPIC-SA-F4-—-Re-bfc4b-te-—-reasignación-implícita-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-Re-bfc4b-te-—-reasignación-implícita-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\asociacion-EPIC-SA-F4-—-Re-bfc4b-te-—-reasignación-implícita-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-22 [P0] Concurrencia: 2 usuarios reasignan el mismo contacto simultáneamente" classname="asociacion.spec.ts" time="1.428">
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-24 [P2] Cliente eliminado mientras otro usuario lo visualiza — error manejado" classname="asociacion.spec.ts" time="11.529">
+</testcase>
+<testcase name="EPIC-SA-F4 — Association API Validation (BE) › TC-F4-18 [P1] PUT /contactos/{id}/cliente con clienteId UUID inválido → 400" classname="asociacion.spec.ts" time="2.736">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-As-94962-ienteId-UUID-inválido-→-400-chromium\error-context.md]]
+
+[[ATTACHMENT|asociacion-EPIC-SA-F4-—-As-94962-ienteId-UUID-inválido-→-400-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(received).toBe(expected) // Object.is equality" type="expect.toBe">
+<![CDATA[  [chromium] › asociacion.spec.ts:702:3 › EPIC-SA-F4 — Association API Validation (BE) › TC-F4-18 [P1] PUT /contactos/{id}/cliente con clienteId UUID inválido → 400 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 500
+
+      714 |
+      715 |     // THEN: 400 Bad Request Problem Details; no 500; no data corruption
+    > 716 |     expect(response.status()).toBe(400)
+          |                               ^
+      717 |     await expect(response.status()).not.toBe(500)
+      718 |     const body = await response.json()
+      719 |     expect(body.errors ?? body).toMatchObject(
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\asociacion.spec.ts:716:31
+
+    Error Context: ..\..\test-results\asociacion-EPIC-SA-F4-—-As-94962-ienteId-UUID-inválido-→-400-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\asociacion-EPIC-SA-F4-—-As-94962-ienteId-UUID-inválido-→-400-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\asociacion-EPIC-SA-F4-—-As-94962-ienteId-UUID-inválido-→-400-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="EPIC-SA-F4 — Association API Validation (BE) › TC-F4-19 [P2] PUT /contactos/{id}/cliente con contactoId inexistente → 404" classname="asociacion.spec.ts" time="0.474">
+</testcase>
+</testsuite>
+<testsuite name="clientes.spec.ts" timestamp="2026-04-15T20:55:52.006Z" hostname="chromium" tests="36" failures="5" skipped="14" time="286.166" errors="2">
+<testcase name="Clientes — List View › should display the clientes list page" classname="clientes.spec.ts" time="6.07">
+</testcase>
+<testcase name="Clientes — List View › should show a newly created cliente in the list" classname="clientes.spec.ts" time="6.215">
+</testcase>
+<testcase name="Clientes — Create › should create a new cliente via the UI" classname="clientes.spec.ts" time="30.519">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|clientes-Clientes-—-Create-64b81-te-a-new-cliente-via-the-UI-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|clientes-Clientes-—-Create-64b81-te-a-new-cliente-via-the-UI-chromium\video.webm]]
+
+[[ATTACHMENT|clientes-Clientes-—-Create-64b81-te-a-new-cliente-via-the-UI-chromium\error-context.md]]
+
+[[ATTACHMENT|clientes-Clientes-—-Create-64b81-te-a-new-cliente-via-the-UI-chromium\trace.zip]]
+]]>
+</system-out>
+<error message="locator.click: Timeout 15000ms exceeded." type="TimeoutError">
+<![CDATA[  [chromium] › clientes.spec.ts:23:3 › Clientes — Create › should create a new cliente via the UI ──
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: /saltar/i })
+
+
+      37 |
+      38 |     // After create, the "Asociar contacto (opcional)" step appears — skip it
+    > 39 |     await page.getByRole('button', { name: /saltar/i }).click()
+         |                                                         ^
+      40 |
+      41 |     // Assert the new client appears in the list
+      42 |     await expect(page.getByText('Empresa UI E2E')).toBeVisible()
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\clientes.spec.ts:39:57
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-Clientes-—-Create-64b81-te-a-new-cliente-via-the-UI-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-Clientes-—-Create-64b81-te-a-new-cliente-via-the-UI-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\clientes-Clientes-—-Create-64b81-te-a-new-cliente-via-the-UI-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-Clientes-—-Create-64b81-te-a-new-cliente-via-the-UI-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\clientes-Clientes-—-Create-64b81-te-a-new-cliente-via-the-UI-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="Clientes — Detail › [P0] should navigate to client detail on row click" classname="clientes.spec.ts" time="31.7">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|clientes-Clientes-—-Detail-7e45d--client-detail-on-row-click-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|clientes-Clientes-—-Detail-7e45d--client-detail-on-row-click-chromium\video.webm]]
+
+[[ATTACHMENT|clientes-Clientes-—-Detail-7e45d--client-detail-on-row-click-chromium\error-context.md]]
+
+[[ATTACHMENT|clientes-Clientes-—-Detail-7e45d--client-detail-on-row-click-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › clientes.spec.ts:47:3 › Clientes — Detail › [P0] should navigate to client detail on row click 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/clientes\/17be30e4-8ae2-430e-ab4a-3890a9e21285/
+    Received string:  "http://localhost:5173/clientes"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 10000ms
+        13 × unexpected value "http://localhost:5173/clientes"
+
+
+      55 |
+      56 |     // Assert: detail page loads with the client's name as heading
+    > 57 |     await expect(page).toHaveURL(new RegExp(`/clientes/${cliente.id}`))
+         |                        ^
+      58 |     await expect(page.getByRole('heading', { name: cliente.nombre })).toBeVisible()
+      59 |   })
+      60 |
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\clientes.spec.ts:57:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-Clientes-—-Detail-7e45d--client-detail-on-row-click-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-Clientes-—-Detail-7e45d--client-detail-on-row-click-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\clientes-Clientes-—-Detail-7e45d--client-detail-on-row-click-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-Clientes-—-Detail-7e45d--client-detail-on-row-click-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\clientes-Clientes-—-Detail-7e45d--client-detail-on-row-click-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="Clientes — Detail › [P1] should edit a client name from the detail view" classname="clientes.spec.ts" time="6.746">
+</testcase>
+<testcase name="Clientes — Detail › [P1] should delete a client and redirect to list" classname="clientes.spec.ts" time="12.55">
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-01 [P3] Lista de clientes muestra todos los registros (FR2)" classname="clientes.spec.ts" time="6.911">
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-02 [P2] Búsqueda por nombre parcial filtra correctamente (FR3)" classname="clientes.spec.ts" time="7.57">
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-03 [P2] Búsqueda por NIT/RUC parcial filtra correctamente (FR4)" classname="clientes.spec.ts" time="7.659">
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-04 [P0] Búsqueda responde en &lt;1s con 500 registros (NFR1)" classname="clientes.spec.ts" time="17.031">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-7ddba--1s-con-500-registros-NFR1--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-7ddba--1s-con-500-registros-NFR1--chromium\video.webm]]
+
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-7ddba--1s-con-500-registros-NFR1--chromium\error-context.md]]
+
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-7ddba--1s-con-500-registros-NFR1--chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(received).toBeLessThan(expected)" type="expect.toBeLessThan">
+<![CDATA[  [chromium] › clientes.spec.ts:164:3 › EPIC-SA-F2 — Clientes List › TC-F2-04 [P0] Búsqueda responde en <1s con 500 registros (NFR1) 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 1000
+    Received:   1327
+
+      184 |
+      185 |     // THEN: Filter response < 1000ms (P95)
+    > 186 |     expect(elapsed).toBeLessThan(1000)
+          |                     ^
+      187 |   })
+      188 |
+      189 |   test('TC-F2-05 [P3] EmptyState cuando no hay clientes', async ({ page }) => {
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\clientes.spec.ts:186:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-7ddba--1s-con-500-registros-NFR1--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-7ddba--1s-con-500-registros-NFR1--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-7ddba--1s-con-500-registros-NFR1--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-7ddba--1s-con-500-registros-NFR1--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-7ddba--1s-con-500-registros-NFR1--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-05 [P3] EmptyState cuando no hay clientes" classname="clientes.spec.ts" time="8.764">
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-06 [P2] ErrorPanel cuando backend no responde" classname="clientes.spec.ts" time="12.739">
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Detail › TC-F2-07 [P3] Detalle de cliente muestra todos los campos (FR5)" classname="clientes.spec.ts" time="14.403">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-83c3c-estra-todos-los-campos-FR5--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-83c3c-estra-todos-los-campos-FR5--chromium\video.webm]]
+
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-83c3c-estra-todos-los-campos-FR5--chromium\error-context.md]]
+
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-83c3c-estra-todos-los-campos-FR5--chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [chromium] › clientes.spec.ts:219:3 › EPIC-SA-F2 — Clientes Detail › TC-F2-07 [P3] Detalle de cliente muestra todos los campos (FR5) 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Cali')
+    Expected: visible
+    Error: strict mode violation: getByText('Cali') resolved to 7 elements:
+        1) <div class="↵          text-sm↵          text-content-primary↵          dark:text-dark-content-primary↵          flex↵          justify-start↵          w-full↵        ">Calidfdfdf</div> aka getByText('Calidfdfdf')
+        2) <div class="↵          text-sm↵          text-content-primary↵          dark:text-dark-content-primary↵          flex↵          justify-start↵          w-full↵        ">CALI</div> aka getByText('CALI').nth(1)
+        3) <div class="↵          text-sm↵          text-content-primary↵          dark:text-dark-content-primary↵          flex↵          justify-start↵          w-full↵        ">CALI</div> aka getByText('CALI').nth(2)
+        4) <div class="↵          text-sm↵          text-content-primary↵          dark:text-dark-content-primary↵          flex↵          justify-start↵          w-full↵        ">CALI</div> aka getByText('CALI').nth(3)
+        5) <div class="↵          text-sm↵          text-content-primary↵          dark:text-dark-content-primary↵          flex↵          justify-start↵          w-full↵        ">CALI</div> aka getByText('CALI').nth(4)
+        6) <div class="↵          text-sm↵          text-content-primary↵          dark:text-dark-content-primary↵          flex↵          justify-start↵          w-full↵        ">Cali</div> aka getByText('Cali').nth(5)
+        7) <div class="↵          text-sm↵          text-content-primary↵          dark:text-dark-content-primary↵          flex↵          justify-start↵          w-full↵        ">Cali</div> aka getByText('Cali', { exact: true }).nth(1)
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByText('Cali')
+
+
+      238 |     await expect(page.getByText(cliente.nit)).toBeVisible()
+      239 |     await expect(page.getByText('3109876543')).toBeVisible()
+    > 240 |     await expect(page.getByText('Cali')).toBeVisible()
+          |                                          ^
+      241 |   })
+      242 |
+      243 |   test('TC-F2-08 [P2] Deep link a /clientes/:id carga detalle correcto (FR30)', async ({
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\clientes.spec.ts:240:42
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-83c3c-estra-todos-los-campos-FR5--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-83c3c-estra-todos-los-campos-FR5--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-83c3c-estra-todos-los-campos-FR5--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-83c3c-estra-todos-los-campos-FR5--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-83c3c-estra-todos-los-campos-FR5--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Detail › TC-F2-08 [P2] Deep link a /clientes/:id carga detalle correcto (FR30)" classname="clientes.spec.ts" time="6.689">
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Detail › TC-F2-09 [P3] Deep link con ID inexistente muestra not-found" classname="clientes.spec.ts" time="6.092">
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-10 [P0] Crear cliente con todos los campos válidos (FR1, FR27)" classname="clientes.spec.ts" time="26.17">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-e2771-os-campos-válidos-FR1-FR27--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-e2771-os-campos-válidos-FR1-FR27--chromium\video.webm]]
+
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-e2771-os-campos-válidos-FR1-FR27--chromium\error-context.md]]
+
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-e2771-os-campos-válidos-FR1-FR27--chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [chromium] › clientes.spec.ts:272:3 › EPIC-SA-F2 — Clientes Create › TC-F2-10 [P0] Crear cliente con todos los campos válidos (FR1, FR27) 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText(/creado correctamente|cliente creado/i)
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByText(/creado correctamente|cliente creado/i)
+
+
+      288 |     // THEN: Client appears in list immediately; toast shown; form closes
+      289 |     await expect(page.getByText('Empresa XYZ')).toBeVisible()
+    > 290 |     await expect(page.getByText(/creado correctamente|cliente creado/i)).toBeVisible()
+          |                                                                          ^
+      291 |   })
+      292 |
+      293 |   test('TC-F2-11 [P0] Crear cliente con NIT duplicado → 409 Conflict (FR8)', async ({
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\clientes.spec.ts:290:74
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-e2771-os-campos-válidos-FR1-FR27--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-e2771-os-campos-válidos-FR1-FR27--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-e2771-os-campos-válidos-FR1-FR27--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-e2771-os-campos-válidos-FR1-FR27--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-e2771-os-campos-válidos-FR1-FR27--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-11 [P0] Crear cliente con NIT duplicado → 409 Conflict (FR8)" classname="clientes.spec.ts" time="5.312">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-dea84-plicado-→-409-Conflict-FR8--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-dea84-plicado-→-409-Conflict-FR8--chromium\video.webm]]
+
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-dea84-plicado-→-409-Conflict-FR8--chromium\error-context.md]]
+
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-dea84-plicado-→-409-Conflict-FR8--chromium\trace.zip]]
+]]>
+</system-out>
+<error message="API POST http://localhost:5000/api/v1/clientes failed: 409 {&quot;type&quot;:&quot;https://tools.ietf.org/html/rfc9110#section-15.5.10&quot;,&quot;title&quot;:&quot;Conflict&quot;,&quot;status&quot;:409,&quot;detail&quot;:&quot;El NIT/RUC ya está registrado.&quot;}" type="Error">
+<![CDATA[  [chromium] › clientes.spec.ts:293:3 › EPIC-SA-F2 — Clientes Create › TC-F2-11 [P0] Crear cliente con NIT duplicado → 409 Conflict (FR8) 
+
+    Error: API POST http://localhost:5000/api/v1/clientes failed: 409 {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.10","title":"Conflict","status":409,"detail":"El NIT/RUC ya está registrado."}
+
+       at ..\support\helpers\api-request.ts:39
+
+      37 |   if (!response.ok()) {
+      38 |     const body = await response.text()
+    > 39 |     throw new Error(`API ${method} ${url} failed: ${response.status()} ${body}`)
+         |           ^
+      40 |   }
+      41 |
+      42 |   const text = await response.text()
+        at apiRequest (C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\support\helpers\api-request.ts:39:11)
+        at ClienteFactory.create (C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\support\fixtures\factories\cliente-factory.ts:44:21)
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\clientes.spec.ts:298:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-dea84-plicado-→-409-Conflict-FR8--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-dea84-plicado-→-409-Conflict-FR8--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-dea84-plicado-→-409-Conflict-FR8--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-dea84-plicado-→-409-Conflict-FR8--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-dea84-plicado-→-409-Conflict-FR8--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-12 [P1] Form bloqueado con Nombre vacío (FR8 — Zod)" classname="clientes.spec.ts" time="7.631">
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-13 [P1] Form bloqueado con NIT/RUC vacío (FR8 — Zod)" classname="clientes.spec.ts" time="6.396">
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-24 [P1] Doble clic en Guardar no crea duplicados" classname="clientes.spec.ts" time="24.178">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-15d1b--Guardar-no-crea-duplicados-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-15d1b--Guardar-no-crea-duplicados-chromium\video.webm]]
+
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-15d1b--Guardar-no-crea-duplicados-chromium\error-context.md]]
+
+[[ATTACHMENT|clientes-EPIC-SA-F2-—-Clie-15d1b--Guardar-no-crea-duplicados-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [chromium] › clientes.spec.ts:340:3 › EPIC-SA-F2 — Clientes Create › TC-F2-24 [P1] Doble clic en Guardar no crea duplicados 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Cliente Doble Click E2E').first()
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for getByText('Cliente Doble Click E2E').first()
+
+
+      356 |     await page.goto('/clientes')
+      357 |     const matches = page.getByText('Cliente Doble Click E2E')
+    > 358 |     await expect(matches.first()).toBeVisible()
+          |                                   ^
+      359 |     expect(await matches.count()).toBe(1)
+      360 |   })
+      361 |
+        at C:\Users\ssancheze\Desktop\Dev\ruta\frontend\tests\e2e\clientes.spec.ts:358:35
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-15d1b--Guardar-no-crea-duplicados-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-15d1b--Guardar-no-crea-duplicados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-15d1b--Guardar-no-crea-duplicados-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-15d1b--Guardar-no-crea-duplicados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\clientes-EPIC-SA-F2-—-Clie-15d1b--Guardar-no-crea-duplicados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-25 [P1] XSS en campo Nombre del cliente — sanitización" classname="clientes.spec.ts" time="9.24">
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-29 [P0] Creación concurrente con mismo NIT — race condition" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-15 [P2] Form de edición pre-poblado con valores actuales (FR6)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-16 [P2] Editar cliente — guardar cambios reflejado inmediatamente (FR6, FR27)" classname="clientes.spec.ts" time="9.026">
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-17 [P2] Edición bloqueada al borrar campo requerido (FR8)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-18 [P3] Cancelar edición no persiste cambios" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-26 [P2] Pegar texto con Unicode special (non-breaking space)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-30 [P2] Editar cliente eliminado concurrentemente — 404 en PUT" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Delete › TC-F2-19 [P3] Dialog de confirmación aparece al eliminar cliente (FR7)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Delete › TC-F2-20 [P1] Confirmar eliminación remueve cliente de la lista (FR7, FR27)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Delete › TC-F2-21 [P0] CRÍTICO: Eliminar cliente con contactos → cascade NULL" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Delete › TC-F2-22 [P3] Cancelar eliminación — cliente inalterado" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Performance &amp; Edge Cases › TC-F2-23 [P2] CRUD mutation UI actualizado en &lt;2s (NFR2)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes API Validation (BE) › TC-F2-14 [P1] Backend rechaza cliente con Nombre vacío (FluentValidation)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes API Validation (BE) › TC-F2-27 [P3] Nombre cliente con longitud máxima (255 chars)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes API Validation (BE) › TC-F2-28 [P2] Nombre cliente con longitud &gt; máximo (256 chars)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="contactos.spec.ts" timestamp="2026-04-15T20:55:52.006Z" hostname="chromium" tests="29" failures="0" skipped="29" time="0" errors="0">
+<testcase name="Contactos — List View › [P0] should display the contactos list page" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — List View › [P0] should show a seeded contacto in the list" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — List View › [P1] should filter contacts by nombre in the search input" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — List View › [P2] should show orphan count badge when contacts have no client" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — Create › [P1] should create a new contacto via the UI" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — Detail Navigation › [P1] should navigate to contacto detail on table row click" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — Edit › [P1] should edit a contacto from the list inline dialog" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — Delete › [P1] should delete a contacto from the list and remove it" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-01 [P3] Lista de contactos muestra todos los registros (FR10)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-02 [P2] Búsqueda por nombre de contacto filtra en tiempo real (FR11)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-03 [P2] Búsqueda por email filtra en tiempo real (FR12)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-04 [P0] Búsqueda responde en &lt;1s con 1000 contactos (NFR1)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-05 [P3] EmptyState cuando no hay contactos" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-06 [P3] Detalle de contacto muestra todos los campos (FR13, FR30)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-20 [P3] Búsqueda con caracteres especiales sin crash" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-21 [P3] Contacto sin cliente asignado muestra &quot;Sin cliente asignado&quot;" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Create › TC-F3-07 [P0] Crear contacto con todos los campos válidos (FR9, FR27)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Create › TC-F3-08 [P1] Form bloqueado con Email vacío (FR16 — Zod)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Create › TC-F3-09 [P1] Form bloqueado con email inválido (FR16 — Zod)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Create › TC-F3-19 [P1] XSS en campo Email — sanitización" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Edit &amp; Delete › TC-F3-12 [P2] Editar contacto — form pre-poblado y cambio guardado (FR14, FR27)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Edit &amp; Delete › TC-F3-13 [P1] Editar contacto no altera clienteId" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Edit &amp; Delete › TC-F3-14 [P2] Eliminar contacto — confirmar (FR15, FR27)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Edit &amp; Delete › TC-F3-15 [P3] Cancelar eliminación de contacto — registro inalterado" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Edit &amp; Delete › TC-F3-18 [P2] Email en mayúsculas — normalización" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos API Validation (BE) › TC-F3-10 [P1] Backend rechaza email inválido via FluentValidation" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos API Validation (BE) › TC-F3-11 [P2] Backend rechaza Cargo con solo espacios (FluentValidation trim)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos API Validation (BE) › TC-F3-16 [P3] Email con longitud máxima válida (254 chars — RFC 5321)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos API Validation (BE) › TC-F3-17 [P2] Email con longitud 255 chars rechazado (BVA)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2026-04-15T20:55:52.006Z" hostname="chromium" tests="10" failures="0" skipped="10" time="0" errors="0">
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-01 [P3] NavigationRail visible en viewport desktop" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-02 [P3] NavigationBar visible en viewport móvil (375px)" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-03 [P2] Navegación a /clientes sin page reload (FR28)" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-04 [P2] Deep link directo a /clientes (FR30)" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-05 [P2] Deep link directo a /contactos (FR30)" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-06 [P3] Ruta desconocida muestra 404 gracefully" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-07 [P2] Breakpoint exacto 1024px — NavigationRail activo" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-08 [P2] Navegación rápida entre rutas 10x seguidas" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-09 [P3] URL con trailing slash /clientes/ no genera 404" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-10 [P2] F5 refresh en ruta profunda /clientes/:id" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="asociacion.spec.ts" timestamp="2026-04-15T20:55:52.006Z" hostname="firefox" tests="33" failures="0" skipped="33" time="0" errors="0">
+<testcase name="Asociación — Client Detail shows associated contacts › [P0] should show &quot;Contactos asociados&quot; section in client detail" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Client Detail shows associated contacts › [P1] should show empty state when client has no contacts" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Client Detail shows associated contacts › [P0] should display a contact that is associated with the client" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Forward navigation (client → contact) › [P0] should navigate to contact detail from client detail in ≤2 clicks (NFR8)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Back navigation (contact → client) › [P1] should navigate to client detail by clicking client name link in contact detail (FR24)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Back navigation (contact → client) › [P1] should show &quot;Sin cliente asignado&quot; for a contact with no client" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Associate contact › [P1] should associate an orphan contact to a client via &quot;Asociar contacto&quot;" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Disassociate contact › [P2] should disassociate a contact from client without deleting either record" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Reassign contact › [P2] should reassign a contact to a different client (FR26, FR27)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-01 [P2] ContactManager muestra contactos del cliente (FR21)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-02 [P3] ContactManager EmptyState cuando cliente sin contactos" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-03 [P2] ContactManager ErrorPanel cuando BE falla" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-04 [P0] CRÍTICO: Asociar contacto + cache invalidation" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-05 [P1] Crear contacto desde ContactManager → auto-asociado (FR18)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-06 [P0] CRÍTICO: Desasociar contacto — no elimina registros (FR20)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-07 [P2] Navegar de cliente a contacto en ≤2 clics (FR22, NFR8)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-08 [P2] Botón atrás regresa al detalle del cliente" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-09 [P2] Detalle de contacto muestra cliente asociado sin búsqueda (FR23, NFR9)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-10 [P3] Clic en nombre del cliente navega a su detalle (FR24)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-11 [P3] Contacto huérfano muestra &quot;Sin cliente asignado&quot; en detalle" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-23 [P2] Navegación profunda cliente→contacto×5 sin corrupción de historial" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Orphan Filter › TC-F4-12 [P1] Filtro &quot;Sin cliente&quot; muestra solo contactos huérfanos (FR25)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Orphan Filter › TC-F4-13 [P3] EmptyState cuando todos los contactos están asignados" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Orphan Filter › TC-F4-14 [P3] Desactivar filtro restaura lista completa de contactos" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Orphan Filter › TC-F4-15 [P0] CRÍTICO: Huérfanos aparecen en filtro inmediatamente post-delete" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-16 [P0] CRÍTICO: Reasignar contacto — 3 query keys invalidadas (FR26, FR27)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-17 [P3] Cancelar reasignación — asociación sin cambios" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-20 [P2] Reasignar contacto al mismo cliente (no-op)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-21 [P0] Asociar contacto ya asignado a otro cliente — reasignación implícita" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-22 [P0] Concurrencia: 2 usuarios reasignan el mismo contacto simultáneamente" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-24 [P2] Cliente eliminado mientras otro usuario lo visualiza — error manejado" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Association API Validation (BE) › TC-F4-18 [P1] PUT /contactos/{id}/cliente con clienteId UUID inválido → 400" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Association API Validation (BE) › TC-F4-19 [P2] PUT /contactos/{id}/cliente con contactoId inexistente → 404" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="clientes.spec.ts" timestamp="2026-04-15T20:55:52.006Z" hostname="firefox" tests="36" failures="0" skipped="36" time="0" errors="0">
+<testcase name="Clientes — List View › should display the clientes list page" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Clientes — List View › should show a newly created cliente in the list" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Clientes — Create › should create a new cliente via the UI" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Clientes — Detail › [P0] should navigate to client detail on row click" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Clientes — Detail › [P1] should edit a client name from the detail view" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Clientes — Detail › [P1] should delete a client and redirect to list" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-01 [P3] Lista de clientes muestra todos los registros (FR2)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-02 [P2] Búsqueda por nombre parcial filtra correctamente (FR3)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-03 [P2] Búsqueda por NIT/RUC parcial filtra correctamente (FR4)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-04 [P0] Búsqueda responde en &lt;1s con 500 registros (NFR1)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-05 [P3] EmptyState cuando no hay clientes" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-06 [P2] ErrorPanel cuando backend no responde" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Detail › TC-F2-07 [P3] Detalle de cliente muestra todos los campos (FR5)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Detail › TC-F2-08 [P2] Deep link a /clientes/:id carga detalle correcto (FR30)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Detail › TC-F2-09 [P3] Deep link con ID inexistente muestra not-found" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-10 [P0] Crear cliente con todos los campos válidos (FR1, FR27)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-11 [P0] Crear cliente con NIT duplicado → 409 Conflict (FR8)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-12 [P1] Form bloqueado con Nombre vacío (FR8 — Zod)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-13 [P1] Form bloqueado con NIT/RUC vacío (FR8 — Zod)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-24 [P1] Doble clic en Guardar no crea duplicados" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-25 [P1] XSS en campo Nombre del cliente — sanitización" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-29 [P0] Creación concurrente con mismo NIT — race condition" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-15 [P2] Form de edición pre-poblado con valores actuales (FR6)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-16 [P2] Editar cliente — guardar cambios reflejado inmediatamente (FR6, FR27)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-17 [P2] Edición bloqueada al borrar campo requerido (FR8)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-18 [P3] Cancelar edición no persiste cambios" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-26 [P2] Pegar texto con Unicode special (non-breaking space)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-30 [P2] Editar cliente eliminado concurrentemente — 404 en PUT" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Delete › TC-F2-19 [P3] Dialog de confirmación aparece al eliminar cliente (FR7)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Delete › TC-F2-20 [P1] Confirmar eliminación remueve cliente de la lista (FR7, FR27)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Delete › TC-F2-21 [P0] CRÍTICO: Eliminar cliente con contactos → cascade NULL" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Delete › TC-F2-22 [P3] Cancelar eliminación — cliente inalterado" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Performance &amp; Edge Cases › TC-F2-23 [P2] CRUD mutation UI actualizado en &lt;2s (NFR2)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes API Validation (BE) › TC-F2-14 [P1] Backend rechaza cliente con Nombre vacío (FluentValidation)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes API Validation (BE) › TC-F2-27 [P3] Nombre cliente con longitud máxima (255 chars)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes API Validation (BE) › TC-F2-28 [P2] Nombre cliente con longitud &gt; máximo (256 chars)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="contactos.spec.ts" timestamp="2026-04-15T20:55:52.006Z" hostname="firefox" tests="29" failures="0" skipped="29" time="0" errors="0">
+<testcase name="Contactos — List View › [P0] should display the contactos list page" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — List View › [P0] should show a seeded contacto in the list" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — List View › [P1] should filter contacts by nombre in the search input" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — List View › [P2] should show orphan count badge when contacts have no client" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — Create › [P1] should create a new contacto via the UI" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — Detail Navigation › [P1] should navigate to contacto detail on table row click" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — Edit › [P1] should edit a contacto from the list inline dialog" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — Delete › [P1] should delete a contacto from the list and remove it" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-01 [P3] Lista de contactos muestra todos los registros (FR10)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-02 [P2] Búsqueda por nombre de contacto filtra en tiempo real (FR11)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-03 [P2] Búsqueda por email filtra en tiempo real (FR12)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-04 [P0] Búsqueda responde en &lt;1s con 1000 contactos (NFR1)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-05 [P3] EmptyState cuando no hay contactos" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-06 [P3] Detalle de contacto muestra todos los campos (FR13, FR30)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-20 [P3] Búsqueda con caracteres especiales sin crash" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-21 [P3] Contacto sin cliente asignado muestra &quot;Sin cliente asignado&quot;" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Create › TC-F3-07 [P0] Crear contacto con todos los campos válidos (FR9, FR27)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Create › TC-F3-08 [P1] Form bloqueado con Email vacío (FR16 — Zod)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Create › TC-F3-09 [P1] Form bloqueado con email inválido (FR16 — Zod)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Create › TC-F3-19 [P1] XSS en campo Email — sanitización" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Edit &amp; Delete › TC-F3-12 [P2] Editar contacto — form pre-poblado y cambio guardado (FR14, FR27)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Edit &amp; Delete › TC-F3-13 [P1] Editar contacto no altera clienteId" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Edit &amp; Delete › TC-F3-14 [P2] Eliminar contacto — confirmar (FR15, FR27)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Edit &amp; Delete › TC-F3-15 [P3] Cancelar eliminación de contacto — registro inalterado" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Edit &amp; Delete › TC-F3-18 [P2] Email en mayúsculas — normalización" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos API Validation (BE) › TC-F3-10 [P1] Backend rechaza email inválido via FluentValidation" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos API Validation (BE) › TC-F3-11 [P2] Backend rechaza Cargo con solo espacios (FluentValidation trim)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos API Validation (BE) › TC-F3-16 [P3] Email con longitud máxima válida (254 chars — RFC 5321)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos API Validation (BE) › TC-F3-17 [P2] Email con longitud 255 chars rechazado (BVA)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2026-04-15T20:55:52.006Z" hostname="firefox" tests="10" failures="0" skipped="10" time="0" errors="0">
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-01 [P3] NavigationRail visible en viewport desktop" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-02 [P3] NavigationBar visible en viewport móvil (375px)" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-03 [P2] Navegación a /clientes sin page reload (FR28)" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-04 [P2] Deep link directo a /clientes (FR30)" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-05 [P2] Deep link directo a /contactos (FR30)" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-06 [P3] Ruta desconocida muestra 404 gracefully" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-07 [P2] Breakpoint exacto 1024px — NavigationRail activo" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-08 [P2] Navegación rápida entre rutas 10x seguidas" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-09 [P3] URL con trailing slash /clientes/ no genera 404" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-10 [P2] F5 refresh en ruta profunda /clientes/:id" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="asociacion.spec.ts" timestamp="2026-04-15T20:55:52.006Z" hostname="webkit" tests="33" failures="0" skipped="33" time="0" errors="0">
+<testcase name="Asociación — Client Detail shows associated contacts › [P0] should show &quot;Contactos asociados&quot; section in client detail" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Client Detail shows associated contacts › [P1] should show empty state when client has no contacts" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Client Detail shows associated contacts › [P0] should display a contact that is associated with the client" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Forward navigation (client → contact) › [P0] should navigate to contact detail from client detail in ≤2 clicks (NFR8)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Back navigation (contact → client) › [P1] should navigate to client detail by clicking client name link in contact detail (FR24)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Back navigation (contact → client) › [P1] should show &quot;Sin cliente asignado&quot; for a contact with no client" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Associate contact › [P1] should associate an orphan contact to a client via &quot;Asociar contacto&quot;" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Disassociate contact › [P2] should disassociate a contact from client without deleting either record" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Asociación — Reassign contact › [P2] should reassign a contact to a different client (FR26, FR27)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-01 [P2] ContactManager muestra contactos del cliente (FR21)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-02 [P3] ContactManager EmptyState cuando cliente sin contactos" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-03 [P2] ContactManager ErrorPanel cuando BE falla" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-04 [P0] CRÍTICO: Asociar contacto + cache invalidation" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-05 [P1] Crear contacto desde ContactManager → auto-asociado (FR18)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — ContactManager › TC-F4-06 [P0] CRÍTICO: Desasociar contacto — no elimina registros (FR20)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-07 [P2] Navegar de cliente a contacto en ≤2 clics (FR22, NFR8)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-08 [P2] Botón atrás regresa al detalle del cliente" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-09 [P2] Detalle de contacto muestra cliente asociado sin búsqueda (FR23, NFR9)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-10 [P3] Clic en nombre del cliente navega a su detalle (FR24)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-11 [P3] Contacto huérfano muestra &quot;Sin cliente asignado&quot; en detalle" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Navigation &amp; Links › TC-F4-23 [P2] Navegación profunda cliente→contacto×5 sin corrupción de historial" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Orphan Filter › TC-F4-12 [P1] Filtro &quot;Sin cliente&quot; muestra solo contactos huérfanos (FR25)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Orphan Filter › TC-F4-13 [P3] EmptyState cuando todos los contactos están asignados" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Orphan Filter › TC-F4-14 [P3] Desactivar filtro restaura lista completa de contactos" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Orphan Filter › TC-F4-15 [P0] CRÍTICO: Huérfanos aparecen en filtro inmediatamente post-delete" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-16 [P0] CRÍTICO: Reasignar contacto — 3 query keys invalidadas (FR26, FR27)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-17 [P3] Cancelar reasignación — asociación sin cambios" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-20 [P2] Reasignar contacto al mismo cliente (no-op)" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-21 [P0] Asociar contacto ya asignado a otro cliente — reasignación implícita" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-22 [P0] Concurrencia: 2 usuarios reasignan el mismo contacto simultáneamente" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Reassign &amp; Edge Cases › TC-F4-24 [P2] Cliente eliminado mientras otro usuario lo visualiza — error manejado" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Association API Validation (BE) › TC-F4-18 [P1] PUT /contactos/{id}/cliente con clienteId UUID inválido → 400" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F4 — Association API Validation (BE) › TC-F4-19 [P2] PUT /contactos/{id}/cliente con contactoId inexistente → 404" classname="asociacion.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="clientes.spec.ts" timestamp="2026-04-15T20:55:52.006Z" hostname="webkit" tests="36" failures="0" skipped="36" time="0" errors="0">
+<testcase name="Clientes — List View › should display the clientes list page" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Clientes — List View › should show a newly created cliente in the list" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Clientes — Create › should create a new cliente via the UI" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Clientes — Detail › [P0] should navigate to client detail on row click" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Clientes — Detail › [P1] should edit a client name from the detail view" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Clientes — Detail › [P1] should delete a client and redirect to list" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-01 [P3] Lista de clientes muestra todos los registros (FR2)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-02 [P2] Búsqueda por nombre parcial filtra correctamente (FR3)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-03 [P2] Búsqueda por NIT/RUC parcial filtra correctamente (FR4)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-04 [P0] Búsqueda responde en &lt;1s con 500 registros (NFR1)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-05 [P3] EmptyState cuando no hay clientes" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes List › TC-F2-06 [P2] ErrorPanel cuando backend no responde" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Detail › TC-F2-07 [P3] Detalle de cliente muestra todos los campos (FR5)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Detail › TC-F2-08 [P2] Deep link a /clientes/:id carga detalle correcto (FR30)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Detail › TC-F2-09 [P3] Deep link con ID inexistente muestra not-found" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-10 [P0] Crear cliente con todos los campos válidos (FR1, FR27)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-11 [P0] Crear cliente con NIT duplicado → 409 Conflict (FR8)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-12 [P1] Form bloqueado con Nombre vacío (FR8 — Zod)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-13 [P1] Form bloqueado con NIT/RUC vacío (FR8 — Zod)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-24 [P1] Doble clic en Guardar no crea duplicados" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-25 [P1] XSS en campo Nombre del cliente — sanitización" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Create › TC-F2-29 [P0] Creación concurrente con mismo NIT — race condition" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-15 [P2] Form de edición pre-poblado con valores actuales (FR6)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-16 [P2] Editar cliente — guardar cambios reflejado inmediatamente (FR6, FR27)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-17 [P2] Edición bloqueada al borrar campo requerido (FR8)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-18 [P3] Cancelar edición no persiste cambios" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-26 [P2] Pegar texto con Unicode special (non-breaking space)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Edit › TC-F2-30 [P2] Editar cliente eliminado concurrentemente — 404 en PUT" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Delete › TC-F2-19 [P3] Dialog de confirmación aparece al eliminar cliente (FR7)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Delete › TC-F2-20 [P1] Confirmar eliminación remueve cliente de la lista (FR7, FR27)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Delete › TC-F2-21 [P0] CRÍTICO: Eliminar cliente con contactos → cascade NULL" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Delete › TC-F2-22 [P3] Cancelar eliminación — cliente inalterado" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes Performance &amp; Edge Cases › TC-F2-23 [P2] CRUD mutation UI actualizado en &lt;2s (NFR2)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes API Validation (BE) › TC-F2-14 [P1] Backend rechaza cliente con Nombre vacío (FluentValidation)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes API Validation (BE) › TC-F2-27 [P3] Nombre cliente con longitud máxima (255 chars)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F2 — Clientes API Validation (BE) › TC-F2-28 [P2] Nombre cliente con longitud &gt; máximo (256 chars)" classname="clientes.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="contactos.spec.ts" timestamp="2026-04-15T20:55:52.006Z" hostname="webkit" tests="29" failures="0" skipped="29" time="0" errors="0">
+<testcase name="Contactos — List View › [P0] should display the contactos list page" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — List View › [P0] should show a seeded contacto in the list" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — List View › [P1] should filter contacts by nombre in the search input" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — List View › [P2] should show orphan count badge when contacts have no client" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — Create › [P1] should create a new contacto via the UI" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — Detail Navigation › [P1] should navigate to contacto detail on table row click" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — Edit › [P1] should edit a contacto from the list inline dialog" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Contactos — Delete › [P1] should delete a contacto from the list and remove it" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-01 [P3] Lista de contactos muestra todos los registros (FR10)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-02 [P2] Búsqueda por nombre de contacto filtra en tiempo real (FR11)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-03 [P2] Búsqueda por email filtra en tiempo real (FR12)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-04 [P0] Búsqueda responde en &lt;1s con 1000 contactos (NFR1)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-05 [P3] EmptyState cuando no hay contactos" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-06 [P3] Detalle de contacto muestra todos los campos (FR13, FR30)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-20 [P3] Búsqueda con caracteres especiales sin crash" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos List › TC-F3-21 [P3] Contacto sin cliente asignado muestra &quot;Sin cliente asignado&quot;" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Create › TC-F3-07 [P0] Crear contacto con todos los campos válidos (FR9, FR27)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Create › TC-F3-08 [P1] Form bloqueado con Email vacío (FR16 — Zod)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Create › TC-F3-09 [P1] Form bloqueado con email inválido (FR16 — Zod)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Create › TC-F3-19 [P1] XSS en campo Email — sanitización" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Edit &amp; Delete › TC-F3-12 [P2] Editar contacto — form pre-poblado y cambio guardado (FR14, FR27)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Edit &amp; Delete › TC-F3-13 [P1] Editar contacto no altera clienteId" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Edit &amp; Delete › TC-F3-14 [P2] Eliminar contacto — confirmar (FR15, FR27)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Edit &amp; Delete › TC-F3-15 [P3] Cancelar eliminación de contacto — registro inalterado" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos Edit &amp; Delete › TC-F3-18 [P2] Email en mayúsculas — normalización" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos API Validation (BE) › TC-F3-10 [P1] Backend rechaza email inválido via FluentValidation" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos API Validation (BE) › TC-F3-11 [P2] Backend rechaza Cargo con solo espacios (FluentValidation trim)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos API Validation (BE) › TC-F3-16 [P3] Email con longitud máxima válida (254 chars — RFC 5321)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F3 — Contactos API Validation (BE) › TC-F3-17 [P2] Email con longitud 255 chars rechazado (BVA)" classname="contactos.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="navigation.spec.ts" timestamp="2026-04-15T20:55:52.006Z" hostname="webkit" tests="10" failures="0" skipped="10" time="0" errors="0">
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-01 [P3] NavigationRail visible en viewport desktop" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-02 [P3] NavigationBar visible en viewport móvil (375px)" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-03 [P2] Navegación a /clientes sin page reload (FR28)" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-04 [P2] Deep link directo a /clientes (FR30)" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-05 [P2] Deep link directo a /contactos (FR30)" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-06 [P3] Ruta desconocida muestra 404 gracefully" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-07 [P2] Breakpoint exacto 1024px — NavigationRail activo" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-08 [P2] Navegación rápida entre rutas 10x seguidas" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-09 [P3] URL con trailing slash /clientes/ no genera 404" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="EPIC-SA-F1 — App Shell &amp; Navigation › TC-F1-10 [P2] F5 refresh en ruta profunda /clientes/:id" classname="navigation.spec.ts">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+</testsuites>

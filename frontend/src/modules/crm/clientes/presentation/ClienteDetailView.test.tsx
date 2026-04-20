@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ClienteDetailView } from './ClienteDetailView'
 import * as useClienteModule from '../application/useCliente'
@@ -208,7 +208,8 @@ describe('ClienteDetailView', () => {
     render(<ClienteDetailView clienteId={mockCliente.id} />)
 
     await userEvent.click(screen.getByRole('button', { name: /eliminar/i }))
-    await userEvent.click(screen.getByText('Confirmar'))
+    const dialog = screen.getByRole('dialog')
+    await userEvent.click(within(dialog).getByRole('button', { name: /eliminar/i }))
 
     expect(mutateAsync).toHaveBeenCalledWith(mockCliente.id)
     expect(mockNavigate).toHaveBeenCalledWith({ to: '/clientes' })

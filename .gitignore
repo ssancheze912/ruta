@@ -58,3 +58,9 @@ desktop.ini
 # ===========================
 # Uncomment to ignore planning artifacts from git:
 # _bmad-output/
+
+# AgileTest credentials — NEVER commit tokens
+_bmad/bmm/config.secrets.yaml
+_siesa-agents/bmm/config.secrets.yaml
+# State files generados por bmad_to_agiletest.py
+bmad_state_*.json

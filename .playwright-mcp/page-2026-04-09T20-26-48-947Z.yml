@@ -1,0 +1,42 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - img "Siesa" [ref=e6]
+  - generic [ref=e8]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - button "Clientes" [ref=e13] [cursor=pointer]:
+          - img [ref=e16]
+        - button "Contactos" [ref=e18] [cursor=pointer]:
+          - img [ref=e21]
+      - generic [ref=e23]:
+        - separator [ref=e24]
+        - button "Expandir" [ref=e26]:
+          - img [ref=e28]
+    - generic [ref=e72]:
+      - generic [ref=e73]:
+        - heading "CLIENTE TEMP TC025" [level=1] [ref=e74]
+        - generic [ref=e75]:
+          - button "Editar" [ref=e76]:
+            - generic [ref=e77]: Editar
+          - button "Eliminar" [ref=e78]:
+            - generic [ref=e79]: Eliminar
+          - button "Volver" [ref=e80]:
+            - generic [ref=e81]: Volver
+      - generic [ref=e82]:
+        - paragraph [ref=e84]: Nombre
+        - paragraph [ref=e86]: CLIENTE TEMP TC025
+      - generic [ref=e87]:
+        - paragraph [ref=e89]: NIT/RUC
+        - paragraph [ref=e91]: "8888888888"
+      - generic [ref=e92]:
+        - paragraph [ref=e94]: Teléfono
+        - paragraph [ref=e96]: "3111111111"
+      - generic [ref=e97]:
+        - paragraph [ref=e99]: Ciudad
+        - paragraph [ref=e101]: Test025
+      - generic [ref=e102]:
+        - heading "Contactos asociados" [level=2] [ref=e103]
+        - generic [ref=e104]:
+          - button "Asociar contacto" [ref=e106]:
+            - generic [ref=e107]: Asociar contacto
+          - paragraph [ref=e108]: Sin contactos asociados aún.

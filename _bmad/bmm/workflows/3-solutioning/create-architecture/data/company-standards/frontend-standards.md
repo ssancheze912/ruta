@@ -422,7 +422,7 @@ import type { Cart } from '../domain/types/cart.types';
 
 | Prioridad | Acción |
 |-----------|--------|
-| **1. siesa-ui-kit** | Siempre verificar primero si existe el componente |
+| **1. siesa-ui-kit** | Siempre verificar primero si existe el componente, sin importar su tipo o complejidad |
 | **2. Si no existe** | Preguntar al usuario: [1] Usar shadcn directamente, [2] Crear para siesa-ui-kit (requiere MR) |
 | **3. Shadcn fallback** | Solo usar registro MCP Shadcn si el usuario elige opción [1] |
 

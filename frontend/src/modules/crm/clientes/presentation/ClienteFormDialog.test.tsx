@@ -7,6 +7,9 @@ import * as useUpdateClienteModule from '../application/useUpdateCliente'
 
 vi.mock('../application/useCreateCliente')
 vi.mock('../application/useUpdateCliente')
+vi.mock('@/modules/crm/contactos/application/useAssignContactoCliente', () => ({
+  useAssignContactoCliente: () => ({ mutateAsync: vi.fn(), isPending: false }),
+}))
 
 const mockMutateAsync = vi.fn()
 
@@ -58,8 +61,18 @@ describe('ClienteFormDialog', () => {
     expect(mockMutateAsync).not.toHaveBeenCalled()
   })
 
+  it('shows validation error for whitespace-only nombre — does not call mutate', async () => {
+    render(<ClienteFormDialog {...defaultProps} />)
+
+    await userEvent.type(screen.getByLabelText(/nombre/i), '   ')
+    await userEvent.click(screen.getByRole('button', { name: /guardar/i }))
+
+    expect(await screen.findByText('Nombre es requerido')).toBeInTheDocument()
+    expect(mockMutateAsync).not.toHaveBeenCalled()
+  })
+
   it('submits valid form and calls onSuccess', async () => {
-    mockMutateAsync.mockResolvedValue({})
+    mockMutateAsync.mockResolvedValue({ id: 'new-client-id' })
 
     render(<ClienteFormDialog {...defaultProps} />)
 
@@ -77,6 +90,9 @@ describe('ClienteFormDialog', () => {
         ciudad: 'Bogotá',
       })
     })
+
+    // After create, dialog moves to step 2 (associate contact) — skip it
+    await userEvent.click(await screen.findByRole('button', { name: /saltar/i }))
     await waitFor(() => expect(defaultProps.onSuccess).toHaveBeenCalled())
   })
 

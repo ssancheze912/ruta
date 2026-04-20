@@ -7,7 +7,7 @@ workflow_path: '{project-root}/_bmad/bmm/workflows/sync-epics-stories'
 
 # File References
 thisStepFile: '{workflow_path}/steps/step-02-setup.md'
-nextStepFile: '{workflow_path}/steps/step-03-scope.md'
+nextStepFile: '{workflow_path}/steps/step-00-feature-lifecycle.md'
 outputFile: '{project-root}/_bmad-output/jira_docs/project_config.yaml'
 
 # Task References
@@ -93,7 +93,7 @@ jira_url: "https://siesa-team.atlassian.net"
 
 ### 6. Present MENU OPTIONS
 
-Display: "**Configuration Complete - Select an Option:** [C] Continue to Scope Selection"
+Display: "**Configuration Complete - Select an Option:** [C] Continue to Feature Lifecycle Audit"
 
 #### Menu Handling Logic:
 

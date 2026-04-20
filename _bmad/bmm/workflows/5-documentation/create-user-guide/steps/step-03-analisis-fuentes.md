@@ -1,6 +1,6 @@
 ---
 name: 'step-03-analisis-fuentes'
-description: 'Analyze source artifacts (PRDs, epics, architecture) to extract context for user guide'
+description: 'Analyze selected feature files (PRD + epics) to extract content for user guide'
 
 # Path Definitions
 workflow_path: '{project-root}/_bmad/bmm/workflows/5-documentation/create-user-guide'
@@ -9,11 +9,10 @@ workflow_path: '{project-root}/_bmad/bmm/workflows/5-documentation/create-user-g
 thisStepFile: '{workflow_path}/steps/step-03-analisis-fuentes.md'
 nextStepFile: '{workflow_path}/steps/step-04-elicitacion.md'
 workflowFile: '{workflow_path}/workflow.md'
-outputFileSpanish: '{output_folder}/documentation-artifacts/user-guide/es/{audience}-guide.md'
 
-# Task References
-advancedElicitationTask: '{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml'
-partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md'
+# Data Locations
+featuresFolder: '{planning_artifacts}/prd'
+epicsFolder: '{planning_artifacts}/epics'
 
 # Config
 bmmConfig: '{project-root}/_bmad/bmm/config.yaml'
@@ -23,7 +22,7 @@ bmmConfig: '{project-root}/_bmad/bmm/config.yaml'
 
 ## STEP GOAL:
 
-Leer y analizar todos los artefactos de documentación del proyecto (PRDs, épicas seleccionadas, arquitectura, workflows) para extraer información clave que se utilizará en la generación de la guía de usuario. Este es un step autónomo donde el agente trabaja sin requerir input constante del usuario.
+Para cada feature seleccionada en step-02, leer su archivo PRD (`prd/feature-*.md`) y su archivo de épica (`epics/epic-*.md`) si existe. Extraer: descripción de la feature, requisitos funcionales, key behaviors, historias de usuario, acceptance criteria y workflows identificados. Este es un step autónomo — el agente trabaja sin requerir input constante.
 
 ## MANDATORY EXECUTION RULES (READ FIRST):
 
@@ -35,248 +34,184 @@ Leer y analizar todos los artefactos de documentación del proyecto (PRDs, épic
 - 📋 YOU ARE A FACILITATOR, not a content generator
 - ✅ YOU MUST ALWAYS SPEAK OUTPUT In your Agent communication style with the config `{communication_language}`
 
-### Role Reinforcement:
-
-- ✅ You are a technical writer and documentation analyst
-- ✅ If you already have been given communication or persona patterns, continue to use those while playing this new role
-- ✅ We engage in collaborative dialogue, not command-response
-- ✅ You bring analytical and synthesis skills, user brings project artifacts
-- ✅ Maintain collaborative professional tone throughout
-
 ### Step-Specific Rules:
 
-- 🎯 Focus ONLY on reading and analyzing artifacts (INTENT-BASED execution)
+- 🎯 Focus ONLY on reading and analyzing feature files (INTENT-BASED)
 - 🚫 FORBIDDEN to generate user guide content yet (that happens in step-05)
-- 💬 Work autonomously but provide progress updates
-- 📊 Extract key information: features, user roles, workflows, concepts
+- 💬 Work autonomously but provide progress updates por feature
+- 📊 Extract: description, FRs, key behaviors, user stories, workflows, warnings
 
 ## EXECUTION PROTOCOLS:
 
-- 🎯 Read all selected artifacts completely
-- 💾 Append "## Contexto del Proyecto" section to outputFile
-- 📖 Set `stepsCompleted: [1, 2, 3]` before loading next step
-- 🚫 FORBIDDEN to skip artifact reading
+- 🎯 Read ALL files for each selected feature before moving to the next
+- 💾 Keep analysis results in memory (no state file)
+- 🚫 FORBIDDEN to skip any selected feature
 
 ## CONTEXT BOUNDARIES:
 
-- Epics selected in step-02 (from frontmatter.epics_selected)
-- Target audience from frontmatter.target_audience
-- This is autonomous work - minimal user interaction
-- Information extracted here feeds into step-04 and step-05
+- `frontmatter.features_selected` contains the list of features to analyze (set in step-02)
+- Each entry has: id, slug, title, prd_file, epic_file (or null), has_epic
+- Target audience: enduser (configured in step-01)
+- Information extracted here feeds directly into step-04 and step-05
 
 ## EXECUTION APPROACH (INTENT-BASED):
 
-This step uses INTENT-BASED execution. You have flexibility in HOW you analyze, but must accomplish the GOAL of extracting comprehensive project context.
+This step uses INTENT-BASED execution. You have flexibility in HOW you analyze each file, but must accomplish the GOAL of building a complete picture of each feature's behavior and user-facing workflows.
 
-### Core Analysis Goals:
+### For each feature, extract:
 
-1. **Understand the Product:**
-   - What is the system/application about?
+1. **Feature Overview:**
+   - What does this feature do for the end user?
    - What problem does it solve?
-   - Who are the users?
+   - Feature ID and canonical name
 
-2. **Identify Key Features:**
-   - What are the main functionalities?
-   - Which features are documented in the selected epics?
-   - What acceptance criteria exist?
+2. **Key Behaviors (from PRD):**
+   - What are the main behaviors users experience?
+   - What are the UI interactions described?
+   - What constraints or rules apply?
 
-3. **Map User Workflows:**
-   - What are the common user journeys?
-   - What processes do users follow?
-   - What are the critical paths?
+3. **Functional Requirements (from PRD):**
+   - Which FRs are covered (FR1, FR2, etc.)?
+   - Brief summary of each FR's user impact
 
-4. **Extract Technical Context:**
-   - What is the architecture?
-   - What are the key components?
-   - What technologies are used?
+4. **User Stories & Acceptance Criteria (from Epic, if exists):**
+   - List of user stories (Story X.Y format)
+   - Key acceptance criteria per story (GWT scenarios)
+   - What "done" looks like from the user's perspective
 
-5. **Understand User Roles:**
-   - What types of users exist?
-   - What permissions/capabilities do they have?
-   - How do roles differ?
+5. **User Workflows (from Epic or PRD):**
+   - Step-by-step processes users follow
+   - Decision points and branching scenarios
+   - Integration points with other features
+
+6. **Warnings / Limitations:**
+   - Known constraints (field limits, validation rules, etc.)
+   - Behaviors that might surprise users
 
 ## EXECUTION SEQUENCE:
 
 ### 1. Announce Analysis Start
 
-"🔍 **Iniciando Análisis de Documentación**
+"🔍 **Iniciando Análisis de Features**
 
-Voy a leer y analizar todos los artefactos del proyecto para extraer la información necesaria para tu guía de usuario.
+Voy a leer y analizar los archivos de cada feature seleccionada para extraer toda la información necesaria para la guía de usuario.
 
-**Artefactos a analizar:**
-- PRD documents (goals, requirements, UI design)
-- {count} épicas seleccionadas
-- Architecture documentation
-- Workflow documentation (si existe)
+**Features a analizar:** {features_count}
+{for each feature in features_selected}
+- **{id}** — {title} {if has_epic: '(PRD + épica)' else: '(solo PRD)'}
+{end for}
 
 Esto puede tomar un momento. Te mantendré informado del progreso..."
 
-### 2. Discover and Read PRD Documents
+### 2. Read General Context Documents
 
-**Scan locations (in priority order):**
+Before reading individual features, read these general documents if they exist:
 
-- `{planning_artifacts}/goals-and-background-context.md`
-- `{planning_artifacts}/requirements.md`
-- `{planning_artifacts}/user-interface-design-goals.md`
+- `{planning_artifacts}/prd/goals.md` → System purpose and strategic goals
+- `{planning_artifacts}/prd/background-context.md` → Business context, target users
+- `{planning_artifacts}/prd/user-interface-design-goals.md` → UI/UX principles
 
-**For each PRD found:**
-- Read complete file
-- Extract: system purpose, goals, target users, key requirements
-- Add to frontmatter.source_artifacts.prd_docs
+Extract: system name, overall purpose, target users description, UI principles.
 
-**Progress update:**
-"✓ PRD analysis completado - {count} documentos leídos"
+**Progress update:** "✓ Contexto general leído"
 
-### 3. Read Selected Epics from Consolidated File
+### 3. Analyze Each Selected Feature
 
-**Load consolidated epics file:**
-- Read complete epics.md file from frontmatter.source_artifacts.epics_file
-- Parse file to locate each epic section (identified by H3 headers: `### Epic X:`)
-- For each epic number in frontmatter.epics_selected:
-  - Extract the complete epic section (from its H3 header to the next epic's H3 header or end of file)
-  - Parse within that section:
-    - Epic title and description
-    - User stories with acceptance criteria
-    - Features described
-    - User workflows/journeys
-    - Technical requirements
-- Compile comprehensive list of features and their sources
+**Repeat for EACH feature in `frontmatter.features_selected`:**
 
-**Progress update:**
-"✓ Epic analysis completado - {count} épicas procesadas desde archivo consolidado, {features_count} features identificadas"
+#### 3a. Read PRD Feature File
 
-### 4. Read Architecture Documentation
+Read complete `{planning_artifacts}/{feature.prd_file}`.
 
-**Scan locations:**
+Extract:
+- Feature ID and title (from H2 header)
+- Feature description (introductory paragraphs)
+- Mapped FRs (from FR table or list)
+- Key Behaviors (from "Key Behaviors" section or equivalent)
+- Any UI-specific behaviors or constraints mentioned
 
-- `{planning_artifacts}/core-workflows.md`
-- `{planning_artifacts}/components.md`
-- `{planning_artifacts}/architecture-*.md`
+**Progress update:** "✓ {feature.id} PRD leído — {behaviors_count} key behaviors identificados"
 
-**For each architecture doc found:**
-- Read complete file
-- Extract: system workflows, component structure, technical stack
-- Add to frontmatter.source_artifacts.architecture_docs
+#### 3b. Read Epic File (If Exists)
 
-**Progress update:**
-"✓ Architecture analysis completado"
+If `feature.has_epic == true`, read complete `{planning_artifacts}/{feature.epic_file}`.
 
-### 5. Read Workflow Documentation (Optional)
+Extract:
+- Epic description and acceptance criteria (epic level)
+- For each Story (Story X.Y):
+  - Story title and user story text (As a... I want... So that...)
+  - All GWT (Given/When/Then) scenarios → these become user workflows
+  - Key acceptance criteria relevant to end users
 
-**If core-workflows.md exists:**
-- Read complete file
-- Extract: detailed user workflows, step-by-step processes
-- Add to frontmatter.source_artifacts.workflow_docs
+**Progress update:** "✓ {feature.id} épica leída — {stories_count} historias, {workflows_count} workflows identificados"
 
-### 6. Synthesize Project Context
+#### 3c. Build Feature Summary
 
-Create a synthesis of analyzed information:
+For each feature, compile:
 
-**Key Information Extracted:**
-- System name and purpose
-- Target users and roles
-- Core features (with epic/story references)
-- Main user workflows
-- Technical architecture overview
-- UI components (if documented)
-
-### 7. Append Context Section to Output
-
-Append to `{outputFileSpanish}` after the frontmatter:
-
-```markdown
-## Contexto del Proyecto
-
-### Propósito del Sistema
-
-[Brief description from PRD goals]
-
-### Usuarios Objetivo
-
-[User types and roles from PRD and epics]
-
-### Funcionalidades Principales Identificadas
-
-Las siguientes funcionalidades han sido identificadas desde la documentación del proyecto:
-
-{for each feature}
-- **{Feature Name}** [Source: Epic {number} Story {number}]
-  Brief description if available
-{end for}
-
-**Total:** {features_count} funcionalidades identificadas para documentar
-
-### Workflows Identificados
-
-{for each workflow}
-- **{Workflow Name}** [Source: {source}]
-  Brief description
-{end for}
-
-**Nota:** Los detalles completos de cada funcionalidad y workflow se documentarán en las secciones siguientes de esta guía.
-
----
+```
+feature_summary:
+  id: "F1"
+  title: "Captura & Descubrimiento de Leads"
+  description: "[2-3 sentence description from PRD]"
+  user_value: "[What value this gives end users]"
+  key_behaviors: ["behavior 1", "behavior 2", ...]
+  functional_requirements: ["FR1: ...", "FR2: ..."]
+  user_stories:
+    - id: "Story 1.1"
+      title: "..."
+      workflows: ["workflow description 1", "workflow description 2"]
+  warnings_limitations: ["limitation 1", ...]
+  source_prd: "prd/feature-{slug}.md"
+  source_epic: "epics/epic-{slug}.md" (or null)
 ```
 
-### 8. Update Frontmatter
+### 4. Synthesize Cross-Feature Context
 
-Update frontmatter with discovered information:
+After analyzing all features, identify:
 
-```yaml
-source_artifacts:
-  prd_docs: [list of PRD files read]
-  epics_file: "path/to/epics.md"  # Single consolidated epics file
-  architecture_docs: [list of architecture files read]
-  workflow_docs: [list of workflow files read]
+- **User Roles:** All user roles mentioned across features
+- **Common Patterns:** UI patterns repeated across features (e.g., CRUD, search/filter)
+- **Feature Dependencies:** Which features reference or depend on others
+- **Global Workflows:** Multi-feature workflows that span several features
 
-# Preliminary counts (will be updated in step-05)
-features_documented: 0  # Will be populated during generation
-workflows_documented: 0  # Will be populated during generation
-```
+### 5. Read Architecture (Optional but Recommended)
 
-### 9. Analysis Complete Message
+If `{planning_artifacts}/architecture.md` exists:
+- Read it and extract: system architecture overview, key components, tech stack relevant to users
 
-"✅ **Análisis de Documentación Completado**
+**Progress update:** "✓ Arquitectura leída"
+
+### 6. Analysis Complete Message
+
+"✅ **Análisis de Features Completado**
 
 **Resumen del Análisis:**
-- PRD documents: {prd_count} leídos
-- Épicas analizadas: {epic_count}
-- Funcionalidades identificadas: {features_count}
-- Workflows identificados: {workflow_count}
-- Architecture docs: {arch_count} leídos
 
-He agregado una sección de "Contexto del Proyecto" al documento de la guía con un resumen de toda la información encontrada.
+| Feature | Behaviors | Historias | Workflows |
+|---------|-----------|-----------|-----------|
+{for each feature}
+| {id} — {title} | {behaviors_count} | {stories_count} | {workflows_count} |
+{end for}
 
-**Siguiente paso:** Elicitación de información adicional con el usuario para refinar el alcance y estilo de la guía.
+**Totales:**
+- Features analizadas: {features_count}
+- Behaviors identificados: {total_behaviors}
+- Historias de usuario: {total_stories}
+- Workflows documentables: {total_workflows}
 
-¿Listo para continuar?"
+Todo el análisis está en memoria y listo para generación.
 
-### 10. Update State Before Next Step
+**Siguiente paso:** Configuración automática y generación de contenido."
 
-Before loading next step:
-- Ensure frontmatter.stepsCompleted = [1, 2, 3]
-- Ensure frontmatter.currentStep = "step-04-elicitacion"
-- Save outputFileSpanish with new context section
+### 7. Proceed Automatically
 
-### 11. Present MENU OPTIONS
-
-Display: **Select an Option:** [R] Re-scan [C] Continue
-
-#### EXECUTION RULES:
-
-- ALWAYS halt and wait for user input after presenting menu
-- ONLY proceed to next step when user selects 'C'
-- After other menu items execution, return to this menu
-
-#### Menu Handling Logic:
-
-- IF R: Re-scan and re-analyze all artifacts, return to step 2
-- IF C: Update frontmatter, then load, read entire file, then execute `{nextStepFile}`
-- IF Any other: Respond and redisplay menu
+No menu in this step. After analysis is complete:
+- Load, read entire file, then execute `{nextStepFile}` immediately (no pause)
 
 ## CRITICAL STEP COMPLETION NOTE
 
-ONLY WHEN C is selected and analysis is complete with context section appended, will you then load, read entire file, then execute `{nextStepFile}` to begin information elicitation.
+NO MENU in this step. Proceed automatically to `{nextStepFile}` once all features have been analyzed and context section is saved.
 
 ---
 
@@ -284,25 +219,17 @@ ONLY WHEN C is selected and analysis is complete with context section appended, 
 
 ### ✅ SUCCESS:
 
-- All artifact locations scanned
-- All selected epics read completely
-- PRD documents read and analyzed
-- Architecture docs read
-- Features identified with source citations
-- Workflows identified
-- Context section appended to outputFile
-- Frontmatter updated with source_artifacts
-- frontmatter.stepsCompleted = [1, 2, 3]
-- User informed of analysis results
+- All selected feature PRD files read completely
+- All available epic files read completely
+- General context docs read (goals, background, UI goals)
+- Feature summaries built in memory with: description, behaviors, stories, workflows
 - Ready to proceed to step 4
 
 ### ❌ SYSTEM FAILURE:
 
-- Skipping artifact reading
-- Not reading complete files
-- Missing source locations
-- Not extracting features comprehensively
-- Not appending context section
-- Not updating frontmatter
+- Skipping any selected feature file
+- Not reading epic files when they exist
+- Generating guide content (reserved for step-05)
+- Writing to `_workflow-state.md` (forbidden — no state file)
 
 **Master Rule:** Skipping steps, optimizing sequences, or not following exact instructions is FORBIDDEN and constitutes SYSTEM FAILURE.

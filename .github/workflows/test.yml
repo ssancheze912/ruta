@@ -1,0 +1,338 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 3 * * 1' # Weekly burn-in: Mondays 3AM UTC
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Shared environment
+# ─────────────────────────────────────────────────────────────────────────────
+env:
+  DOTNET_VERSION: '10.x'
+  NODE_VERSION: '24'
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Stage 1: Lint — Code quality + Security scans
+  # ─────────────────────────────────────────────────────────────────────────────
+  lint:
+    name: Lint & Security Scan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Lint (ESLint)
+        run: npm run lint
+
+      - name: Frontend dependency vulnerability scan
+        run: npm audit --audit-level=high
+        # Informational on first run — escalate to fail-fast once baseline is clean
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore backend packages
+        working-directory: backend
+        run: dotnet restore
+
+      - name: Backend dependency vulnerability scan
+        working-directory: backend
+        run: dotnet list package --vulnerable --include-transitive
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Stage 2: Unit Tests — Frontend (Vitest + coverage) + Backend (xUnit unit)
+  #   Runs in parallel with lint (no dependency)
+  # ─────────────────────────────────────────────────────────────────────────────
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Frontend unit & component tests (Vitest + coverage)
+        working-directory: frontend
+        run: npm run test:coverage
+        env:
+          CI: 'true'
+
+      - name: Upload frontend coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: frontend/coverage/
+          retention-days: 7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore backend packages
+        working-directory: backend
+        run: dotnet restore
+
+      - name: Backend unit tests
+        working-directory: backend
+        run: dotnet test tests/SiesaAgents.UnitTests/ --configuration Release --no-restore --logger "console;verbosity=minimal"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Stage 3: Backend Integration Tests
+  #   Uses Testcontainers — each test class creates its own Postgres container.
+  #   Requires Docker (available on ubuntu-latest by default).
+  # ─────────────────────────────────────────────────────────────────────────────
+  backend-integration:
+    name: Backend Integration Tests
+    runs-on: ubuntu-latest
+    needs: [unit-tests]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore backend packages
+        working-directory: backend
+        run: dotnet restore
+
+      - name: Backend integration tests (Testcontainers)
+        working-directory: backend
+        run: dotnet test tests/SiesaAgents.IntegrationTests/ --configuration Release --no-restore --logger "console;verbosity=minimal"
+        # Testcontainers manages its own Docker containers — no service block needed
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Stage 4: E2E Tests — Full stack (Playwright, 4 parallel shards)
+  #   Needs: lint + backend-integration (ensures API + schema are validated first)
+  #   Postgres service for the live API instance; backend started as background process
+  # ─────────────────────────────────────────────────────────────────────────────
+  e2e:
+    name: 'E2E (Shard ${{ matrix.shard }}/4)'
+    runs-on: ubuntu-latest
+    needs: [lint, backend-integration]
+    defaults:
+      run:
+        working-directory: frontend
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: siesa_e2e
+          POSTGRES_USER: e2e_user
+          POSTGRES_PASSWORD: e2e_pass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore backend packages
+        working-directory: backend
+        run: dotnet restore
+
+      - name: Build backend
+        working-directory: backend
+        run: dotnet build src/SiesaAgents.API/ --configuration Release --no-restore
+
+      - name: Start backend (background)
+        working-directory: backend
+        run: dotnet run --project src/SiesaAgents.API/ --configuration Release --no-build &
+        env:
+          ASPNETCORE_ENVIRONMENT: Development
+          ASPNETCORE_URLS: http://localhost:5000
+          ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=siesa_e2e;Username=e2e_user;Password=e2e_pass;Pooling=true"
+
+      - name: Wait for backend to be ready
+        run: timeout 60 bash -c 'until curl -sf http://localhost:5000/api/v1/clientes > /dev/null 2>&1; do echo "Waiting for backend..."; sleep 2; done'
+
+      - name: Run E2E tests (shard ${{ matrix.shard }}/4)
+        run: npm run test:e2e -- --shard=${{ matrix.shard }}/4
+        env:
+          CI: 'true'
+          BASE_URL: 'http://localhost:5173'
+          API_URL: 'http://localhost:5000'
+
+      - name: Upload test results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results-shard-${{ matrix.shard }}
+          path: |
+            frontend/test-results/
+            frontend/playwright-report/
+          retention-days: 30
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Stage 5: Burn-In — Flaky test detection (10 iterations, Chromium only)
+  #   Runs on: PRs to main/develop + weekly cron
+  # ─────────────────────────────────────────────────────────────────────────────
+  burn-in:
+    name: Burn-In (Flaky Test Detection)
+    runs-on: ubuntu-latest
+    needs: [e2e]
+    if: github.event_name == 'pull_request' || github.event_name == 'schedule'
+    defaults:
+      run:
+        working-directory: frontend
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: siesa_e2e
+          POSTGRES_USER: e2e_user
+          POSTGRES_PASSWORD: e2e_pass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers (Chromium only)
+        run: npx playwright install --with-deps chromium
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore backend packages
+        working-directory: backend
+        run: dotnet restore
+
+      - name: Build backend
+        working-directory: backend
+        run: dotnet build src/SiesaAgents.API/ --configuration Release --no-restore
+
+      - name: Start backend (background)
+        working-directory: backend
+        run: dotnet run --project src/SiesaAgents.API/ --configuration Release --no-build &
+        env:
+          ASPNETCORE_ENVIRONMENT: Development
+          ASPNETCORE_URLS: http://localhost:5000
+          ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=siesa_e2e;Username=e2e_user;Password=e2e_pass;Pooling=true"
+
+      - name: Wait for backend to be ready
+        run: timeout 60 bash -c 'until curl -sf http://localhost:5000/api/v1/clientes > /dev/null 2>&1; do echo "Waiting for backend..."; sleep 2; done'
+
+      - name: Run burn-in loop (10 iterations, Chromium only)
+        run: |
+          for i in {1..10}; do
+            echo "🔥 Burn-in iteration $i/10"
+            npm run test:e2e -- --project=chromium || exit 1
+          done
+        env:
+          CI: 'true'
+          BASE_URL: 'http://localhost:5173'
+          API_URL: 'http://localhost:5000'
+
+      - name: Upload failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: burn-in-failures
+          path: |
+            frontend/test-results/
+            frontend/playwright-report/
+          retention-days: 30

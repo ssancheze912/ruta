@@ -1,0 +1,44 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - img "Siesa" [ref=e6]
+  - generic [ref=e8]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - button "Clientes" [ref=e13] [cursor=pointer]:
+          - img [ref=e16]
+        - button "Contactos" [ref=e18] [cursor=pointer]:
+          - img [ref=e21]
+      - generic [ref=e23]:
+        - separator [ref=e24]
+        - button "Expandir" [ref=e26]:
+          - img [ref=e28]
+    - generic [ref=e102]:
+      - generic [ref=e103]:
+        - heading "test" [level=1] [ref=e104]
+        - generic [ref=e105]:
+          - button "Editar" [ref=e106]:
+            - generic [ref=e107]: Editar
+          - button "Eliminar" [ref=e108]:
+            - generic [ref=e109]: Eliminar
+          - button "Reasignar cliente" [ref=e110]:
+            - generic [ref=e111]: Reasignar cliente
+          - button "Volver" [ref=e112]:
+            - generic [ref=e113]: Volver
+      - generic [ref=e114]:
+        - generic [ref=e115]:
+          - paragraph [ref=e117]: Nombre
+          - paragraph [ref=e119]: test
+        - generic [ref=e120]:
+          - paragraph [ref=e122]: Cargo
+          - paragraph [ref=e124]: Director
+        - generic [ref=e125]:
+          - paragraph [ref=e127]: Teléfono
+          - paragraph [ref=e129]: "3186287645"
+        - generic [ref=e130]:
+          - paragraph [ref=e132]: Email
+          - paragraph [ref=e134]: santiago.esqssssuivel@correounivalle.edu.co
+        - generic [ref=e135]:
+          - paragraph [ref=e137]: Cliente
+          - paragraph [ref=e139]:
+            - button "testttt" [ref=e140]:
+              - generic [ref=e141]: testttt

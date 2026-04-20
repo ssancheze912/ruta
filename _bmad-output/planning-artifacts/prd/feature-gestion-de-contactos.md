@@ -1,3 +1,4 @@
+<!-- FEATURE_CODE_JIRA=PENDING:gestion-de-contactos -->
 ## feature — Gestión de Contactos
 
 CRUD completo del catálogo de contactos independientes. Permite registrar,

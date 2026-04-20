@@ -22,16 +22,16 @@ La fase **5-documentation** contiene workflows especializados en la generación 
 
 #### Descripción
 
-Genera guías de usuario comprehensivas en español e inglés desde épicas y PRDs, con diagramas Mermaid, screenshot placeholders y trazabilidad completa a fuentes.
+Genera guías de usuario en español desde features del proyecto (archivos individuales `prd/feature-*.md` + `epics/epic-*.md`), con diagramas Mermaid, screenshot placeholders y trazabilidad `[Source: FX Story Y.Z]`.
 
 #### Características Principales
 
-- ✅ **Salida Bilingüe:** Genera versiones en español e inglés con estructura idéntica
+- ✅ **Salida en Español:** Archivo único por audiencia, actualizable con nuevos features
 - ✅ **Diagramas Mermaid:** Incluye diagramas para cada feature y workflow
 - ✅ **Screenshot Placeholders:** Sistema estructurado de placeholders con índice
 - ✅ **Trazabilidad:** Citaciones a épicas y stories de origen
 - ✅ **Continuación:** Soporte para resumir workflows interrumpidos
-- ✅ **Múltiples Audiencias:** End users, administrators, API consumers, mixed
+- ✅ **Enfocado en Features:** Lee `prd/feature-*.md` + `epics/epic-*.md` por feature seleccionada
 
 #### Estructura de Archivos (15 archivos)
 
@@ -72,14 +72,16 @@ create-user-guide/
    - Carga estado guardado
    - Resume desde último paso completado
 
-3. **step-02-seleccion-epicas** → Selección de épicas
-   - Escanea múltiples ubicaciones (BMAD 6, BMAD 4, custom)
-   - Usuario selecciona épicas a documentar
-   - Registra selección en frontmatter
+3. **step-02-seleccion-epicas** → Selección de Features
+   - Escanea `planning_artifacts/prd/feature-*.md`
+   - Usuario selecciona qué features documentar
+   - Verifica existencia de épica correspondiente por feature
+   - Registra selección en frontmatter (`features_selected`)
 
-4. **step-03-analisis-fuentes** → Análisis de artefactos
-   - Lee PRDs, épicas, arquitectura autónomamente
-   - Extrae features y workflows
+4. **step-03-analisis-fuentes** → Análisis de Features
+   - Por cada feature: lee `prd/feature-*.md` (descripción, FRs, key behaviors)
+   - Si existe: lee `epics/epic-*.md` (historias, GWT, acceptance criteria)
+   - Lee contexto general (goals.md, background-context.md)
    - Genera sección "Contexto del Proyecto"
 
 5. **step-04-elicitacion** → Elicitación de preferencias
@@ -91,12 +93,11 @@ create-user-guide/
    - Genera 9 secciones completas
    - Incluye diagramas Mermaid para cada feature
    - Agrega screenshot placeholders
-   - Cita fuentes `[Source: Epic X Story Y]`
+   - Cita fuentes `[Source: FX Story Y.Z]`
 
-7. **step-06-traduccion-ingles** → Traducción al inglés
-   - Traduce contenido manteniendo estructura
-   - Traduce labels de Mermaid
-   - Valida consistencia estructural
+7. **step-06-traduccion-ingles** → ⛔ DESHABILITADO
+   - Paso conservado como referencia pero no se ejecuta
+   - El workflow salta directamente a step-07
 
 8. **step-07-validacion-guardado** → Validación y guardado
    - Ejecuta TOP 5 validaciones

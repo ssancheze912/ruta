@@ -72,6 +72,40 @@ public class ExceptionHandlingMiddlewareUnitTests
     }
 
     [Fact]
+    public async Task InvokeAsync_WhenArgumentExceptionThrown_Returns500SameProblemDetailsShape()
+    {
+        // GIVEN: Middleware receives an ArgumentException (same catch-all path as InvalidOperationException)
+        var logger = Substitute.For<ILogger<ExceptionHandlingMiddleware>>();
+        RequestDelegate next = _ => throw new ArgumentException("Invalid argument value");
+        var middleware = new ExceptionHandlingMiddleware(next, logger);
+
+        var context = new DefaultHttpContext();
+        var responseBody = new MemoryStream();
+        context.Response.Body = responseBody;
+
+        // Act
+        await middleware.InvokeAsync(context);
+
+        // THEN: Same 500 Problem Details shape — consistent across all unhandled exception types
+        Assert.Equal(StatusCodes.Status500InternalServerError, context.Response.StatusCode);
+        Assert.Equal("application/problem+json", context.Response.ContentType);
+
+        responseBody.Seek(0, SeekOrigin.Begin);
+        var json = await new StreamReader(responseBody).ReadToEndAsync();
+        var problem = JsonSerializer.Deserialize<ProblemDetails>(json, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        });
+
+        Assert.NotNull(problem);
+        Assert.Equal(500, problem.Status);
+        Assert.Equal("Internal Server Error", problem.Title);
+        // AND: Argument details are NOT exposed to client (NFR6 — no exception leakage)
+        Assert.DoesNotContain("Invalid argument value", problem.Detail ?? string.Empty);
+        Assert.DoesNotContain("ArgumentException", json);
+    }
+
+    [Fact]
     public async Task InvokeAsync_WhenResponseAlreadyStarted_DoesNotThrow()
     {
         // Arrange

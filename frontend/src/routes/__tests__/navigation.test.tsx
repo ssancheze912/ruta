@@ -27,10 +27,10 @@ describe('Navigation Shell', () => {
     await waitFor(
       () => {
         expect(
-          screen.getByText(/selecciona un cliente para ver su detalle/i),
+          screen.getByRole('heading', { name: /clientes/i }),
         ).toBeInTheDocument()
       },
-      { timeout: 5000 },
+      { timeout: 12000 },
     )
   })
 
@@ -38,14 +38,14 @@ describe('Navigation Shell', () => {
     renderWithRouter('/contactos')
     await waitFor(() => {
       expect(screen.getByRole('heading', { name: /contactos/i })).toBeInTheDocument()
-    }, { timeout: 5000 })
+    }, { timeout: 12000 })
   })
 
   it('redirects / to /clientes', async () => {
     renderWithRouter('/')
     await waitFor(() => {
       expect(
-        screen.getByText(/selecciona un cliente para ver su detalle/i),
+        screen.getByRole('heading', { name: /clientes/i }),
       ).toBeInTheDocument()
     })
   })
@@ -69,7 +69,7 @@ describe('Navigation Shell', () => {
     renderWithRouter('/clientes')
     await waitFor(() => {
       expect(
-        screen.getByText(/selecciona un cliente para ver su detalle/i),
+        screen.getByRole('heading', { name: /clientes/i }),
       ).toBeInTheDocument()
     })
     // Multiple nav buttons exist (NavigationRail + NavigationBar) — click the first

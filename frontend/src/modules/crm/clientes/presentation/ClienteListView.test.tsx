@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ClienteListView } from './ClienteListView'
 import * as useClientesModule from '../application/useClientes'
 import type { Cliente } from '../domain/Cliente'
@@ -48,7 +49,7 @@ describe('ClienteListView', () => {
   it('renders cliente list with nombre and nit', () => {
     mockUseClientes()
 
-    render(<ClienteListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ClienteListView /></QueryClientProvider>)
 
     expect(screen.getByText('Empresa ABC')).toBeInTheDocument()
     expect(screen.getByText('900123456-1')).toBeInTheDocument()
@@ -59,7 +60,7 @@ describe('ClienteListView', () => {
   it('shows EmptyState when no clientes from API', () => {
     mockUseClientes({ clientes: [] })
 
-    render(<ClienteListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ClienteListView /></QueryClientProvider>)
 
     expect(
       screen.getByText('No hay clientes aún. Crea el primer cliente.'),
@@ -69,7 +70,7 @@ describe('ClienteListView', () => {
   it('shows search EmptyState when search yields no results', () => {
     mockUseClientes()
 
-    render(<ClienteListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ClienteListView /></QueryClientProvider>)
 
     const searchInput = screen.getByPlaceholderText('Buscar por nombre o NIT/RUC')
     fireEvent.change(searchInput, { target: { value: 'xyznonexistente' } })
@@ -83,7 +84,7 @@ describe('ClienteListView', () => {
   it('shows ErrorPanel when fetch fails', () => {
     mockUseClientes({ clientes: [], isError: true })
 
-    render(<ClienteListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ClienteListView /></QueryClientProvider>)
 
     expect(
       screen.getByText('No se pudo cargar la información.'),
@@ -95,7 +96,7 @@ describe('ClienteListView', () => {
     const refetch = vi.fn()
     mockUseClientes({ clientes: [], isError: true, refetch })
 
-    render(<ClienteListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ClienteListView /></QueryClientProvider>)
     fireEvent.click(screen.getByText('Reintentar'))
 
     expect(refetch).toHaveBeenCalledOnce()
@@ -104,7 +105,7 @@ describe('ClienteListView', () => {
   it('filters clientes by nombre on search', () => {
     mockUseClientes()
 
-    render(<ClienteListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ClienteListView /></QueryClientProvider>)
 
     const searchInput = screen.getByPlaceholderText('Buscar por nombre o NIT/RUC')
     fireEvent.change(searchInput, { target: { value: 'empresa' } })
@@ -116,7 +117,7 @@ describe('ClienteListView', () => {
   it('filters clientes by nit on search', () => {
     mockUseClientes()
 
-    render(<ClienteListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ClienteListView /></QueryClientProvider>)
 
     const searchInput = screen.getByPlaceholderText('Buscar por nombre o NIT/RUC')
     fireEvent.change(searchInput, { target: { value: '800987654' } })

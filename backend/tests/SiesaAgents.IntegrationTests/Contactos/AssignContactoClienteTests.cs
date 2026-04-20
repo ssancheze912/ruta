@@ -2,6 +2,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SiesaAgents.Application.Contactos.DTOs;
@@ -153,5 +154,52 @@ public class AssignContactoClienteTests : IAsyncLifetime
             JsonBody(new { clienteId = unknownClienteId }));
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ReassignContacto_WithDifferentClienteId_Returns200AndUpdatesClienteId()
+    {
+        // GIVEN: Two clients and a contact assigned to clienteA
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+
+        Guid clienteAId, clienteBId, contactoId;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var clienteA = new ClienteEntity { Nombre = "Cliente A Reassign", Nit = "reassign-a-001" };
+            var clienteB = new ClienteEntity { Nombre = "Cliente B Reassign", Nit = "reassign-b-001" };
+            db.Clientes.Add(clienteA);
+            db.Clientes.Add(clienteB);
+            await db.SaveChangesAsync();
+            clienteAId = clienteA.Id;
+            clienteBId = clienteB.Id;
+
+            var contacto = new ContactoEntity
+            {
+                Nombre = "Contacto Para Reasignar",
+                Cargo = "Cargo Test",
+                Telefono = "3001234567",
+                Email = "reassign@test.com",
+                ClienteId = clienteAId,
+            };
+            db.Contactos.Add(contacto);
+            await db.SaveChangesAsync();
+            contactoId = contacto.Id;
+        }
+
+        // WHEN: The contact is reassigned to clienteB
+        var client = factory.CreateClient();
+        var response = await client.PutAsync(
+            $"/api/v1/contactos/{contactoId}/cliente",
+            JsonBody(new { clienteId = clienteBId }));
+
+        // THEN: 200 OK and dto.ClienteId reflects the new client
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var json = await response.Content.ReadAsStringAsync();
+        var dto = JsonSerializer.Deserialize<ContactoDto>(json, JsonOptions);
+        Assert.NotNull(dto);
+        Assert.Equal(clienteBId, dto!.ClienteId);
+        Assert.NotEqual(clienteAId, dto.ClienteId);
     }
 }

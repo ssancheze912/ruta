@@ -1,3 +1,4 @@
+<!-- FEATURE_CODE_JIRA=PENDING:asociacion-cliente-contacto -->
 ## feature — Asociación Cliente ↔ Contacto
 
 Relación bidireccional navegable entre clientes y contactos como entidad de

@@ -1,5 +1,6 @@
 ---
-stepsCompleted: [1, 2, 3, 4, 5, 6]
+stepsCompleted: [1, 2, 3, 4, 5, 6, 7]
+status: done
 status: in-progress
 story_key: 4-5-orphan-contacts-filter
 story_path: _bmad-output/implementation-artifacts/4-5-orphan-contacts-filter.md
@@ -95,3 +96,12 @@ None.
 ## Jira Sync
 
 - ⚠️ Story has no `## Jira Information` or `## Synced Tasks` sections — not linked to Jira. Sync skipped.
+
+## Repository Sync
+
+- **Branch**: `develop-santidev-ssancheze-epics-2-3`
+- **Frontend commit**: `5650dc0` — fix: code-review 4.5 — null consistency, aria-pressed, test assertions, AC5 deactivation test
+- **Root commit**: `bd06c73` — fix: finalize review-4-5 — all findings fixed, story marked done
+- **Push**: ✅ Performed — `origin/develop-santidev-ssancheze-epics-2-3`
+- **GitFlow Compliance**: ✅ Verified
+- **Status**: Workflow Completed Successfully

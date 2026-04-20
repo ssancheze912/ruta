@@ -1,0 +1,19 @@
+# Ambientes de Prueba — run-acceptance-tests
+# Edita las URLs según el ambiente real del proyecto.
+# El QA solo verá el "name" y la "description" — nunca la URL directamente.
+
+environments:
+  - id: local
+    name: "Local (mi máquina)"
+    description: "Aplicación corriendo en mi computador"
+    url: "http://localhost:5173"
+
+  - id: qa
+    name: "QA"
+    description: "Ambiente de pruebas compartido del equipo"
+    url: "http://localhost:5173"
+
+  - id: staging
+    name: "Staging"
+    description: "Ambiente de pre-producción"
+    url: "http://localhost:5173"

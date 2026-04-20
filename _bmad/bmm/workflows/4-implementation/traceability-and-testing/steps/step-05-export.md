@@ -1,6 +1,6 @@
 ---
 name: 'step-05-export'
-description: 'Export traceability map (PRD→FR→Epic→Story→Task) to CSV format'
+description: 'Export traceability map (PRD→FR→Feature→Story→Task) to CSV format'
 
 # Path Definitions
 workflow_path: '{project-root}/_bmad/bmm/workflows/4-implementation/traceability-and-testing'
@@ -16,7 +16,7 @@ traceabilityCSV: '{implementation_artifacts}/traceability-artifacts/traceability
 
 ## STEP GOAL:
 
-To export the traceability map (PRD→FR→Epic→Story→Task hierarchy ONLY) to CSV format and finalize the workflow.
+To export the traceability map (PRD→FR→Feature→Story→Task hierarchy ONLY) to CSV format and finalize the workflow.
 
 **IMPORTANT:** This step exports ONLY traceability (implementation hierarchy), NOT test cases or test plans.
 
@@ -39,17 +39,17 @@ To export the traceability map (PRD→FR→Epic→Story→Task hierarchy ONLY) t
 
 ## EXECUTION PROTOCOLS:
 
-- 📊 Generate simple CSV export of traceability (PRD→FR→Epic→Story→Task ONLY)
+- 📊 Generate simple CSV export of traceability (PRD→FR→Feature→Story→Task ONLY)
 - 📖 Update frontmatter with `stepsCompleted: [1, 2, 3, 4, 5]` and `workflowCompleted: true`
 - 🎉 Present final summary to user
 
 ## CONTEXT BOUNDARIES:
 
 - Input data from traceability-map.md (sections 1-3 ONLY - pure traceability)
-- Epic test plan files from {implementation_artifacts}/epic-test-plans/ (separate from traceability CSV)
+- Feature test plan files from {implementation_artifacts}/feature-test-plans/ (separate from traceability CSV)
 - Focus on simple CSV export, NOT complex scripts or Excel files
 
-**CRITICAL:** Traceability CSV contains ONLY implementation hierarchy (PRD→FR→Epic→Story→Task), NO test information.
+**CRITICAL:** Traceability CSV contains ONLY implementation hierarchy (PRD→FR→Feature→Story→Task), NO test information.
 
 ---
 
@@ -83,23 +83,25 @@ Read {outputFile} to extract traceability data from sections 1-3:
 **CSV Structure:**
 
 ```csv
-PRD,ID_FR,Titulo_FR,ID_Epica,Titulo_Epica,ID_Historia,Titulo_Historia,ID_Tarea,Titulo_Tarea
+PRD;ID_FR;Titulo_FR;ID_Feature;Titulo_Feature;ID_Historia;Titulo_Historia;ID_Tarea;Titulo_Tarea
 ```
+
+**IMPORTANT:** Use `;` (semicolon) as delimiter — required for Spanish/Latin American Excel locale where `,` is the decimal separator.
 
 **Example rows:**
 ```csv
-PRD,ID_FR,Titulo_FR,ID_Epica,Titulo_Epica,ID_Historia,Titulo_Historia,ID_Tarea,Titulo_Tarea
-"Sección 3.1","FR-001","Gestión de usuarios","Epic-1","Sistema de autenticación","Story-1.1","Login de usuario","Task-1.1.1","Implementar formulario de login"
-"Sección 3.1","FR-001","Gestión de usuarios","Epic-1","Sistema de autenticación","Story-1.1","Login de usuario","Task-1.1.2","Validar credenciales en backend"
-"Sección 3.1","FR-001","Gestión de usuarios","Epic-1","Sistema de autenticación","Story-1.2","Recuperar contraseña","Task-1.2.1","Implementar flujo de recuperación"
-"Sección 3.2","FR-002","Gestión de productos","Epic-2","Catálogo de productos","Story-2.1","Listar productos","Task-2.1.1","Crear API de productos"
+PRD;ID_FR;Titulo_FR;ID_Feature;Titulo_Feature;ID_Historia;Titulo_Historia;ID_Tarea;Titulo_Tarea
+"Sección 3.1";"FR-001";"Gestión de usuarios";"Epic-1";"Sistema de autenticación";"Story-1.1";"Login de usuario";"Task-1.1.1";"Implementar formulario de login"
+"Sección 3.1";"FR-001";"Gestión de usuarios";"Epic-1";"Sistema de autenticación";"Story-1.1";"Login de usuario";"Task-1.1.2";"Validar credenciales en backend"
+"Sección 3.1";"FR-001";"Gestión de usuarios";"Epic-1";"Sistema de autenticación";"Story-1.2";"Recuperar contraseña";"Task-1.2.1";"Implementar flujo de recuperación"
+"Sección 3.2";"FR-002";"Gestión de productos";"Epic-2";"Catálogo de productos";"Story-2.1";"Listar productos";"Task-2.1.1";"Crear API de productos"
 ```
 
 **Build CSV content in memory:**
 
 ```
 Step 1: Create header row
-header = "PRD,ID_FR,Titulo_FR,ID_Epica,Titulo_Epica,ID_Historia,Titulo_Historia,ID_Tarea,Titulo_Tarea"
+header = "PRD;ID_FR;Titulo_FR;ID_Feature;Titulo_Feature;ID_Historia;Titulo_Historia;ID_Tarea;Titulo_Tarea"
 
 Step 2: For each traceability path extracted from sections 1-3:
   for each_path in traceability_data:
@@ -107,18 +109,18 @@ Step 2: For each traceability path extracted from sections 1-3:
       prd_section = escape_csv(path.prd_section)
       fr_id = escape_csv(path.fr_id)
       fr_title = escape_csv(path.fr_title)
-      epic_id = escape_csv(path.epic_id)
-      epic_title = escape_csv(path.epic_title)
+      feature_id = escape_csv(path.feature_id)
+      feature_title = escape_csv(path.feature_title)
       story_id = escape_csv(path.story_id)
       story_title = escape_csv(path.story_title)
       task_id = escape_csv(path.task_id or "")
       task_title = escape_csv(path.task_title or "")
 
-      row = f'"{prd_section}","{fr_id}","{fr_title}","{epic_id}","{epic_title}","{story_id}","{story_title}","{task_id}","{task_title}"'
+      row = f'"{prd_section}";"{fr_id}";"{fr_title}";"{feature_id}";"{feature_title}";"{story_id}";"{story_title}";"{task_id}";"{task_title}"'
 
       csv_rows.append(row)
 
-Step 3: Combine all
+Step 3: Combine all rows separated by actual newlines
 complete_csv = header + "\n" + "\n".join(csv_rows)
 ```
 
@@ -127,8 +129,10 @@ complete_csv = header + "\n" + "\n".join(csv_rows)
 ```
 Write tool:
 - file_path: {traceabilityCSV}
-- content: {complete_csv_string}
+- content: {complete_csv}
 ```
+
+**CRITICAL:** The `content` field must contain the fully materialized CSV string with real newline characters between rows — NOT the literal text `\n`. Each row must be on its own line.
 
 **DO NOT:**
 - ❌ Create exports/ directory
@@ -190,10 +194,10 @@ Display:
    - ✅ Casos de prueba generados automáticamente
    - 💡 **Nota:** Carpeta con timestamp que identifica tipo, alcance y fecha de generación
 
-**4. Planes de Prueba por Épica**
-   - 📁 Directorio: `{implementation_artifacts}/epic-test-plans/`
-   - 📄 Archivos: epic-1-test-plan.md, epic-2-test-plan.md, etc.
-   - ✅ Un plan detallado por cada épica
+**4. Planes de Prueba por Feature**
+   - 📁 Directorio: `{implementation_artifacts}/feature-test-plans/`
+   - 📄 Archivos: feature-1-test-plan.md, feature-2-test-plan.md, etc.
+   - ✅ Un plan detallado por cada feature
 
 ---
 
@@ -203,8 +207,8 @@ Display:
 📁 **Ubicación de casos de prueba (timestamped):**
 `{testcasesFolderPath}`
 
-📁 **Ubicación de planes de prueba por épica:**
-`{implementation_artifacts}/epic-test-plans/`
+📁 **Ubicación de planes de prueba por feature:**
+`{implementation_artifacts}/feature-test-plans/`
 
 ---
 
@@ -240,7 +244,7 @@ Display: **El workflow ha finalizado. Opciones:**
 
 - Traceability data extracted from traceability-map.md
 - CSV file created successfully with traceability hierarchy
-- CSV contains ONLY implementation hierarchy (PRD→FR→Epic→Story→Task)
+- CSV contains ONLY implementation hierarchy (PRD→FR→Feature→Story→Task)
 - NO test information included in CSV
 - Frontmatter updated with workflowCompleted: true
 - User confirmed completion

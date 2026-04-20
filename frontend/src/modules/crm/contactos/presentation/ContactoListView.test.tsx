@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ContactoListView } from './ContactoListView'
 import * as useContactosModule from '../application/useContactos'
 import type { Contacto } from '../domain/Contacto'
@@ -20,6 +21,9 @@ vi.mock('./ContactoFormDialog', () => ({
 }))
 
 vi.mock('../application/useContactos')
+vi.mock('@/modules/crm/clientes/application/useClientes', () => ({
+  useClientes: () => ({ clientes: [], isLoading: false, isError: false }),
+}))
 
 const mockNavigate = vi.fn()
 vi.mock('@tanstack/react-router', () => ({
@@ -121,7 +125,7 @@ describe('ContactoListView', () => {
 
   it('renders contact list with nombre, cargo and email', () => {
     mockUseContactos()
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     expect(screen.getByText('Ana García')).toBeInTheDocument()
     expect(screen.getByText('Gerente')).toBeInTheDocument()
     expect(screen.getByText('ana@empresa.com')).toBeInTheDocument()
@@ -130,14 +134,14 @@ describe('ContactoListView', () => {
 
   it('shows "Sin cliente" badge for contacts without client', () => {
     mockUseContactos()
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     const sinClienteElements = screen.getAllByText('Sin cliente')
     expect(sinClienteElements.length).toBeGreaterThanOrEqual(1)
   })
 
   it('shows empty message when no contacts', () => {
     mockUseContactos({ data: [] })
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     expect(
       screen.getByText('No hay contactos aún. Crea el primer contacto.'),
     ).toBeInTheDocument()
@@ -145,7 +149,7 @@ describe('ContactoListView', () => {
 
   it('shows error panel when fetch fails', () => {
     mockUseContactos({ data: undefined, isError: true })
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     expect(screen.getByText('No se pudo cargar la información.')).toBeInTheDocument()
     expect(screen.getByText('Reintentar')).toBeInTheDocument()
   })
@@ -153,39 +157,39 @@ describe('ContactoListView', () => {
   it('calls refetch when retry button is clicked', () => {
     const refetch = vi.fn()
     mockUseContactos({ data: undefined, isError: true, refetch })
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     fireEvent.click(screen.getByText('Reintentar'))
     expect(refetch).toHaveBeenCalledOnce()
   })
 
   it('shows "Nuevo contacto" button at all times', () => {
     mockUseContactos()
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     expect(screen.getByText('Nuevo contacto')).toBeInTheDocument()
   })
 
   it('shows "Nuevo contacto" button even during error state', () => {
     mockUseContactos({ data: undefined, isError: true })
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     expect(screen.getByText('Nuevo contacto')).toBeInTheDocument()
   })
 
   it('shows "Nuevo contacto" button even when list is empty', () => {
     mockUseContactos({ data: [] })
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     expect(screen.getByText('Nuevo contacto')).toBeInTheDocument()
   })
 
   it('opens dialog when "Nuevo contacto" button is clicked', async () => {
     mockUseContactos()
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     fireEvent.click(screen.getByText('Nuevo contacto'))
     expect(await screen.findByTestId('contacto-form-dialog')).toBeInTheDocument()
   })
 
   it('closes dialog when Cancelar is clicked', async () => {
     mockUseContactos()
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     fireEvent.click(screen.getByText('Nuevo contacto'))
     await screen.findByTestId('contacto-form-dialog')
     fireEvent.click(screen.getByText('Cancelar'))
@@ -194,7 +198,7 @@ describe('ContactoListView', () => {
 
   it('filters contacts by nombre on search', () => {
     mockUseContactos()
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     const searchInput = screen.getByPlaceholderText('Buscar por nombre o email')
     fireEvent.change(searchInput, { target: { value: 'ana' } })
     expect(screen.getByText('Ana García')).toBeInTheDocument()
@@ -203,7 +207,7 @@ describe('ContactoListView', () => {
 
   it('filters contacts by email on search', () => {
     mockUseContactos()
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     const searchInput = screen.getByPlaceholderText('Buscar por nombre o email')
     fireEvent.change(searchInput, { target: { value: 'carlos@' } })
     expect(screen.getByText('Carlos López')).toBeInTheDocument()
@@ -212,13 +216,13 @@ describe('ContactoListView', () => {
 
   it('shows orphan count in toggle button', () => {
     mockUseContactos()
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     expect(screen.getByText('Sin cliente (1)')).toBeInTheDocument()
   })
 
   it('activates orphan filter on button click — shows only orphan contacts', () => {
     mockUseContactos()
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     fireEvent.click(screen.getByText('Sin cliente (1)'))
     expect(screen.getByText('Carlos López')).toBeInTheDocument()
     expect(screen.queryByText('Ana García')).not.toBeInTheDocument()
@@ -226,7 +230,7 @@ describe('ContactoListView', () => {
 
   it('deactivates orphan filter on second click — restores full list', () => {
     mockUseContactos()
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     fireEvent.click(screen.getByText('Sin cliente (1)'))
     fireEvent.click(screen.getByText('Sin cliente (1)'))
     expect(screen.getByText('Ana García')).toBeInTheDocument()
@@ -239,7 +243,7 @@ describe('ContactoListView', () => {
       { ...mockContactos[1], clienteId: '200' },
     ]
     mockUseContactos({ data: mockSinHuerfanos })
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     fireEvent.click(screen.getByText('Sin cliente (0)'))
     expect(screen.getByText('Todos los contactos tienen cliente asignado')).toBeInTheDocument()
   })
@@ -256,7 +260,7 @@ describe('ContactoListView', () => {
       updatedAt: '2026-03-13T12:00:00Z',
     }
     mockUseContactos({ data: [...mockContactos, extraOrphan] })
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     fireEvent.click(screen.getByText('Sin cliente (2)'))
     const searchInput = screen.getByPlaceholderText('Buscar por nombre o email')
     fireEvent.change(searchInput, { target: { value: 'carlos' } })
@@ -271,7 +275,7 @@ describe('ContactoListView', () => {
       { ...mockContactos[1], clienteId: '200' },
     ]
     mockUseContactos({ data: mockSinHuerfanos })
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     const toggleBtn = screen.getByText('Sin cliente (0)').closest('button')!
     expect(toggleBtn).not.toBeDisabled()
     fireEvent.click(toggleBtn)
@@ -280,7 +284,7 @@ describe('ContactoListView', () => {
 
   it('deactivating orphan filter with active search shows only search-matching contacts', () => {
     mockUseContactos()
-    render(<ContactoListView />)
+    render(<QueryClientProvider client={new QueryClient()}><ContactoListView /></QueryClientProvider>)
     // activate orphan filter → only Carlos López (orphan)
     fireEvent.click(screen.getByText('Sin cliente (1)'))
     // type search matching Ana García but NOT Carlos López

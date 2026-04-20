@@ -1,0 +1,65 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - navigation [ref=e4]:
+      - img [ref=e94]
+    - generic [ref=e8]:
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - button [ref=e95] [cursor=pointer]:
+            - img [ref=e16]
+          - button [ref=e96] [cursor=pointer]:
+            - img [ref=e21]
+        - generic [ref=e23]:
+          - separator [ref=e24]
+          - button [ref=e97]:
+            - img [ref=e28]
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - heading [level=1] [ref=e98]: CLIENTE TEST ELIMINAR
+          - generic [ref=e35]:
+            - button [ref=e99]:
+              - generic [ref=e37]: Editar
+            - button [ref=e100]:
+              - generic [ref=e39]: Eliminar
+            - button [ref=e101]:
+              - generic [ref=e41]: Volver
+        - generic [ref=e42]:
+          - paragraph [ref=e44]: Nombre
+          - paragraph [ref=e46]: CLIENTE TEST ELIMINAR
+        - generic [ref=e47]:
+          - paragraph [ref=e49]: NIT/RUC
+          - paragraph [ref=e51]: "9999999999"
+        - generic [ref=e52]:
+          - paragraph [ref=e54]: Teléfono
+          - paragraph [ref=e56]: "3000000000"
+        - generic [ref=e57]:
+          - paragraph [ref=e59]: Ciudad
+          - paragraph [ref=e61]: Test
+        - generic [ref=e62]:
+          - heading [level=2] [ref=e102]: Contactos asociados
+          - generic [ref=e64]:
+            - button [ref=e103]:
+              - generic [ref=e67]: Asociar contacto
+            - generic [ref=e69]:
+              - button [ref=e104] [cursor=pointer]:
+                - generic [ref=e71]: Nombre
+              - generic [ref=e75]: Cargo
+              - generic [ref=e77]: Teléfono
+              - generic [ref=e79]: Email
+              - generic [ref=e81]:
+                - generic [ref=e83]: test
+                - generic [ref=e85]: Director
+                - generic [ref=e87]: "3186287645"
+                - generic [ref=e89]: santiago.esqssssuivel@correounivalle.edu.co
+                - button [ref=e105]:
+                  - generic [ref=e93]: Desasociar
+  - dialog [ref=e109]:
+    - generic [ref=e111]:
+      - generic [ref=e112]:
+        - paragraph [ref=e113]: ¿Eliminar este cliente?
+        - paragraph [ref=e114]: Estás a punto de eliminar a CLIENTE TEST ELIMINAR. Esta acción no se puede deshacer. Los contactos asociados quedarán sin cliente asignado.
+      - generic [ref=e115]:
+        - button "Cancelar" [active] [ref=e116]:
+          - generic [ref=e117]: Cancelar
+        - button "Eliminar" [ref=e118]:
+          - generic [ref=e119]: Eliminar

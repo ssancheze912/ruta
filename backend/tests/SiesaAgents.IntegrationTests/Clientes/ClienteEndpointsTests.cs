@@ -274,6 +274,39 @@ public class ClienteEndpointsTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task PutCliente_WithSameNitAsCurrentClient_Returns200()
+    {
+        // GIVEN: A cliente exists with a specific NIT
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+
+        Guid clienteId;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var entity = new ClienteEntity { Nombre = "Original", Nit = "same-nit-200", Telefono = "300", Ciudad = "Cali" };
+            db.Clientes.Add(entity);
+            await db.SaveChangesAsync();
+            clienteId = entity.Id;
+        }
+
+        var client = factory.CreateClient();
+
+        // WHEN: PUT sends the same NIT (only Nombre and Ciudad change)
+        var payload = new { nombre = "Actualizado", nit = "same-nit-200", telefono = "3009999999", ciudad = "Bogotá" };
+        var response = await client.PutAsJsonAsync($"/api/v1/clientes/{clienteId}", payload);
+
+        // THEN: 200 OK — not 409 Conflict (same NIT on same entity is not a duplicate)
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var json = await response.Content.ReadAsStringAsync();
+        var dto = JsonSerializer.Deserialize<ClienteDto>(json, JsonOptions);
+        Assert.NotNull(dto);
+        Assert.Equal("Actualizado", dto!.Nombre);
+        Assert.Equal("same-nit-200", dto.Nit);
+        Assert.Equal("Bogotá", dto.Ciudad);
+    }
+
+    [Fact]
     public async Task DeleteCliente_Existing_WithNoContacts_Returns200WithZeroCount()
     {
         await using var factory = CreateFactory();

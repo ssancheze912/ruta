@@ -25,12 +25,22 @@ memories: []
 
 # Add custom menu items (appended to base menu)
 # Don't include * prefix or help/exit - auto-injected
-menu: []
-# Example:
-# menu:
-#   - trigger: my-workflow
-#     workflow: "{project-root}/custom/my.yaml"
-#     description: My custom workflow
+menu:
+  - trigger: test-automate
+    action: |
+      FIRST load and apply ALL rules from {project-root}/_siesa-agents/bmm/workflows/testarch/automate/workflow_ext.md,
+      then execute workflow {project-root}/_bmad/bmm/workflows/testarch/automate/workflow.yaml using workflow.xml.
+    description: "[TA] Generate test automation using test-cases.csv as source (extended)"
+  - trigger: test-design
+    action: |
+      FIRST load and apply ALL rules from {project-root}/_siesa-agents/bmm/workflows/testarch/test-design/workflow_ext.md,
+      then execute workflow {project-root}/_bmad/bmm/workflows/testarch/test-design/workflow.yaml using workflow.xml.
+    description: "[TD] Epic-level test design using test-cases.csv as baseline (extended)"
+  - trigger: test-review
+    action: |
+      FIRST load and apply ALL rules from {project-root}/_siesa-agents/bmm/workflows/testarch/test-review/workflow_ext.md,
+      then execute workflow {project-root}/_bmad/bmm/workflows/testarch/test-review/workflow.yaml using workflow.xml.
+    description: "[RV] Test quality review with CSV integrity checks (extended)"
 
 # Add custom prompts (for action="#id" handlers)
 prompts: []

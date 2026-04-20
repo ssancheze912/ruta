@@ -16,15 +16,15 @@ type TestFixtures = {
  * Each factory automatically cleans up after itself when the fixture tears down.
  */
 export const test = base.extend<TestFixtures>({
-  clienteFactory: async ({ request }, use) => {
+  clienteFactory: async ({ request }, provide) => {
     const factory = new ClienteFactory(request)
-    await use(factory)
+    await provide(factory)
     await factory.cleanup()
   },
 
-  contactoFactory: async ({ request }, use) => {
+  contactoFactory: async ({ request }, provide) => {
     const factory = new ContactoFactory(request)
-    await use(factory)
+    await provide(factory)
     await factory.cleanup()
   },
 })

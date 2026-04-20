@@ -1,0 +1,19 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - img "Siesa" [ref=e6]
+  - generic [ref=e8]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - button "Clientes" [ref=e13] [cursor=pointer]:
+          - img [ref=e16]
+        - button "Contactos" [ref=e18] [cursor=pointer]:
+          - img [ref=e21]
+      - generic [ref=e23]:
+        - separator [ref=e24]
+        - button "Expandir" [ref=e26]:
+          - img [ref=e28]
+    - generic [ref=e32]:
+      - heading "Página no encontrada" [level=1] [ref=e33]
+      - paragraph [ref=e34]: La ruta que buscas no existe.
+      - link "Ir a Clientes" [ref=e35] [cursor=pointer]:
+        - /url: /clientes

@@ -5,8 +5,8 @@ web_bundle: true
 version: 1.0.0
 testCaseFormat: 'Siesa Standard (FT-SD-007 v5.0)'
 parameters:
-  epic_number:
-    description: 'Optional: Epic number to process (e.g., "1", "2", "3"). If not provided, user will be prompted to select'
+  feature_id:
+    description: 'Optional: Feature ID to process (e.g., "feature-1", "feature-2"). If not provided, user will be prompted to select from features-status.yaml'
     required: false
     type: string
 ---
@@ -182,27 +182,29 @@ Expected Results:
 
 ## WORKFLOW ARCHITECTURE
 
-**EXECUTION MODE: Fully Automated - Zero User Interaction (Megaprompt-Driven)**
+**EXECUTION MODE: Feature-Selection + Automated Megaprompt**
 
-This workflow executes using a master megaprompt with automatic data loading from standard BMAD paths. NO user input required - completely autonomous execution.
+This workflow asks the user which features to analyze, then executes the megaprompt automatically with the selected data. One interactive step at the start, then fully autonomous execution.
 
 ### Architecture Principles
 
-- **Single-Prompt Execution**: The entire test design process runs from one master prompt
-- **Zero User Interaction**: No menus, no confirmation steps - fully automated execution
+- **Single Feature-Selection Step**: Ask user which features to process before anything else
+- **Automated Execution After Selection**: Once features are chosen, no more user input required
 - **Comprehensive Output**: Generates complete test design documentation in one pass
 - **BMAD V6.0 Methodology**: Implements all 4 phases (Gatekeeper, FAC, Blind Spots, ISO 29119-4)
 - **Structured Output**: Produces formatted tables (I-V) plus traceability matrix
 
 ### Execution Flow
 
-1. **Load Configuration** → Read project config and epics
-2. **Execute Megaprompt** → Run complete analysis (4 phases)
-3. **Generate Output** → Create comprehensive test-design-complete.md file
-4. **Confirm Completion** → Report metrics and file location to user
+1. **Select Features** → Ask user which features from `feature-status.yaml` to process
+2. **Load Configuration** → Read project config and load selected feature files
+3. **Execute Megaprompt** → Run complete analysis (4 phases)
+4. **Generate Output** → Create comprehensive test-design-complete.md file
+5. **Confirm Completion** → Report metrics and file location to user
 
 ### Critical Rules (NO EXCEPTIONS)
 
+- 🎯 **ALWAYS** ask the user to select features BEFORE loading data or executing the megaprompt
 - 🎯 **ALWAYS** execute the complete megaprompt without stopping
 - 📄 **ALWAYS** load `prompts/MegaPrompt_DiseñoPruebas_BMAD_V6_Feb6.md` as the execution source
 - 📁 **ALWAYS** create timestamped folder: `{implementation_artifacts}/traceability-artifacts/test-design-YYYY-MM-DD-HHmmss/` (use current date and time)
@@ -220,27 +222,27 @@ The original interactive step-by-step workflow files are preserved in the `steps
 
 ## WORKFLOW PARAMETERS
 
-### Epic Selection (Optional)
+### Feature Selection (Optional)
 
 This workflow can process:
-- **All epics** (default): Generate traceability and test plans for all epics in the project
-- **Multiple epics (N epics)**: Process a specific number of epics to group related functionality
-- **Single epic**: Process only a specific epic by number (e.g., "1", "2", "3")
+- **All features** (default): Generate traceability and test plans for all features in `feature-status.yaml`
+- **Multiple features**: Process a specific subset of features to group related functionality
+- **Single feature**: Process only a specific feature by ID (e.g., "feature-1", "feature-2")
 
-**Why multiple epics?**
-Test cases are high-level and functional. Sometimes a complete feature (like "login") is developed across multiple epics (authentication, session management, password recovery). Grouping N epics allows generating coherent test cases that cover a complete functional unit.
+**Why group features?**
+Test cases are high-level and functional. Sometimes a complete functional unit (like "lead capture") spans multiple features. Grouping N features allows generating coherent test cases that cover a complete functional unit.
 
 **Usage:**
 ```
-/traceability-and-testing              # Process all epics (user will be prompted)
-/traceability-and-testing 1            # Process only Epic 1
+/traceability-and-testing                  # Process all features (user will be prompted)
+/traceability-and-testing feature-1        # Process only feature-1
 ```
 
-If no epic number is provided as a parameter, the workflow will ask the user to select:
-1. **All epics**: Process everything
-2. **N epics**: Specify how many epics to analyze, then select which ones
+If no feature ID is provided as a parameter, the workflow will ask the user to select:
+1. **All features**: Process everything from `feature-status.yaml`
+2. **N features**: Specify which feature IDs to analyze
 
-This allows consolidating test plans for functional units that span multiple epics.
+Each feature points to its `epic_source` file defined in `feature-status.yaml`.
 
 ---
 
@@ -284,13 +286,80 @@ Load and read full config from {project-root}/_bmad/bmm/config.yaml and resolve:
 
 ### 2. Parameter Capture
 
-Capture the `epic_number` parameter if provided by the user (e.g., from command arguments).
+Capture the `feature_id` parameter if provided by the user (e.g., from command arguments).
 
-Store in memory as: `selected_epic_number` (can be null if not provided)
+Store in memory as: `selected_feature_id` (can be null if not provided)
 
 ### 3. Input Collection and Megaprompt Execution
 
 **Execution Instructions:**
+
+#### Step 3.0: Feature Selection (Interactive)
+
+1. **Load feature registry:**
+   - Read: `{implementation_artifacts}/feature-status.yaml`
+   - Parse YAML to extract all features: `[{id, epic_source, status, last_update}, ...]`
+
+2. **If `selected_feature_id` was provided as parameter:**
+   - Validate it exists in the registry; if not, list available IDs and halt
+   - Set `filtered_features = [that single feature]`
+   - Notify: `✅ Feature seleccionado por parámetro: {selected_feature_id}`
+   - **Skip to Step 3.1**
+
+3. **If no parameter was provided, ask the user:**
+
+   Display available features:
+   ```
+   📋 Features disponibles en el proyecto:
+
+   {for each feature:
+     "  • {feature.id}  [{feature.status}]  →  {feature.epic_source}"
+   }
+   ```
+
+   Ask using AskUserQuestion tool:
+   ```json
+   {
+     "questions": [
+       {
+         "question": "¿Qué features deseas analizar?",
+         "header": "Selección de Features",
+         "multiSelect": false,
+         "options": [
+           {
+             "label": "Todos los features",
+             "description": "Procesar todos los features del registro"
+           },
+           {
+             "label": "Seleccionar features específicos",
+             "description": "Elegir uno o más features por ID"
+           }
+         ]
+       }
+     ]
+   }
+   ```
+
+   **If "Todos los features":**
+   - `filtered_features = all_features`
+   - Notify: `✅ Se procesarán todos los features ({count} features)`
+
+   **If "Seleccionar features específicos":**
+   - If ≤ 4 features, use AskUserQuestion multiSelect with one option per feature
+   - If > 4 features, ask via text: "Ingresa los IDs separados por comas (ej: feature-1,feature-3):"
+   - Parse and validate each ID against the registry
+   - `filtered_features = matching features`
+   - Notify:
+     ```
+     ✅ Features seleccionados ({count}):
+     {for each feature in filtered_features:
+       "  • {feature.id} → {feature.epic_source}"
+     }
+     ```
+
+4. Store `filtered_features` in memory for use in Step 3.1.
+
+---
 
 #### Step 3.1: Automatic Data Loading (Zero User Interaction)
 
@@ -300,10 +369,11 @@ Store in memory as: `selected_epic_number` (can be null if not provided)
    - Load from config: `{project_name}`
    - Store as: `input_proyecto`
 
-2. **INPUT 2 - ÉPICAS / HISTORIAS DE USUARIO:**
-   - Load from: `{planning_artifacts}/epics.md`
-   - Read complete file content
-   - Store as: `input_epicas`
+2. **INPUT 2 - FEATURES / HISTORIAS DE USUARIO:**
+   - Use `filtered_features` resolved in Step 3.0
+   - For each feature in `filtered_features`, read its `epic_source` file and concatenate content
+   - Store combined content as: `input_epicas`
+   - Store feature list as: `input_features` (array of {id, epic_source, status})
 
 3. **INPUT 3 - METAS DE NEGOCIO (PRD):**
    - Search for PRD file in: `{planning_artifacts}/`
@@ -325,8 +395,9 @@ Store in memory as: `selected_epic_number` (can be null if not provided)
 
 📋 Datos cargados:
   • Proyecto: {input_proyecto}
-  • Épicas: {planning_artifacts}/epics.md
-  • PRD: [ruta encontrada o "extraído de epics.md"]
+  • Features registry: {implementation_artifacts}/feature-status.yaml
+  • Features seleccionados: [lista de feature IDs procesados]
+  • PRD: [ruta encontrada o "extraído de epic_source files"]
   • Stack Tecnológico: _siesa-agents/bmm/data/company-standards/technology-stack.md
 
 🚀 Ejecutando las 4 fases de análisis BMAD V6.0...
@@ -345,7 +416,7 @@ Store in memory as: `selected_epic_number` (can be null if not provided)
    ```
    # [INPUT]:
    - **PROYECTO**: {input_proyecto}
-   - **ÉPICAS / HISTORIAS DE USUARIO**: {input_epicas}
+   - **FEATURES / HISTORIAS DE USUARIO**: {input_epicas}
    - **METAS DE NEGOCIO (PRD)**: {input_metas}
    - **STACK TECNOLÓGICO**: {input_stack}
    ```

@@ -1,6 +1,6 @@
 ---
 name: 'step-04-generate-plans'
-description: 'Generate consolidated epic-level test plans with comprehensive test case organization and coverage analysis'
+description: 'Generate consolidated feature-level test plans with comprehensive test case organization and coverage analysis'
 
 # Path Definitions
 workflow_path: '{project-root}/_bmad/bmm/workflows/4-implementation/traceability-and-testing'
@@ -11,14 +11,14 @@ nextStepFile: '{workflow_path}/steps/step-05-export.md'
 workflowFile: '{workflow_path}/workflow.md'
 outputFile: '{implementation_artifacts}/traceability-artifacts/traceability-map.md'
 templateFile: '{workflow_path}/templates/epic-test-plan-template.md'
-epicPlansDir: '{implementation_artifacts}/epic-test-plans'
+featurePlansDir: '{implementation_artifacts}/feature-test-plans'
 ---
 
-# Step 4: Generate Epic Test Plans
+# Step 4: Generate Feature Test Plans
 
 ## STEP GOAL:
 
-To generate comprehensive, consolidated test plans organized by Epic, incorporating all mapped test cases, acceptance criteria, coverage analysis, and execution strategy.
+To generate comprehensive, consolidated test plans organized by Feature, incorporating all mapped test cases, acceptance criteria, coverage analysis, and execution strategy.
 
 ## MANDATORY EXECUTION RULES (READ FIRST):
 
@@ -36,32 +36,32 @@ To generate comprehensive, consolidated test plans organized by Epic, incorporat
 - ✅ If you already have been given communication or persona patterns, continue to use those while playing this new role
 - ✅ We engage in collaborative dialogue, not command-response
 - ✅ You bring expertise in test planning and test strategy
-- ✅ Together we create comprehensive epic test plans
+- ✅ Together we create comprehensive feature test plans
 
 ### Step-Specific Rules:
 
-- 🎯 Focus ONLY on organizing existing test cases into epic plans
+- 🎯 Focus ONLY on organizing existing test cases into feature plans
 - 🚫 FORBIDDEN to create new test cases (use existing mapped cases only)
 - 💬 Validate test plan structure with user
-- 📊 Include coverage analysis and gap identification per epic
+- 📊 Include coverage analysis and gap identification per feature
 
 ## EXECUTION PROTOCOLS:
 
-- 🎯 Generate one test plan document per Epic
+- 🎯 Generate one test plan document per Feature
 - 📖 Update frontmatter with `stepsCompleted: [1, 2, 3, 4]`
-- 🚫 FORBIDDEN to load next step until all epic test plans are generated and validated
+- 🚫 FORBIDDEN to load next step until all feature test plans are generated and validated
 
-**IMPORTANT:** traceability-map.md is NOT updated in this step. It contains only pure traceability (PRD→FR→Epic→Story→Task), not test plan information.
+**IMPORTANT:** traceability-map.md is NOT updated in this step. It contains only pure traceability (PRD→FR→Feature→Story→Task), not test plan information.
 
 ## CONTEXT BOUNDARIES:
 
 - Input data from step 03 frontmatter (test coverage statistics)
 - Test case CSV file and summary from step 03
 - Traceability hierarchy from sections 1-3
-- Acceptance Criteria from epics.md story definitions
+- Acceptance Criteria from feature epic_source file story definitions
 - Focus on test plan organization, NOT new test case creation
 
-## EPIC TEST PLAN GENERATION PROCESS:
+## FEATURE TEST PLAN GENERATION PROCESS:
 
 ### 1. Load Context from Step 03
 
@@ -69,43 +69,43 @@ Read frontmatter from {outputFile}:
 
 ```yaml
 stepsCompleted: [1, 2, 3]
-epicScopeMode: "all" | "multiple"
-targetEpicNumbers: null | [1, 3, 5]  # Array of selected epic numbers
-epicCount: {number}  # Number of epics being processed
-epics: [...]  # Already filtered if multiple epic mode
+featureScopeMode: "all" | "multiple"
+targetFeatureIds: null | ["feature-1", "feature-3"]  # Array of selected feature IDs
+featureCount: {number}  # Number of features being processed
+selectedFeatures: [...]  # Already filtered if multiple feature mode
 testCoverage:
   totalTestCases: X
   mappedTestCases: Y
-  epicCoverageRate: P%
-  epicsWithoutTests: [...]
+  featureCoverageRate: P%
+  featuresWithoutTests: [...]
 ```
 
 **Display scope-aware message:**
 
 ```
-{if epicScopeMode === "all":
-  "Generando planes de prueba por épica para **{projectName}**...
+{if featureScopeMode === "all":
+  "Generando planes de prueba por feature para **{projectName}**...
 
   📊 Datos cargados:
-  - {totalEpics} Épicas a procesar
+  - {totalFeatures} Features a procesar
   - {mappedTestCases} Casos de prueba mapeados
-  - Cobertura de épicas: {epicCoverageRate}%
+  - Cobertura de features: {featureCoverageRate}%
 
-  🎯 **Alcance:** Todas las épicas (se generará 1 plan por épica)
+  🎯 **Alcance:** Todos los features (se generará 1 plan por feature)
 
   Iniciando generación de planes de prueba..."
 else:
-  "Generando plan de prueba CONSOLIDADO para **{projectName}** ({epicCount} épica(s) seleccionada(s))...
+  "Generando plan de prueba CONSOLIDADO para **{projectName}** ({featureCount} feature(s) seleccionado(s))...
 
   📊 Datos cargados:
-  - {epicCount} Épica(s) a procesar:
-    {for each epic_number in targetEpicNumbers:
-      \"  • Epic {epic_number}: {epic_title}\"
+  - {featureCount} Feature(s) a procesar:
+    {for each feature_id in targetFeatureIds:
+      \"  • Feature {feature_id}: {feature_title}\"
     }
   - {mappedTestCases} Casos de prueba mapeados
-  - Cobertura: {epicCoverageRate}%
+  - Cobertura: {featureCoverageRate}%
 
-  🎯 **Alcance:** {epicCount} épica(s) agrupadas en 1 plan consolidado
+  🎯 **Alcance:** {featureCount} feature(s) agrupados en 1 plan consolidado
 
   💡 Esta agrupación permite generar un plan coherente que cubre una unidad funcional completa.
 
@@ -115,7 +115,7 @@ else:
 
 ---
 
-### 2. Load Epic Test Plan Template
+### 2. Load Feature Test Plan Template
 
 Read template file:
 
@@ -124,7 +124,7 @@ Read: {templateFile}
 ```
 
 Template should include placeholders for:
-- Epic metadata (ID, title, FRs covered, stories)
+- Feature metadata (ID, title, FRs covered, stories)
 - Test objectives
 - Scope (in-scope / out-of-scope)
 - Test cases organized by story
@@ -136,79 +136,79 @@ Template should include placeholders for:
 
 ---
 
-### 3. Create Epic Test Plans Directory
+### 3. Create Feature Test Plans Directory
 
-Create directory for individual epic test plan files:
+Create directory for individual feature test plan files:
 
 ```
-Create directory: {epicPlansDir}/
+Create directory: {featurePlansDir}/
 ```
 
-"📁 Directorio creado para planes de prueba: `{epicPlansDir}/`"
+"📁 Directorio creado para planes de prueba: `{featurePlansDir}/`"
 
 ---
 
 ### 4. Generate Test Plan(s)
 
-**Note:** The epics list was already filtered in Step 01 based on `epicScopeMode`:
-- If `epicScopeMode = "all"`: Process all epics in the project (generate 1 plan per epic)
-- If `epicScopeMode = "multiple"`: Process only the epics specified in `targetEpicNumbers` (generate 1 consolidated plan)
+**Note:** The features list was already filtered in Step 01 based on `featureScopeMode`:
+- If `featureScopeMode = "all"`: Process all features in the project (generate 1 plan per feature)
+- If `featureScopeMode = "multiple"`: Process only the features specified in `targetFeatureIds` (generate 1 consolidated plan)
 
 **Branching logic:**
 
-**If `epicScopeMode = "all"`:** Generate one test plan per epic (loop through all epics)
+**If `featureScopeMode = "all"`:** Generate one test plan per feature (loop through all features)
 
-**If `epicScopeMode = "multiple"`:** Generate ONE consolidated test plan that groups all selected epics
+**If `featureScopeMode = "multiple"`:** Generate ONE consolidated test plan that groups all selected features
 
 ---
 
-#### Mode A: Individual Plans (epicScopeMode = "all")
+#### Mode A: Individual Plans (featureScopeMode = "all")
 
-For each Epic in the traceability hierarchy:
+For each Feature in the traceability hierarchy:
 
-#### 4.1. Extract Epic Metadata
+#### 4.1. Extract Feature Metadata
 
 ```javascript
-epic_metadata = {
-  id: "Epic 1",
+feature_metadata = {
+  id: "feature-1",
   title: "User Management System",
-  description: extract_from_epics_md(epic.id),
-  frs_covered: get_frs_for_epic(epic.id),  // from section 2
-  stories: get_stories_for_epic(epic.id),  // from section 1
-  test_cases: get_test_cases_for_epic(epic.id)  // from section 6
+  description: extract_from_epic_source(feature.id),
+  frs_covered: get_frs_for_feature(feature.id),  // from section 2
+  stories: get_stories_for_feature(feature.id),  // from section 1
+  test_cases: get_test_cases_for_feature(feature.id)  // from section 6
 }
 ```
 
 #### 4.2. Extract Story-level Details
 
-For each story in the epic:
+For each story in the feature:
 
 ```javascript
-for each story in epic.stories:
+for each story in feature.stories:
     story_details = {
       id: story.id,
       title: story.title,
-      description: extract_from_epics_md(story.id),
-      acceptance_criteria: extract_ACs_from_epics_md(story.id),
+      description: extract_from_epic_source(story.id),
+      acceptance_criteria: extract_ACs_from_epic_source(story.id),
       tasks: extract_tasks_from_story_files(story.id),  // if available
       test_cases: get_test_cases_for_story(story.id),  // from section 7
       test_coverage: calculate_story_coverage(story.id)
     }
 ```
 
-#### 4.3. Calculate Epic-level Coverage Metrics
+#### 4.3. Calculate Feature-level Coverage Metrics
 
 ```javascript
-epic_coverage = {
-  total_stories: count(epic.stories),
+feature_coverage = {
+  total_stories: count(feature.stories),
   stories_with_tests: count(stories with ≥1 test case),
   stories_without_tests: count(stories with 0 test cases),
 
-  total_acs: count(all acceptance criteria in epic),
+  total_acs: count(all acceptance criteria in feature),
   acs_covered_by_tests: count(ACs referenced by test cases),
   acs_not_covered: count(ACs without test coverage),
 
-  total_test_cases: count(epic.test_cases),
+  total_test_cases: count(feature.test_cases),
   high_priority_tests: count(tests with priority=High),
   medium_priority_tests: count(tests with priority=Medium),
   low_priority_tests: count(tests with priority=Low),
@@ -231,7 +231,7 @@ testing_gaps = {
 
 #### 4.5. Define Test Objectives
 
-Based on Epic scope and FRs:
+Based on Feature scope and FRs:
 
 ```markdown
 ## Test Objectives
@@ -246,7 +246,7 @@ This test plan validates:
    - Validate authentication flows
    - Test error handling and edge cases
 
-{Derive from FRs covered by this Epic}
+{Derive from FRs covered by this Feature}
 ```
 
 #### 4.6. Organize Test Cases by Story
@@ -281,7 +281,7 @@ This test plan validates:
 - {AC que no está cubierto}
 - {Tipo de prueba o escenario faltante}
 
-{Repetir para cada Historia en la Épica}
+{Repetir para cada Historia en el Feature}
 ```
 
 #### 4.7. Generate Scope Section
@@ -290,7 +290,7 @@ This test plan validates:
 ## Alcance
 
 ### Dentro del Alcance
-- Validación funcional de {Epic title}
+- Validación funcional de {Feature title}
 - Todas las historias: {list story IDs}
 - Requerimientos Funcionales: {list FRs}
 - Tipos de prueba: {list types present in test cases}
@@ -376,20 +376,20 @@ This test plan validates:
 3. Agregar pruebas de casos límite para {scenario}
 ```
 
-#### 4.10. Write Epic Test Plan Document
+#### 4.10. Write Feature Test Plan Document
 
 Create individual test plan file:
 
 ```
-File: {epicPlansDir}/epic-{epic_id}-test-plan.md
+File: {featurePlansDir}/feature-{feature_id}-test-plan.md
 ```
 
 Populate from template with all sections:
 
 ```markdown
 ---
-epic_id: Epic 1
-epic_title: Sistema de Gestión de Usuarios
+feature_id: feature-1
+feature_title: Sistema de Gestión de Usuarios
 frs_covered: [FR-001, FR-002]
 total_stories: 3
 total_test_cases: 12
@@ -397,10 +397,10 @@ coverage_rate: 75%
 generated_date: {current_date}
 ---
 
-# Plan de Pruebas: Epic 1 - Sistema de Gestión de Usuarios
+# Plan de Pruebas: feature-1 - Sistema de Gestión de Usuarios
 
-## Descripción General de la Épica
-{epic.description}
+## Descripción General del Feature
+{feature.description}
 
 ## Requerimientos Funcionales Cubiertos
 {lista de RFs con descripciones}
@@ -437,28 +437,28 @@ generated_date: {current_date}
 
 Display progress:
 
-"✅ Plan de prueba generado: `epic-{epic_id}-test-plan.md`
+"✅ Plan de prueba generado: `feature-{feature_id}-test-plan.md`
    - Historias: {count}
    - Casos de prueba: {count}
    - Cobertura: {coverage_rate}%"
 
 ---
 
-#### Mode B: Consolidated Plan (epicScopeMode = "multiple")
+#### Mode B: Consolidated Plan (featureScopeMode = "multiple")
 
-**Generate ONE test plan that consolidates all selected epics:**
+**Generate ONE test plan that consolidates all selected features:**
 
 #### 4B.1. Extract Consolidated Metadata
 
 ```javascript
 consolidated_metadata = {
-  epic_ids: targetEpicNumbers,  // e.g., [1, 3, 5]
-  epic_titles: get_titles_for_epics(targetEpicNumbers),
-  combined_title: "Consolidated Test Plan - " + join_epic_titles(epic_titles),
-  description: "This consolidated test plan covers {epicCount} epics that together form a complete functional unit.",
-  frs_covered: get_all_frs_for_epics(targetEpicNumbers),
-  stories: get_all_stories_for_epics(targetEpicNumbers),
-  test_cases: get_all_test_cases_for_epics(targetEpicNumbers)
+  feature_ids: targetFeatureIds,  // e.g., ["feature-1", "feature-3"]
+  feature_titles: get_titles_for_features(targetFeatureIds),
+  combined_title: "Consolidated Test Plan - " + join_feature_titles(feature_titles),
+  description: "This consolidated test plan covers {featureCount} features that together form a complete functional unit.",
+  frs_covered: get_all_frs_for_features(targetFeatureIds),
+  stories: get_all_stories_for_features(targetFeatureIds),
+  test_cases: get_all_test_cases_for_features(targetFeatureIds)
 }
 ```
 
@@ -469,22 +469,22 @@ Generate consolidated test objectives:
 ```markdown
 ## Objetivos de Prueba
 
-Validar la funcionalidad completa que abarca las siguientes épicas:
+Validar la funcionalidad completa que abarca los siguientes features:
 
-{for each epic_number in targetEpicNumbers:
-  "- **Epic {epic_number}:** {epic_title} - {epic_description_brief}"}
+{for each feature_id in targetFeatureIds:
+  "- **{feature_id}:** {feature_title} - {feature_description_brief}"}
 
 **Objetivos específicos:**
-1. Verificar la integración entre funcionalidades desarrolladas en diferentes épicas
-2. Validar flujos end-to-end que cruzan múltiples épicas
+1. Verificar la integración entre funcionalidades desarrolladas en diferentes features
+2. Validar flujos end-to-end que cruzan múltiples features
 3. Confirmar que la unidad funcional completa cumple con los requisitos de negocio
 
-**Ejemplo:** Si las épicas seleccionadas son Login (Epic 1), Gestión de Sesión (Epic 2), y Recuperación de Contraseña (Epic 3), los objetivos validarían el flujo completo de autenticación del usuario.
+**Ejemplo:** Si los features seleccionados son Login (feature-1), Gestión de Sesión (feature-2), y Recuperación de Contraseña (feature-3), los objetivos validarían el flujo completo de autenticación del usuario.
 ```
 
 #### 4B.3. Functional Requirements (Consolidated)
 
-List all FRs covered by the selected epics:
+List all FRs covered by the selected features:
 
 ```markdown
 ## Requerimientos Funcionales Cubiertos
@@ -494,7 +494,7 @@ List all FRs covered by the selected epics:
 
   **Descripción:** {FR_description}
 
-  **Épicas relacionadas:** {list epics that cover this FR}
+  **Features relacionados:** {list features that cover this FR}
 
   **Prioridad:** {FR_priority}"}
 ```
@@ -508,34 +508,34 @@ Define scope for the consolidated plan:
 
 ### En Alcance
 
-Funcionalidades desarrolladas en las {epicCount} épicas seleccionadas:
+Funcionalidades desarrolladas en los {featureCount} features seleccionados:
 
-{for each epic in selected_epics:
-  "**Epic {epic.id}: {epic.title}**
+{for each feature in selectedFeatures:
+  "**{feature.id}: {feature.title}**
   - Historias: {list story IDs}
   - Funcionalidades clave: {list key features}"}
 
 **Flujos integrados:**
-- Flujos que cruzan múltiples épicas
-- Integración entre componentes de diferentes épicas
+- Flujos que cruzan múltiples features
+- Integración entre componentes de diferentes features
 - Validación de la unidad funcional completa
 
 ### Fuera de Alcance
 
-{List other epics and features NOT included in this consolidated plan}
+{List other features NOT included in this consolidated plan}
 ```
 
-#### 4B.5. Test Cases Organized by Epic and Story (Consolidated)
+#### 4B.5. Test Cases Organized by Feature and Story (Consolidated)
 
-Organize test cases grouped first by epic, then by story:
+Organize test cases grouped first by feature, then by story:
 
 ```markdown
-## Casos de Prueba por Épica y Historia
+## Casos de Prueba por Feature y Historia
 
-{for each epic in selected_epics:
-  "### Epic {epic.id}: {epic.title}
+{for each feature in selectedFeatures:
+  "### {feature.id}: {feature.title}
 
-  {for each story in epic.stories:
+  {for each story in feature.stories:
     "#### Historia {story.id}: {story.title}
 
     **Criterios de Aceptación:**
@@ -559,42 +559,42 @@ Organize test cases grouped first by epic, then by story:
 
 #### 4B.6. Integrated Flows Section (Consolidated)
 
-Add a special section for flows that span multiple epics:
+Add a special section for flows that span multiple features:
 
 ```markdown
-## Flujos Integrados (Cross-Epic)
+## Flujos Integrados (Cross-Feature)
 
-Esta sección identifica flujos end-to-end que cruzan múltiples épicas seleccionadas.
+Esta sección identifica flujos end-to-end que cruzan múltiples features seleccionados.
 
 **Ejemplo de Flujo Integrado: Autenticación Completa del Usuario**
 
-**Épicas involucradas:** Epic 1 (Login), Epic 2 (Gestión de Sesión), Epic 3 (Recuperación de Contraseña)
+**Features involucrados:** feature-1 (Login), feature-2 (Gestión de Sesión), feature-3 (Recuperación de Contraseña)
 
 **Flujo:**
-1. [Epic 1] Usuario ingresa credenciales
-2. [Epic 1] Sistema valida y autentica
-3. [Epic 2] Sistema crea sesión activa
-4. [Epic 2] Usuario navega con sesión activa
-5. [Epic 3] Usuario solicita recuperación de contraseña (si olvidó)
-6. [Epic 2] Sistema cierra sesión tras timeout
+1. [feature-1] Usuario ingresa credenciales
+2. [feature-1] Sistema valida y autentica
+3. [feature-2] Sistema crea sesión activa
+4. [feature-2] Usuario navega con sesión activa
+5. [feature-3] Usuario solicita recuperación de contraseña (si olvidó)
+6. [feature-2] Sistema cierra sesión tras timeout
 
 **Casos de Prueba Relacionados:**
-{list test cases from different epics that validate this integrated flow}
+{list test cases from different features that validate this integrated flow}
 
 {Identify and document other integrated flows}
 ```
 
 #### 4B.7. Coverage Analysis (Consolidated)
 
-Analyze coverage across all selected epics:
+Analyze coverage across all selected features:
 
 ```markdown
 ## Resumen de Cobertura Consolidada
 
-**Cobertura por Épica:**
+**Cobertura por Feature:**
 
-{for each epic in selected_epics:
-  "- **Epic {epic.id}:** {epic.coverage_rate}% ({epic.covered_stories}/{epic.total_stories} historias con pruebas)"}
+{for each feature in selectedFeatures:
+  "- **{feature.id}:** {feature.coverage_rate}% ({feature.covered_stories}/{feature.total_stories} historias con pruebas)"}
 
 **Cobertura Global:**
 - Total de Historias: {total_stories}
@@ -623,20 +623,20 @@ Identify risks across the consolidated functional unit:
 
 ### Riesgos de Integración
 
-**RIESGO ALTO:** Flujos que cruzan múltiples épicas
+**RIESGO ALTO:** Flujos que cruzan múltiples features
 - {Identify integrated flows with insufficient test coverage}
 - Recomendación: Agregar casos de prueba E2E que validen flujos completos
 
-### Áreas de Alto Riesgo por Épica
+### Áreas de Alto Riesgo por Feature
 
-{for each epic in selected_epics:
-  "**Epic {epic.id}: {epic.title}**
-  {Identify high-risk stories within this epic based on coverage}"}
+{for each feature in selectedFeatures:
+  "**{feature.id}: {feature.title}**
+  {Identify high-risk stories within this feature based on coverage}"}
 
 ### Resumen de Brechas de Prueba
 
 - Historias sin cobertura de pruebas: {count_total}
-  {list all uncovered stories across all epics}
+  {list all uncovered stories across all features}
 - Criterios de Aceptación sin pruebas: {count_total}
   {list critical uncovered ACs}
 - Flujos integrados sin validación E2E: {count}
@@ -644,7 +644,7 @@ Identify risks across the consolidated functional unit:
 **Recomendaciones Prioritarias:**
 1. Agregar casos E2E para flujos integrados (CRÍTICO)
 2. Completar cobertura de historias sin pruebas
-3. Validar puntos de integración entre épicas
+3. Validar puntos de integración entre features
 ```
 
 #### 4B.9. Execution Strategy (Consolidated)
@@ -654,32 +654,32 @@ Define execution strategy for the consolidated plan:
 ```markdown
 ## Estrategia de Ejecución de Pruebas Consolidada
 
-### Fase 1: Pruebas por Épica (Aisladas)
-Ejecutar casos de prueba por épica individualmente antes de validar integración.
+### Fase 1: Pruebas por Feature (Aisladas)
+Ejecutar casos de prueba por feature individualmente antes de validar integración.
 
-{for each epic in selected_epics:
-  "**Epic {epic.id}:**
-  - Ejecutar {epic.test_count} casos de prueba
+{for each feature in selectedFeatures:
+  "**{feature.id}:**
+  - Ejecutar {feature.test_count} casos de prueba
   - Validar funcionalidad aislada
   - Duración estimada: {estimated_time}"}
 
-### Fase 2: Pruebas de Integración (Cross-Epic)
-Ejecutar casos que validan integración entre épicas.
+### Fase 2: Pruebas de Integración (Cross-Feature)
+Ejecutar casos que validan integración entre features.
 
 - Flujos integrados identificados: {integrated_flows_count}
 - Casos de prueba E2E: {e2e_count}
 - Validar puntos de integración
 
 ### Fase 3: Validación Completa del Flujo
-Ejecutar flujos end-to-end completos que cruzan todas las épicas seleccionadas.
+Ejecutar flujos end-to-end completos que cruzan todos los features seleccionados.
 
 ### Prerequisitos y Dependencias
 
-**Dependencias entre Épicas:**
-{Identify if Epic X must be validated before Epic Y}
+**Dependencias entre Features:**
+{Identify if feature-X must be validated before feature-Y}
 
 **Datos de Prueba Requeridos:**
-{Consolidate test data requirements from all epics}
+{Consolidate test data requirements from all features}
 
 **Entorno de Pruebas:**
 {Specify environment requirements}
@@ -690,8 +690,8 @@ Ejecutar flujos end-to-end completos que cruzan todas las épicas seleccionadas.
 Create ONE consolidated test plan file:
 
 ```
-File: {epicPlansDir}/consolidated-test-plan-epics-{join_epic_numbers_with_dash}.md
-Example: consolidated-test-plan-epics-1-3-5.md
+File: {featurePlansDir}/consolidated-test-plan-features-{join_feature_ids_with_dash}.md
+Example: consolidated-test-plan-features-feature-1-feature-3.md
 ```
 
 Populate from template with all consolidated sections:
@@ -699,12 +699,11 @@ Populate from template with all consolidated sections:
 ```markdown
 ---
 plan_type: "consolidated"
-epic_ids: [1, 3, 5]
-epic_titles:
-  - "Epic 1: User Authentication"
-  - "Epic 3: Session Management"
-  - "Epic 5: Password Recovery"
-epic_count: 3
+feature_ids: ["feature-1", "feature-3"]
+feature_titles:
+  - "feature-1: User Authentication"
+  - "feature-3: Session Management"
+feature_count: 2
 functional_unit: "Complete User Authentication Flow"
 frs_covered: [FR-001, FR-002, FR-005]
 total_stories: 12
@@ -715,16 +714,16 @@ generated_date: {current_date}
 
 # Plan de Pruebas Consolidado: {functional_unit_name}
 
-## Épicas Incluidas
+## Features Incluidos
 
-{for each epic:
-  "- **Epic {id}:** {title}"}
+{for each feature:
+  "- **{feature.id}:** {feature.title}"}
 
 ## Descripción del Plan Consolidado
 
-Este plan de pruebas consolida {epicCount} épicas que juntas forman una unidad funcional completa: **{functional_unit_name}**.
+Este plan de pruebas consolida {featureCount} features que juntos forman una unidad funcional completa: **{functional_unit_name}**.
 
-El objetivo es validar no solo cada épica individualmente, sino también la integración y los flujos end-to-end que cruzan múltiples épicas.
+El objetivo es validar no solo cada feature individualmente, sino también la integración y los flujos end-to-end que cruzan múltiples features.
 
 ## Requerimientos Funcionales Cubiertos
 {sección 4B.3}
@@ -735,10 +734,10 @@ El objetivo es validar no solo cada épica individualmente, sino también la int
 ## Alcance
 {sección 4B.4}
 
-## Casos de Prueba por Épica y Historia
+## Casos de Prueba por Feature y Historia
 {sección 4B.5}
 
-## Flujos Integrados (Cross-Epic)
+## Flujos Integrados (Cross-Feature)
 {sección 4B.6}
 
 ## Resumen de Cobertura Consolidada
@@ -758,20 +757,20 @@ El objetivo es validar no solo cada épica individualmente, sino también la int
 
 Display progress:
 
-"✅ Plan de prueba CONSOLIDADO generado: `consolidated-test-plan-epics-{join_epic_numbers}.md`
-   - Épicas agrupadas: {epicCount}
+"✅ Plan de prueba CONSOLIDADO generado: `consolidated-test-plan-features-{join_feature_ids}.md`
+   - Features agrupados: {featureCount}
    - Historias totales: {count}
    - Casos de prueba totales: {count}
    - Cobertura consolidada: {coverage_rate}%
 
-💡 Este plan agrupa múltiples épicas en una unidad funcional coherente."
+💡 Este plan agrupa múltiples features en una unidad funcional coherente."
 
 ---
 
 ### 5. Update workflow progress
 
 **IMPORTANT:** Do NOT add test plan information to traceability-map.md.
-The traceability map contains ONLY the implementation hierarchy (PRD→FR→Epic→Story→Task), not test plan information.
+The traceability map contains ONLY the implementation hierarchy (PRD→FR→Feature→Story→Task), not test plan information.
 
 **Only update frontmatter of step tracking:**
 
@@ -790,25 +789,25 @@ stepsCompleted: [1, 2, 3, 4]
 **Display scope-aware summary:**
 
 ```
-{if epicScopeMode === "all":
-  "✅ **Planes de Prueba por Épica Generados con Éxito**
+{if featureScopeMode === "all":
+  "✅ **Planes de Prueba por Feature Generados con Éxito**
 
   📊 **Estadísticas de Planes de Prueba:**
   - Total de planes generados: {count}
-  - Épicas procesadas: {count}/{totalEpics}
+  - Features procesados: {count}/{totalFeatures}
   - Casos de prueba organizados: {totalTestCases}
 
-  🎯 **Alcance:** Todas las épicas procesadas (1 plan por épica)
+  🎯 **Alcance:** Todos los features procesados (1 plan por feature)
 
   📁 **Archivos generados:**
-  - Directorio: `{epicPlansDir}/`
+  - Directorio: `{featurePlansDir}/`
   - {count} planes de prueba individuales
 
   **Planes generados:**
 
-  {for each epic:
-    \"✅ **Epic {id}: {title}**
-        - Archivo: `epic-{id}-test-plan.md`
+  {for each feature:
+    \"✅ **{feature.id}: {feature.title}**
+        - Archivo: `feature-{feature.id}-test-plan.md`
         - Historias: {count}
         - Casos de prueba: {count}
         - Cobertura: {coverage_rate}%\"
@@ -817,22 +816,22 @@ else:
   "✅ **Plan de Prueba CONSOLIDADO Generado con Éxito**
 
   📊 **Estadísticas del Plan Consolidado:**
-  - Plan consolidado para {epicCount} épica(s)
-  - Épicas agrupadas:
-    {for each epic_number in targetEpicNumbers:
-      \"  • Epic {epic_number}: {epic_title}\"
+  - Plan consolidado para {featureCount} feature(s)
+  - Features agrupados:
+    {for each feature_id in targetFeatureIds:
+      \"  • {feature_id}: {feature_title}\"
     }
   - Historias procesadas: {count_stories_total}
   - Casos de prueba organizados: {totalTestCases}
   - Flujos integrados identificados: {integrated_flows_count}
 
-  🎯 **Alcance:** {epicCount} épica(s) consolidadas en 1 plan
+  🎯 **Alcance:** {featureCount} feature(s) consolidados en 1 plan
 
-  💡 Este plan agrupa múltiples épicas que forman una unidad funcional completa.
+  💡 Este plan agrupa múltiples features que forman una unidad funcional completa.
 
   📁 **Archivo generado:**
-  - Directorio: `{epicPlansDir}/`
-  - Archivo: `consolidated-test-plan-epics-{join_epic_numbers}.md`"
+  - Directorio: `{featurePlansDir}/`
+  - Archivo: `consolidated-test-plan-features-{join_feature_ids}.md`"
 }
 ```
 
@@ -855,14 +854,14 @@ Ask user:
 Puedo mostrarte el contenido completo de cualquiera de los planes generados.
 
 **Opciones:**
-- [1-{count}] Ver plan de Epic {number}
+- [1-{count}] Ver plan de Feature {id}
 - [A] Ver el índice maestro completo
 - [N] No, continuar al siguiente paso
 
 Selecciona opción:"
 
 If user selects a plan number:
-- Read and display that epic test plan file
+- Read and display that feature test plan file
 - Ask if they want to see another or continue
 - Return to menu options
 
@@ -888,12 +887,12 @@ Display: **Confirma para [C] continuar:**
 
 #### Menu Handling Logic:
 
-- IF C: Ensure all epic test plans are saved, workflow progress updated, frontmatter updated with `stepsCompleted: [1, 2, 3, 4]`, only then load, read entire file, then execute {nextStepFile}
+- IF C: Ensure all feature test plans are saved, workflow progress updated, frontmatter updated with `stepsCompleted: [1, 2, 3, 4]`, only then load, read entire file, then execute {nextStepFile}
 - IF Any other comments or queries: help user respond then [Redisplay Menu Options](#10-present-menu-options)
 
 ## CRITICAL STEP COMPLETION NOTE
 
-ONLY WHEN C is selected, all epic test plans are written to {epicPlansDir} section 8 is written to {outputFile}, and frontmatter is updated with `stepsCompleted: [1, 2, 3, 4]` and test plan metadata, will you then load, read entire file, then execute {nextStepFile} to begin the export process.
+ONLY WHEN C is selected, all feature test plans are written to {featurePlansDir} section 8 is written to {outputFile}, and frontmatter is updated with `stepsCompleted: [1, 2, 3, 4]` and test plan metadata, will you then load, read entire file, then execute {nextStepFile} to begin the export process.
 
 ---
 
@@ -902,27 +901,27 @@ ONLY WHEN C is selected, all epic test plans are written to {epicPlansDir} secti
 ### ✅ SUCCESS:
 
 - Template loaded correctly
-- Epic test plans directory created
-- One test plan generated per Epic
-- Epic metadata extracted accurately
-- Story-level details extracted from epics.md
+- Feature test plans directory created
+- One test plan generated per Feature
+- Feature metadata extracted accurately
+- Story-level details extracted from feature epic_source files
 - Acceptance criteria mapped to test cases
-- Coverage metrics calculated per epic
-- Testing gaps identified per epic
+- Coverage metrics calculated per feature
+- Testing gaps identified per feature
 - Test execution strategy defined with phases and dependencies
 - Risk assessment completed identifying high-risk areas
 - Individual test plan files created
 - Frontmatter updated with stepsCompleted: [1, 2, 3, 4]
 - User confirmed completion
 
-**IMPORTANT:** traceability-map.md is NOT updated in this step. It contains only pure traceability (PRD→FR→Epic→Story→Task), not test plan information.
+**IMPORTANT:** traceability-map.md is NOT updated in this step. It contains only pure traceability (PRD→FR→Feature→Story→Task), not test plan information.
 
 ### ❌ SYSTEM FAILURE:
 
 - Template not loaded
 - Directory not created
-- Incomplete test plan generation (missing epics)
-- Missing epic or story metadata
+- Incomplete test plan generation (missing features)
+- Missing feature or story metadata
 - Acceptance criteria not extracted
 - Coverage metrics not calculated
 - Testing gaps not identified
@@ -934,4 +933,4 @@ ONLY WHEN C is selected, all epic test plans are written to {epicPlansDir} secti
 - Proceeding without user confirmation
 - Adding test plan information to traceability-map.md (WRONG - that file is for implementation hierarchy only)
 
-**Master Rule:** Epic test plans must be comprehensive, including all mapped test cases, coverage analysis, execution strategy, and gap identification. All plans must be validated before export. The traceability map remains pure (only PRD→FR→Epic→Story→Task).
+**Master Rule:** Feature test plans must be comprehensive, including all mapped test cases, coverage analysis, execution strategy, and gap identification. All plans must be validated before export. The traceability map remains pure (only PRD→FR→Feature→Story→Task).

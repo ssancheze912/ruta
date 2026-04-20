@@ -1,6 +1,7 @@
 ---
 name: 'step-06-traduccion-ingles'
-description: 'Translate Spanish user guide to English maintaining identical structure'
+description: '[DISABLED] This step is disabled. The workflow now outputs Spanish only. Skip directly to step-07.'
+status: 'DISABLED'
 
 # Path Definitions
 workflow_path: '{project-root}/_bmad/bmm/workflows/5-documentation/create-user-guide'
@@ -21,7 +22,14 @@ partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md'
 bmmConfig: '{project-root}/_bmad/bmm/config.yaml'
 ---
 
-# Step 6: Traducción a Inglés
+# ⛔ STEP 6: DESHABILITADO
+
+> Este paso está **deshabilitado**. El workflow genera únicamente la guía en español.
+> Si llegas aquí desde step-05, carga y ejecuta directamente `step-07-validacion-guardado.md`.
+
+---
+
+# Step 6: Traducción a Inglés (REFERENCIA — NO EJECUTAR)
 
 ## STEP GOAL:
 

@@ -7,9 +7,10 @@ workflow_path: '{project-root}/_bmad/bmm/workflows/5-documentation/create-user-g
 
 # File References
 thisStepFile: '{workflow_path}/steps/step-05-generacion-espanol.md'
-nextStepFile: '{workflow_path}/steps/step-06-traduccion-ingles.md'
+nextStepFile: '{workflow_path}/steps/step-07-validacion-guardado.md'
 workflowFile: '{workflow_path}/workflow.md'
-outputFileSpanish: '{output_folder}/documentation-artifacts/user-guide/es/{audience}-guide.md'
+featuresOutputFolder: '{output_folder}/documentation-artifacts/user-guide'
+# Each feature writes to: {featuresOutputFolder}/{slug}-guide.md
 
 # Data References
 sectionStructureData: '{workflow_path}/data/section-structure.csv'
@@ -27,7 +28,9 @@ bmmConfig: '{project-root}/_bmad/bmm/config.yaml'
 
 ## STEP GOAL:
 
-Generar todo el contenido de la guía de usuario en español, incluyendo todas las secciones obligatorias (Introduction, Getting Started, Core Concepts, Features, Workflows, FAQ, Glossary, Screenshot Index) y opcionales (Troubleshooting si fue solicitado). Cada feature y workflow debe incluir diagrama Mermaid, screenshot placeholders y source citations. Este es un step autónomo donde el agente trabaja sin requerir input constante, pero ofrece checkpoints para revisión.
+Generar el contenido de la guía de usuario en español **por feature individual**. Para cada feature seleccionada, crear o actualizar su archivo `{slug}-guide.md` en `{featuresOutputFolder}/`. El archivo contiene únicamente el contenido de esa feature (descripción, flujos, diagramas, FAQ, glosario, screenshots). Las secciones compartidas (Introducción, Primeros Pasos, Conceptos Clave) se generan solo en el primer archivo procesado o en un archivo `shared-guide.md`.
+
+**REGLA CRÍTICA:** Cada feature produce su propio archivo independiente. NO se genera un único archivo combinado.
 
 ## MANDATORY EXECUTION RULES (READ FIRST):
 
@@ -50,16 +53,18 @@ Generar todo el contenido de la guía de usuario en español, incluyendo todas l
 ### Step-Specific Rules:
 
 - 🎯 Focus ONLY on Spanish content generation (PRESCRIPTIVE execution)
-- 🚫 FORBIDDEN to translate to English yet (that's step-06)
+- 🚫 FORBIDDEN to generate English content (step-06 is disabled, Spanish only)
 - 💬 Work autonomously with progress updates
 - 📊 MUST include: Mermaid diagrams, screenshot placeholders, source citations for EVERY feature/workflow
 
 ## EXECUTION PROTOCOLS:
 
 - 🎯 Follow prescriptive sequence exactly
-- 💾 Append-only: add content progressively to outputFile
-- 📖 Set `stepsCompleted: [1, 2, 3, 4, 5]` before loading next step
-- 🚫 FORBIDDEN to skip sections or omit required elements
+- 💾 Write/update one file per feature: `{featuresOutputFolder}/{slug}-guide.md`
+  - `action: "create"` → crear archivo nuevo desde template
+  - `action: "update"` → actualizar secciones del archivo existente
+- 🚫 FORBIDDEN to merge all features into a single file
+- 🚫 FORBIDDEN to skip sections or omit required elements per feature
 
 ## CONTEXT BOUNDARIES:
 
@@ -74,7 +79,7 @@ Generar todo el contenido de la guía de usuario en español, incluyendo todas l
 1. Clear description (adapted to technical_level)
 2. Mermaid diagram (flowchart or appropriate type)
 3. At least 1 screenshot placeholder with unique ID
-4. Source citation `[Source: Epic X Story Y]`
+4. Source citation `[Source: FX Story Y]`
 
 **For EVERY Workflow:**
 1. Step-by-step instructions
@@ -97,30 +102,60 @@ Load `{diagramTypesData}` to know which diagram types to use for different conte
 
 ### 2. Announce Generation Start
 
-"📝 **Iniciando Generación de Contenido en Español**
+"📝 **Iniciando Generación de Contenido en Español (Por Feature)**
 
-Voy a generar todas las secciones de la guía de usuario en español. Esto incluye:
+Voy a generar un archivo independiente por cada feature seleccionada:
 
-**Secciones obligatorias:**
-- Introducción (Introduction)
-- Primeros Pasos (Getting Started)
-- Conceptos Clave (Core Concepts)
-- Funcionalidades (Features - {features_count} identificadas)
-- Flujos de Trabajo (Workflows - {workflows_count} identificados)
-- Preguntas Frecuentes (FAQ)
-- Glosario (Glossary)
-- Índice de Capturas (Screenshot Index)
+{for each feature in features_selected}
+- **{id}** — {title} → `{slug}-guide.md` ({if action == 'update': '🔄 Actualizar' else: '🆕 Crear'})
+{end for}
 
-**Secciones opcionales:**
-{if include_troubleshooting}
-- Solución de Problemas (Troubleshooting)
-{endif}
+**Cada archivo de feature incluye:**
+- Descripción y comportamientos de la feature
+- Flujos de trabajo específicos de la feature
+- Diagramas Mermaid
+- Solución de problemas (si aplica)
+- FAQ y Glosario de la feature
+- Índice de capturas de pantalla
 
-Este proceso es autónomo pero te notificaré al completar cada sección principal. La generación puede tomar varios minutos..."
+**Secciones compartidas** (Introducción, Primeros Pasos, Conceptos Clave) se incluyen en el primer archivo de feature procesado.
 
-### 3. Generate Introduction Section
+Este proceso es autónomo pero te notificaré al completar cada feature. La generación puede tomar varios minutos..."
 
-Append to `{outputFileSpanish}`:
+### 3. PER-FEATURE GENERATION LOOP
+
+**Repeat sections 3a–3h for EACH feature in `frontmatter.features_selected`:**
+
+Determine target file: `featureFile = {featuresOutputFolder}/{feature.slug}-guide.md`
+
+**IF `feature.action == "create"`:** Create new file with frontmatter:
+```yaml
+---
+feature_id: "{feature.id}"
+feature_slug: "{feature.slug}"
+feature_title: "{feature.title}"
+generated_date: "{current_date}"
+last_modified: "{current_timestamp}"
+review_status: "draft"
+source_prd: "{feature.prd_file}"
+source_epic: "{feature.epic_file}"
+diagrams_count: 0
+screenshots_count: 0
+citations_count: 0
+---
+```
+
+**IF `feature.action == "update"`:** Read existing file, preserve frontmatter, replace content sections below.
+
+**Progress update:** "📝 Procesando {feature.id} — {feature.title} ({action})..."
+
+---
+
+#### 3a. Shared Sections (ONLY for the FIRST feature processed)
+
+If this is the first feature being processed, prepend to `featureFile`:
+
+**Generate Introduction Section** — append to `featureFile`:
 
 ```markdown
 ## Introducción
@@ -151,7 +186,7 @@ Esta guía está diseñada para **{audience_description_es}** que necesitan [des
 
 **Convenciones:**
 - 📸 **[Screenshot: ID - Description]**: Marcador de captura de pantalla
-- 🔗 **[Source: Epic X Story Y]**: Referencia a documentación fuente
+- 🔗 **[Source: FX Story Y]**: Referencia a documentación fuente
 - ⚠️ **Advertencia**: Información crítica
 - 💡 **Tip**: Consejos útiles
 
@@ -160,9 +195,7 @@ Esta guía está diseñada para **{audience_description_es}** que necesitan [des
 
 **Progress update:** "✓ Sección Introduction completada"
 
-### 4. Generate Getting Started Section
-
-Append to `{outputFileSpanish}`:
+**Generate Getting Started Section** — append to `featureFile`:
 
 ```markdown
 ## Primeros Pasos
@@ -215,9 +248,7 @@ flowchart LR
 
 **Progress update:** "✓ Sección Getting Started completada"
 
-### 5. Generate Core Concepts Section
-
-Append to `{outputFileSpanish}`:
+**Generate Core Concepts Section** — append to `featureFile`:
 
 ```markdown
 ## Conceptos Clave
@@ -261,13 +292,15 @@ flowchart TD
 ---
 ```
 
-**Progress update:** "✓ Sección Core Concepts completada"
+**Progress update:** "✓ Sección Core Concepts completada (solo en primer archivo)"
 
-### 6. Generate Features Section
+---
 
-**This is the largest section. For EACH feature identified in step-03:**
+#### 3b. Feature-Specific Content
 
-Append to `{outputFileSpanish}`:
+Generate the following sections **scope = this feature only** — write to `featureFile`:
+
+**Generate Feature Section** — append to `featureFile`:
 
 ```markdown
 ## Funcionalidades y Cómo Usarlas
@@ -311,20 +344,16 @@ Esta sección documenta todas las funcionalidades disponibles en {project_name}.
 **Limitaciones:**
 - {Limitation 1}
 
-**Source:** [Source: Epic {number} Story {number}]
+**Source:** [Source: F{feature_id} Story {story_id}]
 
 ---
 
 {End for each feature}
 ```
 
-**Progress update after every 5 features:** "✓ {count} funcionalidades documentadas..."
+**Progress update:** "✓ Sección Funcionalidades completada para {feature.id}"
 
-**Final progress:** "✓ Sección Features completada - {total_features} funcionalidades documentadas"
-
-### 7. Generate Workflows Section
-
-Append to `{outputFileSpanish}`:
+**Generate Workflows Section (this feature only)** — append to `featureFile`:
 
 ```markdown
 ## Flujos de Trabajo Comunes
@@ -378,13 +407,13 @@ flowchart TD
 {End for each workflow}
 ```
 
-**Progress update:** "✓ Sección Workflows completada - {workflows_count} workflows documentados"
+**Progress update:** "✓ Sección Workflows completada para {feature.id}"
 
-### 8. Generate Troubleshooting Section (If Requested)
+**Generate Troubleshooting Section (this feature only)**
 
-**IF frontmatter.include_troubleshooting == true:**
+**Always include** (include_troubleshooting is always true):
 
-Append to `{outputFileSpanish}`:
+Append to `featureFile`:
 
 ```markdown
 ## Solución de Problemas
@@ -422,11 +451,9 @@ Esta sección ayuda a resolver problemas comunes que puedes encontrar al usar {p
 ---
 ```
 
-**Progress update:** "✓ Sección Troubleshooting completada"
+**Progress update:** "✓ Sección Troubleshooting completada para {feature.id}"
 
-### 9. Generate FAQ Section
-
-Append to `{outputFileSpanish}`:
+**Generate FAQ Section (this feature only)** — append to `featureFile`:
 
 ```markdown
 ## Preguntas Frecuentes (FAQ)
@@ -460,11 +487,9 @@ Append to `{outputFileSpanish}`:
 ---
 ```
 
-**Progress update:** "✓ Sección FAQ completada"
+**Progress update:** "✓ Sección FAQ completada para {feature.id}"
 
-### 10. Generate Glossary Section
-
-Append to `{outputFileSpanish}`:
+**Generate Glossary Section (this feature only)** — append to `featureFile`:
 
 ```markdown
 ## Glosario
@@ -483,11 +508,9 @@ Términos clave usados en esta guía y en {project_name}.
 ---
 ```
 
-**Progress update:** "✓ Sección Glossary completada"
+**Progress update:** "✓ Sección Glosario completada para {feature.id}"
 
-### 11. Generate Screenshot Index
-
-Append to `{outputFileSpanish}`:
+**Generate Screenshot Index (this feature only)** — append to `featureFile`:
 
 ```markdown
 ## Índice de Capturas de Pantalla
@@ -507,76 +530,55 @@ Todas las capturas de pantalla referenciadas en esta guía están listadas aquí
 ---
 ```
 
-**Progress update:** "✓ Sección Screenshot Index completada"
+**Progress update:** "✓ Screenshot Index completado para {feature.id}"
 
-### 12. Update Frontmatter with Metrics
+#### 3c. Update Feature File Frontmatter
 
-Update `{outputFileSpanish}` frontmatter:
-
+Update frontmatter in `featureFile`:
 ```yaml
-# Content tracking (updated after generation)
-features_documented: {actual_count}
-workflows_documented: {actual_count}
-diagrams_generated: {actual_count}  # Count all mermaid blocks
-screenshot_placeholders: {actual_count}  # Count all [Screenshot: ...] markers
-source_citations_count: {actual_count}  # Count all [Source: ...] citations
-
-# Quality metrics
-completeness_score: 0  # Will be calculated in step-07
+last_modified: "{current_timestamp}"
 review_status: "draft"
+diagrams_count: {count of mermaid blocks in this file}
+screenshots_count: {count of [Screenshot: ...] in this file}
+citations_count: {count of [Source: ...] in this file}
 ```
 
-### 13. Generation Complete Message
+**Progress update:** "✅ {feature.id} — `{slug}-guide.md` {if action == 'update': 'actualizado' else: 'creado'}"
+
+---
+
+#### END OF LOOP — After all features processed
+
+### 12. Generation Complete Message
 
 "✅ **Generación de Contenido en Español Completada**
 
-**Resumen del Contenido Generado:**
+**Archivos Generados:**
 
-📄 **Secciones:**
-- Introduction ✓
-- Getting Started ✓
-- Core Concepts ✓
-- Features: {features_count} documentadas ✓
-- Workflows: {workflows_count} documentados ✓
-{if troubleshooting: - Troubleshooting ✓}
-- FAQ: {faq_count} preguntas ✓
-- Glossary: {terms_count} términos ✓
-- Screenshot Index ✓
+{for each feature processed}
+- `{slug}-guide.md` — {feature.id} {feature.title} ({action}) ✓
+  → {diagrams_count} diagramas | {screenshots_count} screenshots | {citations_count} citations
+{end for}
 
-📊 **Métricas:**
-- Diagramas Mermaid: {diagrams_count}
-- Screenshot placeholders: {screenshots_count}
-- Source citations: {citations_count}
-- Palabras totales (aprox): {word_count}
+📊 **Métricas Totales:**
+- Archivos de feature: {features_count}
+- Diagramas Mermaid totales: {total_diagrams}
+- Screenshot placeholders totales: {total_screenshots}
+- Source citations totales: {total_citations}
 
-El documento español está completo y listo para traducción.
+Todos los archivos están completos y listos para validación final.
 
-**Siguiente paso:** Traducción a inglés manteniendo estructura idéntica."
+**Siguiente paso:** Validación y guardado."
 
-### 14. Update State Before Next Step
+### 13. Proceed Automatically to Validation
 
-Before loading next step:
-- Ensure frontmatter.stepsCompleted = [1, 2, 3, 4, 5]
-- Ensure frontmatter.currentStep = "step-06-traduccion-ingles"
-- Save outputFileSpanish
-
-### 15. Present MENU OPTIONS
-
-Display: **Select an Option:** [C] Continue
-
-#### EXECUTION RULES:
-
-- ALWAYS halt and wait for user input after presenting menu
-- ONLY proceed to next step when user selects 'C'
-
-#### Menu Handling Logic:
-
-- IF C: Update frontmatter, then load, read entire file, then execute `{nextStepFile}`
-- IF Any other: Respond and redisplay menu
+No menu in this step. After all feature files are generated:
+- Load, read entire file, then execute `{nextStepFile}` immediately (no pause)
+- NOTE: Step-06 is DISABLED — skip directly to step-07
 
 ## CRITICAL STEP COMPLETION NOTE
 
-ONLY WHEN C is selected and all Spanish content is generated with complete metrics, will you then load, read entire file, then execute `{nextStepFile}` to begin English translation.
+NO MENU in this step. Proceed automatically to `{nextStepFile}` (step-07) once all feature files have been generated with complete metrics.
 
 ---
 
@@ -584,25 +586,26 @@ ONLY WHEN C is selected and all Spanish content is generated with complete metri
 
 ### ✅ SUCCESS:
 
-- All required sections generated
-- Every feature has: description + diagram + screenshot(s) + citation
+- One file generated per feature: `{slug}-guide.md`
+- Files created (action=create) OR updated (action=update) correctly
+- Every feature file has: description + diagram + screenshot(s) + citation
 - Every workflow has: steps + diagram + screenshot(s) + citation
 - Technical level adaptation applied throughout
-- All screenshot placeholders have unique IDs in correct format
+- All screenshot placeholders have unique IDs in correct format (UPPER_SNAKE_CASE)
 - All diagrams are valid Mermaid syntax with Spanish labels
-- Screenshot Index consolidated all placeholders
-- Frontmatter updated with accurate metrics
-- frontmatter.stepsCompleted = [1, 2, 3, 4, 5]
-- Ready to proceed to step 6
+- Each feature file has its own Screenshot Index
+- Each feature file's frontmatter updated with accurate metrics
+- Ready to proceed to step 7 (step-06 is disabled)
 
 ### ❌ SYSTEM FAILURE:
 
-- Missing required sections
+- Generating a single combined file instead of per-feature files
+- Not respecting `action: create/update` per feature
 - Features without diagrams or citations
 - Workflows without step-by-step instructions
 - Screenshot IDs not in UPPER_SNAKE_CASE
 - Diagrams with English labels
-- Missing Screenshot Index
-- Incomplete frontmatter metrics
+- Missing Screenshot Index in any feature file
+- Writing to `_workflow-state.md` (forbidden — no state file)
 
 **Master Rule:** Skipping steps, optimizing sequences, or not following exact instructions is FORBIDDEN and constitutes SYSTEM FAILURE.

@@ -1,3 +1,4 @@
+<!-- FEATURE_CODE_JIRA=PENDING:gestion-de-clientes -->
 ## feature — Gestión de Clientes
 
 CRUD completo del catálogo de clientes. Permite crear, consultar, editar y

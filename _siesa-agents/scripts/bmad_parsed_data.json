@@ -1,0 +1,2597 @@
+{
+  "meta": {
+    "feature": "",
+    "feature_code": "",
+    "total_stories": 19,
+    "total_test_cases": 85,
+    "total_facs": 0,
+    "total_trace_links": 85,
+    "generated_at": "2026-04-20 12:15:41"
+  },
+  "stories": [
+    {
+      "story_id": "Story 1.1",
+      "epic_id": "Epic 1",
+      "epic_name": "",
+      "title": "Project Initialization & Repository Structure",
+      "description": "Setup de entorno de desarrollo: inicialización de proyectos Vite/React y .NET 10, instalación de dependencias (`npm install`, `dotnet new`). No genera lógica de negocio certificable desde QA; los ACs son sobre herramientas CLI y compilación. Validado implícitamente cuando Stories 1.2 y 1.3 funcionen.",
+      "layer": "Frontend",
+      "classification": "TN"
+    },
+    {
+      "story_id": "Story 1.2",
+      "epic_id": "Epic 1",
+      "epic_name": "",
+      "title": "Frontend Navigation Shell",
+      "description": "Implementa FR28 (SPA navigation), FR29 (mobile-responsive), FR30 (deep linking). Los ACs son verificables por QA: NavigationRail/NavigationBar, navegación sin page reload, URL directa funcional, 404 graceful.",
+      "layer": "Frontend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 1.3",
+      "epic_id": "Epic 1",
+      "epic_name": "",
+      "title": "Backend Database Foundation",
+      "description": "Crea la migración inicial vacía en PostgreSQL y configura EF Core snake_case. No existe tabla de dominio ni entidad de negocio — solo infraestructura de datos. La validación de snake_case naming y Problem Details middleware es implícita en los tests de integración de Epic 2 y 3.",
+      "layer": "Backend",
+      "classification": "TN"
+    },
+    {
+      "story_id": "Story 2.1",
+      "epic_id": "Epic 2",
+      "epic_name": "",
+      "title": "Client List & Search",
+      "description": "FR2 (lista scrollable), FR3 (búsqueda por nombre), FR4 (búsqueda por NIT/RUC), NFR1 (<1s con 500 registros). EmptyState y ErrorPanel son ACs de UX verificables.",
+      "layer": "Backend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 2.2",
+      "epic_id": "Epic 2",
+      "epic_name": "",
+      "title": "Client Detail View",
+      "description": "FR5 (ver detalle completo), FR30 (deep linking /clientes/:id). ACs verificables: campos visibles, deep link funcional, 404 graceful para ID inválido.",
+      "layer": "Backend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 2.3",
+      "epic_id": "Epic 2",
+      "epic_name": "",
+      "title": "Create Client",
+      "description": "FR1 (crear con campos requeridos), FR8 (impedir guardado con campos vacíos), FR27 (cambio inmediato en lista). ACs críticos: 409 por NIT duplicado, toast de éxito, validación inline.",
+      "layer": "Backend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 2.4",
+      "epic_id": "Epic 2",
+      "epic_name": "",
+      "title": "Edit Client",
+      "description": "FR6 (editar campos), FR8 (validación), FR27 (cambio inmediato). ACs: form pre-poblado, toast de éxito, cancelar sin efecto.",
+      "layer": "Frontend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 2.5",
+      "epic_id": "Epic 2",
+      "epic_name": "",
+      "title": "Delete Client",
+      "description": "FR7 (eliminar), FR27 (cambio inmediato). **Criticidad especial:** AC define que contactos asociados quedan `clienteId = null` (regla de integridad referencial — riesgo de datos).",
+      "layer": "Backend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 3.1",
+      "epic_id": "Epic 3",
+      "epic_name": "",
+      "title": "Contact List & Search",
+      "description": "FR10 (lista), FR11 (búsqueda nombre), FR12 (búsqueda email), NFR1 (<1s con 1000 registros). EmptyState y ErrorPanel verificables.",
+      "layer": "Backend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 3.2",
+      "epic_id": "Epic 3",
+      "epic_name": "",
+      "title": "Contact Detail View",
+      "description": "FR13 (detalle completo), FR30 (deep linking). ACs verificables.",
+      "layer": "Backend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 3.3",
+      "epic_id": "Epic 3",
+      "epic_name": "",
+      "title": "Create Contact",
+      "description": "FR9 (crear con campos), FR16 (validación), FR27 (cambio inmediato). Formato email validado por Zod.",
+      "layer": "Frontend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 3.4",
+      "epic_id": "Epic 3",
+      "epic_name": "",
+      "title": "Edit Contact",
+      "description": "FR14 (editar), FR16 (validación), FR27. Cancel sin efecto.",
+      "layer": "Backend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 3.5",
+      "epic_id": "Epic 3",
+      "epic_name": "",
+      "title": "Delete Contact",
+      "description": "FR15 (eliminar), FR27. Verificar que contacto desaparece de la lista.",
+      "layer": "Backend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 4.1",
+      "epic_id": "Epic 4",
+      "epic_name": "",
+      "title": "View Associated Contacts in Client Detail",
+      "description": "FR21 (ver contactos desde detalle cliente). ContactManager con IContactServiceAdapter. EmptyState y ErrorPanel verificables.",
+      "layer": "Backend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 4.2",
+      "epic_id": "Epic 4",
+      "epic_name": "",
+      "title": "Associate & Disassociate Contacts from Client",
+      "description": "FR17 (asociar existente), FR18 (asociar al crear), FR19 (desde detalle cliente), FR20 (desasociar), FR27 (cambio inmediato). TanStack Query invalidation es AC crítico.",
+      "layer": "Backend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 4.3",
+      "epic_id": "Epic 4",
+      "epic_name": "",
+      "title": "Navigate from Client Detail to Contact Detail",
+      "description": "FR22 (navegar cliente→contacto), NFR8 (≤2 clics). Browser back funcional.",
+      "layer": "Backend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 4.4",
+      "epic_id": "Epic 4",
+      "epic_name": "",
+      "title": "View Associated Client from Contact Detail",
+      "description": "FR23 (ver cliente desde contacto), FR24 (navegar contacto→cliente), NFR9 (sin búsqueda adicional). \"Sin cliente asignado\" para huérfanos.",
+      "layer": "Backend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 4.5",
+      "epic_id": "Epic 4",
+      "epic_name": "",
+      "title": "Orphan Contacts Filter",
+      "description": "FR25 (filtro \"Sin cliente\"). Conteo visible, EmptyState si todos asignados, desactivar restaura lista.",
+      "layer": "Backend",
+      "classification": "BL"
+    },
+    {
+      "story_id": "Story 4.6",
+      "epic_id": "Epic 4",
+      "epic_name": "",
+      "title": "Reassign Contact to Different Client",
+      "description": "FR26 (reasignar), FR27 (cambio inmediato). Invalidación de 3 query keys es AC técnico crítico.",
+      "layer": "Backend",
+      "classification": "BL"
+    }
+  ],
+  "test_cases": [
+    {
+      "tc_id": "TC-F1-01",
+      "title": "NavigationRail visible en viewport desktop",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "App Shell & Navigation",
+      "epics": "Story 1.2 / FR28",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 1.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: App cargada en Chrome con viewport ≥ 1024px",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Abrir app en http://localhost:5173/",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Inspeccionar elemento izquierdo del layout",
+          "expected_result": "El NavigationRail de siesa-ui-kit es visible con las entradas \"Clientes\" y \"Contactos\"",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F1-02",
+      "title": "NavigationBar visible en viewport móvil (375px)",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "App Shell & Navigation",
+      "epics": "Story 1.2 / FR29",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 1.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: App cargada, DevTools abierto en modo 375×667px",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Simular viewport móvil 375px en DevTools",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Navegar a /",
+          "expected_result": "El NavigationBar (móvil) de siesa-ui-kit es visible y el NavigationRail NO aparece",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F1-03",
+      "title": "Navegación a /clientes sin page reload",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "App Shell & Navigation",
+      "epics": "Story 1.2 / FR28",
+      "technique": "EP",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 1.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: App cargada en /",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Abrir consola → `window.reloadCount = 0; window.addEventListener('beforeunload', ()=>window.reloadCount++)`",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Hacer clic en \"Clientes\" en el nav",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Verificar contador",
+          "expected_result": "URL cambia a /clientes, la vista de Clientes se renderiza, `window.reloadCount` sigue en 0 — sin page reload (FR28)",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F1-04",
+      "title": "Deep link directo a /clientes",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "App Shell & Navigation",
+      "epics": "Story 1.2 / FR30",
+      "technique": "EP",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 1.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Servidor frontend activo",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. En barra de URL escribir http://localhost:5173/clientes y presionar Enter",
+          "expected_result": "La vista de Clientes se renderiza correctamente sin redirigir a / (FR30)",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F1-05",
+      "title": "Deep link directo a /contactos",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "App Shell & Navigation",
+      "epics": "Story 1.2 / FR30",
+      "technique": "EP",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 1.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Servidor frontend activo",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. En barra de URL escribir http://localhost:5173/contactos y presionar Enter",
+          "expected_result": "La vista de Contactos se renderiza correctamente sin redirigir a /",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F1-06",
+      "title": "Ruta desconocida muestra 404",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "App Shell & Navigation",
+      "epics": "Story 1.2",
+      "technique": "EG",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 1.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: App cargada",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Navegar a /ruta-inexistente",
+          "expected_result": "Vista 404 se muestra, sin error de consola JavaScript, NavigationRail accesible para navegación de recuperación",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F1-07",
+      "title": "Breakpoint exacto 1024px — NavigationRail activo",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "App Shell & Navigation",
+      "epics": "Story 1.2 / FR29",
+      "technique": "BVA",
+      "risk_score": "2×3=6",
+      "source_stories": [
+        "Story 1.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: App cargada",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "DevTools → establecer viewport en exactamente 1024px",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Observar layout",
+          "expected_result": "NavigationRail activo a 1024px; al cambiar a 1023px → NavigationBar; sin solapamiento visual",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F1-08",
+      "title": "Navegación rápida entre rutas 10× seguidas (stress)",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "App Shell & Navigation",
+      "epics": "Story 1.2 / FR28",
+      "technique": "EC",
+      "risk_score": "2×3=6",
+      "source_stories": [
+        "Story 1.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: App cargada con datos en ambas vistas",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Hacer clic alternado entre Clientes y Contactos 10 veces seguidas rápidamente",
+          "expected_result": "Sin errores de consola, sin página en blanco, sin memory leak visible, renderizado siempre correcto",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F1-09",
+      "title": "URL con trailing slash /clientes/",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "App Shell & Navigation",
+      "epics": "Story 1.2 / FR30",
+      "technique": "EC",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 1.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: App cargada",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Navegar a http://localhost:5173/clientes/ (con slash final)",
+          "expected_result": "La vista de Clientes se renderiza o hay redirección limpia a /clientes; no se muestra 404",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F1-10",
+      "title": "F5 (refresh) en ruta profunda /clientes/:id",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "App Shell & Navigation",
+      "epics": "Story 1.2",
+      "technique": "EC",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 1.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Usuario en la vista de detalle de un cliente",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Navegar a /clientes/:id",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Presionar F5",
+          "expected_result": "La vista de detalle del cliente se recarga correctamente (Vite SPA fallback configurado); sin 404 del servidor",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-01",
+      "title": "Lista de clientes muestra todos los registros",
+      "priority": "P3",
+      "level": "FE+BE",
+      "feature": "Client Management",
+      "epics": "Story 2.1 / FR2",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 2.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: 5+ clientes en BD",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Navegar a /clientes",
+          "expected_result": "Panel izquierdo muestra lista scrollable con todos los clientes; cada item muestra Nombre y NIT/RUC",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-02",
+      "title": "Búsqueda por nombre parcial filtra correctamente",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "Client Management",
+      "epics": "Story 2.1 / FR3",
+      "technique": "EP",
+      "risk_score": "2×3=6",
+      "source_stories": [
+        "Story 2.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: 5+ clientes en BD, lista cargada",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Escribir \"Empresa\" en campo de búsqueda",
+          "expected_result": "Lista muestra solo clientes cuyo Nombre contiene \"Empresa\" (case-insensitive); sin llamada a la API",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-03",
+      "title": "Búsqueda por NIT/RUC parcial filtra correctamente",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "Client Management",
+      "epics": "Story 2.1 / FR4",
+      "technique": "EP",
+      "risk_score": "2×3=6",
+      "source_stories": [
+        "Story 2.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: 5+ clientes con NITs distintos",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Escribir \"9001\" en campo de búsqueda",
+          "expected_result": "Lista muestra solo clientes cuyo NIT contiene \"9001\"",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-04",
+      "title": "Búsqueda responde en <1s con 500 registros",
+      "priority": "P0",
+      "level": "FE+BE",
+      "feature": "Client Management",
+      "epics": "Story 2.1 / NFR1",
+      "technique": "EP",
+      "risk_score": "5×4=20",
+      "source_stories": [
+        "Story 2.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: 500 clientes en BD, lista pre-cargada",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Medir tiempo desde keystroke hasta re-render filtrado con 500 registros",
+          "expected_result": "Tiempo total de filtrado < 1000ms (P95); herramienta: React DevTools Profiler o performance.now()",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-05",
+      "title": "EmptyState cuando no hay clientes",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "Client Management",
+      "epics": "Story 2.1",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 2.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: BD sin clientes; TanStack Query devuelve []",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Navegar a /clientes con BD vacía",
+          "expected_result": "Componente EmptyState visible con mensaje guía para crear el primer cliente; sin panel vacío/error",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-06",
+      "title": "ErrorPanel cuando backend no responde",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "Client Management",
+      "epics": "Story 2.1",
+      "technique": "EG",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 2.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Backend apagado o devuelve 500",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Navegar a /clientes",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Esperar fetch fallido",
+          "expected_result": "ErrorPanel visible con botón \"Reintentar\"; sin stack trace o mensaje técnico en la UI (NFR6)",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-07",
+      "title": "Detalle de cliente muestra todos los campos",
+      "priority": "P3",
+      "level": "FE+BE",
+      "feature": "Client Management",
+      "epics": "Story 2.2 / FR5",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 2.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: 1+ cliente en BD",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Clic en cliente de la lista",
+          "expected_result": "Panel derecho muestra Nombre, NIT/RUC, Teléfono, Ciudad completos",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-08",
+      "title": "Deep link a /clientes/:id carga detalle correcto",
+      "priority": "P2",
+      "level": "FE+BE",
+      "feature": "Client Management",
+      "epics": "Story 2.2 / FR30",
+      "technique": "EP",
+      "risk_score": "3×2=6",
+      "source_stories": [
+        "Story 2.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Cliente con UUID conocido en BD",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Navegar directamente a /clientes/:id",
+          "expected_result": "Detalle del cliente correcto se muestra sin redirigir",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-09",
+      "title": "Deep link con ID inexistente muestra not-found",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "Client Management",
+      "epics": "Story 2.2 / FR30",
+      "technique": "EG",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 2.2"
+      ],
+      "steps": [
+        {
+          "action": "1. Navegar a /clientes/00000000-0000-0000-0000-000000000000",
+          "expected_result": "Mensaje \"no encontrado\" mostrado; sin error JavaScript",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-10",
+      "title": "Crear cliente con todos los campos válidos",
+      "priority": "P0",
+      "level": "FE+BE",
+      "feature": "Client Management",
+      "epics": "Story 2.3 / FR1",
+      "technique": "EP",
+      "risk_score": "4×4=16",
+      "source_stories": [
+        "Story 2.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: BD activa, form abierto",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Clic \"Nuevo cliente\"",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Llenar: Nombre=\"Empresa XYZ\", NIT=\"800111222-3\", Tel=\"+57 300 5555555\", Ciudad=\"Cali\"",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Submit",
+          "expected_result": "Backend devuelve 201, cliente aparece en lista inmediatamente (FR27), toast \"Cliente creado correctamente\", form cierra",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-11",
+      "title": "Crear cliente con NIT/RUC duplicado devuelve 409",
+      "priority": "P0",
+      "level": "FE+BE",
+      "feature": "Client Management",
+      "epics": "Story 2.3 / FR8",
+      "technique": "DT",
+      "risk_score": "4×4=16",
+      "source_stories": [
+        "Story 2.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Cliente con NIT=\"800111222-3\" ya existe",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Abrir form \"Nuevo cliente\"",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Llenar con NIT=\"800111222-3\"",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Submit",
+          "expected_result": "Backend devuelve 409 Conflict; UI muestra \"El NIT/RUC ya está registrado\"; sin stack trace; form queda abierto",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-12",
+      "title": "Form submission bloqueado con Nombre vacío",
+      "priority": "P1",
+      "level": "FE",
+      "feature": "Client Management",
+      "epics": "Story 2.3 / FR8",
+      "technique": "EP",
+      "risk_score": "4×3=12",
+      "source_stories": [
+        "Story 2.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Form abierto",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Dejar Nombre vacío",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Clic Submit",
+          "expected_result": "Error inline \"Campo requerido\" aparece en Nombre; sin llamada HTTP; form no se cierra",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-13",
+      "title": "Form submission bloqueado con NIT vacío",
+      "priority": "P1",
+      "level": "FE",
+      "feature": "Client Management",
+      "epics": "Story 2.3 / FR8",
+      "technique": "EP",
+      "risk_score": "4×3=12",
+      "source_stories": [
+        "Story 2.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Form abierto",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Dejar NIT/RUC vacío",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Submit",
+          "expected_result": "Error inline en NIT/RUC; sin HTTP call",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-14",
+      "title": "Backend rechaza cliente con Nombre vacío (FluentValidation)",
+      "priority": "P1",
+      "level": "BE",
+      "feature": "Client Management",
+      "epics": "Story 2.3 / FR8",
+      "technique": "EP",
+      "risk_score": "3×4=12",
+      "source_stories": [
+        "Story 2.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: API activa",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. POST /api/v1/clientes con body { nombre: \"\", nit: \"900111\", telefono: \"111\", ciudad: \"Bogota\" }",
+          "expected_result": "Respuesta 400 Bad Request en formato Problem Details RFC 7807 con errors.nombre indicando requerido",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-15",
+      "title": "Form de edición pre-poblado con valores actuales",
+      "priority": "P2",
+      "level": "FE+BE",
+      "feature": "Client Management",
+      "epics": "Story 2.4 / FR6",
+      "technique": "EP",
+      "risk_score": "3×2=6",
+      "source_stories": [
+        "Story 2.4"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Cliente existente con todos los campos",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Ver detalle",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Clic \"Editar\"",
+          "expected_result": "Form abre con valores exactamente iguales a los guardados; sin campos vacíos ni valores por defecto",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-16",
+      "title": "Editar cliente — guardar cambios se refleja inmediatamente",
+      "priority": "P2",
+      "level": "FE+BE",
+      "feature": "Client Management",
+      "epics": "Story 2.4 / FR6",
+      "technique": "EP",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 2.4"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Cliente existente",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Editar → cambiar Ciudad a \"Medellín\" → Submit",
+          "expected_result": "BE devuelve 200, lista y detalle muestran \"Medellín\" sin refresh, toast \"Cliente actualizado correctamente\" (FR27)",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-17",
+      "title": "Edición bloqueada al borrar campo requerido",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "Client Management",
+      "epics": "Story 2.4 / FR8",
+      "technique": "EP",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 2.4"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Form de edición abierto",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Borrar Nombre → Submit",
+          "expected_result": "Error inline en Nombre; sin HTTP call",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-18",
+      "title": "Cancelar edición no persiste cambios",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "Client Management",
+      "epics": "Story 2.4",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 2.4"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Form abierto con cambios",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Cambiar Nombre → Clic \"Cancelar\"",
+          "expected_result": "Form cierra, detalle muestra el Nombre original",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-19",
+      "title": "Dialog de confirmación aparece al eliminar",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "Client Management",
+      "epics": "Story 2.5 / FR7",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 2.5"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Cliente en detalle",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Clic \"Eliminar\"",
+          "expected_result": "Dialog muestra \"¿Eliminar este cliente?\" con botones \"Confirmar\" y \"Cancelar\"",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-20",
+      "title": "Confirmar eliminación remueve cliente de la lista",
+      "priority": "P1",
+      "level": "FE+BE",
+      "feature": "Client Management",
+      "epics": "Story 2.5 / FR7",
+      "technique": "EP",
+      "risk_score": "4×3=12",
+      "source_stories": [
+        "Story 2.5"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Cliente sin contactos",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Clic \"Eliminar\" → \"Confirmar\"",
+          "expected_result": "204 del BE; cliente desaparece de la lista inmediatamente; panel derecho vuelve a estado vacío; toast \"Cliente eliminado correctamente\" (FR27)",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-21",
+      "title": "**CRÍTICO: Eliminar cliente con contactos asociados**",
+      "priority": "P0",
+      "level": "FE+BE",
+      "feature": "Client Management",
+      "epics": "Story 2.5 / FR7",
+      "technique": "DT",
+      "risk_score": "5×4=20",
+      "source_stories": [
+        "Story 2.5"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Cliente con 3 contactos asociados (clienteId = cliente.id)",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Ver detalle del cliente con contactos",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Clic \"Eliminar\" → \"Confirmar\"",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Verificar en BD: SELECT cliente_id FROM contactos WHERE id IN (...)",
+          "expected_result": "Cliente eliminado; 3 contactos existen en BD con cliente_id=NULL; toast \"Cliente eliminado. Sus contactos asociados quedaron sin cliente asignado.\"; los 3 contactos aparecen en filtro \"Sin cliente\" (FR25, FR27)",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-22",
+      "title": "Cancelar eliminación no borra el cliente",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "Client Management",
+      "epics": "Story 2.5",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 2.5"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Cliente en detalle",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Clic \"Eliminar\" → \"Cancelar\"",
+          "expected_result": "Dialog cierra; cliente permanece en la lista y detalle",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-23",
+      "title": "CRUD mutation UI se actualiza en <2s",
+      "priority": "P2",
+      "level": "FE+BE",
+      "feature": "Client Management",
+      "epics": "Story 2.1 / NFR2",
+      "technique": "EP",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 2.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: BE activo con latencia normal",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Medir tiempo desde Submit del form hasta aparición en lista",
+          "expected_result": "UI refleja el cambio en ≤2 segundos (P95)",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-24",
+      "title": "Doble clic en \"Guardar\" cliente",
+      "priority": "P1",
+      "level": "FE",
+      "feature": "Client Management",
+      "epics": "Story 2.3",
+      "technique": "EC",
+      "risk_score": "4×3=12",
+      "source_stories": [
+        "Story 2.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Form listo para submit",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Llenar form válido",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Hacer doble clic rápido en \"Guardar\"",
+          "expected_result": "Solo 1 request HTTP es enviado (botón deshabilitado durante la mutación); solo 1 cliente creado",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-25",
+      "title": "XSS en campo Nombre del cliente",
+      "priority": "P1",
+      "level": "FE+BE",
+      "feature": "Client Management",
+      "epics": "Story 2.3",
+      "technique": "EC",
+      "risk_score": "4×3=12",
+      "source_stories": [
+        "Story 2.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Form de creación abierto",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Nombre=\"<script>alert('xss')</script>\"",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Submit",
+          "expected_result": "BE guarda el string escapado; en la lista se renderiza como texto literal, sin ejecutar script; no hay alert",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-26",
+      "title": "Pegar texto con caracteres Unicode especiales (non-breaking space)",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "Client Management",
+      "epics": "Story 2.3",
+      "technique": "EC",
+      "risk_score": "2×3=6",
+      "source_stories": [
+        "Story 2.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Form de creación abierto",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Pegar Nombre con \\u00a0 (non-breaking space): \"Empresa\\u00a0ABC\"",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Submit",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Buscar \"Empresa ABC\" (espacio normal)",
+          "expected_result": "Investigar si la búsqueda encuentra el cliente; si no lo encuentra, este es un defecto de normalización",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-27",
+      "title": "Nombre cliente con longitud máxima (255 chars)",
+      "priority": "P3",
+      "level": "BE",
+      "feature": "Client Management",
+      "epics": "Story 2.3",
+      "technique": "BVA",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 2.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: BE activo",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. POST /api/v1/clientes con Nombre de exactamente 255 caracteres",
+          "expected_result": "201 Created; cliente guardado correctamente",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-28",
+      "title": "Nombre cliente con longitud > máximo (256 chars)",
+      "priority": "P2",
+      "level": "BE",
+      "feature": "Client Management",
+      "epics": "Story 2.3",
+      "technique": "BVA",
+      "risk_score": "2×3=6",
+      "source_stories": [
+        "Story 2.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: BE activo",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. POST /api/v1/clientes con Nombre de 256 caracteres",
+          "expected_result": "400 Bad Request con Problem Details indicando longitud máxima excedida",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-29",
+      "title": "Creación concurrente con mismo NIT por 2 usuarios",
+      "priority": "P0",
+      "level": "BE",
+      "feature": "Client Management",
+      "epics": "Story 2.3",
+      "technique": "EC",
+      "risk_score": "5×4=20",
+      "source_stories": [
+        "Story 2.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: BE activo, PostgreSQL con uk_clientes_nit",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Enviar 2 POST simultáneos con mismo NIT desde 2 sesiones",
+          "expected_result": "Solo 1 cliente creado (201); el otro recibe 409 Conflict; sin datos corruptos en BD; constraint uk_clientes_nit funcionando",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F2-30",
+      "title": "Editar cliente que fue eliminado por otro usuario (404 en PUT)",
+      "priority": "P2",
+      "level": "BE",
+      "feature": "Client Management",
+      "epics": "Story 2.4",
+      "technique": "EC",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 2.4"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Cliente eliminado concurrentemente",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "User A abre form de edición",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "User B elimina el cliente",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "User A guarda cambios",
+          "expected_result": "PUT devuelve 404 Not Found en Problem Details; FE muestra mensaje de error claro \"El cliente ya no existe\" sin exponer stack trace",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-01",
+      "title": "Lista de contactos muestra todos los registros",
+      "priority": "P3",
+      "level": "FE+BE",
+      "feature": "Contact Management",
+      "epics": "Story 3.1 / FR10",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 3.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: 5+ contactos en BD",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Navegar a /contactos",
+          "expected_result": "Lista muestra todos los contactos con Nombre, Cargo y Email por item",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-02",
+      "title": "Búsqueda por nombre de contacto filtra en tiempo real",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "Contact Management",
+      "epics": "Story 3.1 / FR11",
+      "technique": "EP",
+      "risk_score": "2×3=6",
+      "source_stories": [
+        "Story 3.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: 5+ contactos, lista cargada",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Escribir \"Ana\" en búsqueda",
+          "expected_result": "Lista muestra solo contactos cuyo Nombre contiene \"Ana\" (case-insensitive)",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-03",
+      "title": "Búsqueda por email filtra en tiempo real",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "Contact Management",
+      "epics": "Story 3.1 / FR12",
+      "technique": "EP",
+      "risk_score": "2×3=6",
+      "source_stories": [
+        "Story 3.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: 5+ contactos",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Escribir \"@empresa.com\"",
+          "expected_result": "Lista muestra solo contactos con ese dominio en email",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-04",
+      "title": "Búsqueda responde en <1s con 1000 contactos",
+      "priority": "P0",
+      "level": "FE+BE",
+      "feature": "Contact Management",
+      "epics": "Story 3.1 / NFR1",
+      "technique": "EP",
+      "risk_score": "5×4=20",
+      "source_stories": [
+        "Story 3.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: 1000 contactos en BD, lista pre-cargada",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Medir tiempo filtrado con 1000 registros",
+          "expected_result": "Filtrado < 1000ms (P95)",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-05",
+      "title": "EmptyState cuando no hay contactos",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "Contact Management",
+      "epics": "Story 3.1",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 3.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: BD sin contactos",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Navegar a /contactos",
+          "expected_result": "EmptyState guía al usuario a crear el primer contacto",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-06",
+      "title": "Detalle muestra todos los campos del contacto",
+      "priority": "P3",
+      "level": "FE+BE",
+      "feature": "Contact Management",
+      "epics": "Story 3.2 / FR13",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 3.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: 1+ contacto en BD",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Clic en contacto",
+          "expected_result": "Detalle muestra Nombre, Cargo, Teléfono, Email; URL actualiza a /contactos/:id",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-07",
+      "title": "Crear contacto con todos los campos válidos",
+      "priority": "P0",
+      "level": "FE+BE",
+      "feature": "Contact Management",
+      "epics": "Story 3.3 / FR9",
+      "technique": "EP",
+      "risk_score": "4×4=16",
+      "source_stories": [
+        "Story 3.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: BD activa",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Clic \"Nuevo contacto\"",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Llenar: Nombre=\"Juan Pérez\", Cargo=\"Director\", Tel=\"+57 310 1111111\", Email=\"juan@empresa.com\"",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Submit",
+          "expected_result": "201 del BE; contacto aparece en lista inmediatamente (FR27); toast \"Contacto creado correctamente\"",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-08",
+      "title": "Form bloqueado con Email vacío",
+      "priority": "P1",
+      "level": "FE",
+      "feature": "Contact Management",
+      "epics": "Story 3.3 / FR16",
+      "technique": "EP",
+      "risk_score": "4×3=12",
+      "source_stories": [
+        "Story 3.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Form abierto",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Dejar Email vacío → Submit",
+          "expected_result": "Error inline en Email; sin HTTP call",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-09",
+      "title": "Form bloqueado con email inválido",
+      "priority": "P1",
+      "level": "FE",
+      "feature": "Contact Management",
+      "epics": "Story 3.3 / FR16",
+      "technique": "EP",
+      "risk_score": "4×3=12",
+      "source_stories": [
+        "Story 3.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Form abierto",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Email=\"no-es-email\" → Submit",
+          "expected_result": "Error Zod inline \"Email inválido\"; sin HTTP call",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-10",
+      "title": "Backend rechaza email inválido (FluentValidation)",
+      "priority": "P1",
+      "level": "BE",
+      "feature": "Contact Management",
+      "epics": "Story 3.3 / FR16",
+      "technique": "EP",
+      "risk_score": "3×4=12",
+      "source_stories": [
+        "Story 3.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: API activa",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. POST /api/v1/contactos con email=\"invalid\"",
+          "expected_result": "400 Bad Request con Problem Details, campo errors.email",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-11",
+      "title": "Backend rechaza Cargo solo con espacios",
+      "priority": "P2",
+      "level": "BE",
+      "feature": "Contact Management",
+      "epics": "Story 3.3 / FR16",
+      "technique": "EP",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 3.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: API activa",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. POST /api/v1/contactos con cargo=\"   \" (solo espacios)",
+          "expected_result": "400 Bad Request; FluentValidation usa .NotEmpty() + .Trim() implícito",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-12",
+      "title": "Editar contacto — form pre-poblado y cambio guardado",
+      "priority": "P2",
+      "level": "FE+BE",
+      "feature": "Contact Management",
+      "epics": "Story 3.4 / FR14",
+      "technique": "EP",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 3.4"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Contacto existente",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Ver detalle → \"Editar\" → cambiar Cargo → Submit",
+          "expected_result": "200 del BE; cambio reflejado en detalle y lista inmediatamente (FR27); clienteId sin modificar; toast de éxito",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-13",
+      "title": "Editar contacto — verificar que clienteId no cambia",
+      "priority": "P1",
+      "level": "FE+BE",
+      "feature": "Contact Management",
+      "epics": "Story 3.4",
+      "technique": "EC",
+      "risk_score": "4×3=12",
+      "source_stories": [
+        "Story 3.4"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Contacto con clienteId asignado",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Editar Nombre, Cargo, Tel, Email → Submit",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "GET /api/v1/contactos/:id y verificar clienteId",
+          "expected_result": "El clienteId del contacto es exactamente el mismo que antes de la edición",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-14",
+      "title": "Eliminar contacto — confirmar",
+      "priority": "P2",
+      "level": "FE+BE",
+      "feature": "Contact Management",
+      "epics": "Story 3.5 / FR15",
+      "technique": "EP",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 3.5"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Contacto existente",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. \"Eliminar\" → \"Confirmar\"",
+          "expected_result": "204 del BE; contacto desaparece de lista; toast \"Contacto eliminado correctamente\"; vista regresa a lista",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-15",
+      "title": "Cancelar eliminación — contacto inalterado",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "Contact Management",
+      "epics": "Story 3.5",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 3.5"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Contacto en detalle",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. \"Eliminar\" → \"Cancelar\"",
+          "expected_result": "Dialog cierra; contacto persiste sin cambios",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-16",
+      "title": "Email con longitud máxima válida (254 chars RFC 5321)",
+      "priority": "P3",
+      "level": "BE",
+      "feature": "Contact Management",
+      "epics": "Story 3.3",
+      "technique": "BVA",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 3.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: BE activo",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. POST con email de exactamente 254 chars",
+          "expected_result": "201 Created",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-17",
+      "title": "Email con longitud 255 chars (límite excedido)",
+      "priority": "P2",
+      "level": "BE",
+      "feature": "Contact Management",
+      "epics": "Story 3.3",
+      "technique": "BVA",
+      "risk_score": "2×3=6",
+      "source_stories": [
+        "Story 3.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: BE activo",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. POST con email de 255 chars",
+          "expected_result": "400 Bad Request; FluentValidation rechaza",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-18",
+      "title": "Email en mayúsculas — normalización",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "Contact Management",
+      "epics": "Story 3.3",
+      "technique": "EC",
+      "risk_score": "2×3=6",
+      "source_stories": [
+        "Story 3.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Form abierto",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Email=\"JUAN@EMPRESA.COM\" → Submit",
+          "expected_result": "Email guardado en minúsculas o aceptado; búsqueda posterior lo encuentra con \"juan@empresa.com\"",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-19",
+      "title": "XSS en campo Email",
+      "priority": "P1",
+      "level": "FE+BE",
+      "feature": "Contact Management",
+      "epics": "Story 3.3",
+      "technique": "EC",
+      "risk_score": "4×3=12",
+      "source_stories": [
+        "Story 3.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Form abierto",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Email=\"<img src=x onerror=alert(1)>@test.com\" → Submit",
+          "expected_result": "Zod rechaza por formato inválido; si pasa Zod, FluentValidation rechaza; en ningún caso se ejecuta script",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-20",
+      "title": "Búsqueda con caracteres especiales en campo",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "Contact Management",
+      "epics": "Story 3.1",
+      "technique": "EC",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 3.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: 10+ contactos",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Buscar \"()\" o \"%\" en campo de búsqueda",
+          "expected_result": "Sin error JavaScript; búsqueda retorna resultados vacíos o los correspondientes sin crash",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F3-21",
+      "title": "Contacto sin cliente asignado muestra \"Sin cliente asignado\"",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "Contact Management",
+      "epics": "Story 3.2",
+      "technique": "EC",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 3.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Contacto con clienteId=null",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Ver detalle del contacto",
+          "expected_result": "Detalle muestra \"Sin cliente asignado\" en el campo de cliente (no vacío, no crash)",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-01",
+      "title": "ContactManager muestra contactos del cliente",
+      "priority": "P2",
+      "level": "FE+BE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.1 / FR21",
+      "technique": "EP",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 4.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Cliente con 3 contactos asociados",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Navegar a /clientes/:clienteId",
+          "expected_result": "ContactManager renderiza los 3 contactos asociados via GET /api/v1/contactos?clienteId=:id",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-02",
+      "title": "ContactManager EmptyState cuando cliente sin contactos",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.1 / FR21",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 4.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Cliente sin contactos",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Ver detalle de cliente sin contactos",
+          "expected_result": "ContactManager muestra estado vacío: \"No hay contactos asociados\"",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-03",
+      "title": "ContactManager ErrorPanel cuando BE falla",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.1",
+      "technique": "EG",
+      "risk_score": "2×3=6",
+      "source_stories": [
+        "Story 4.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: BE apagado o 500",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Ver detalle de cliente",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "GET contactos falla",
+          "expected_result": "ErrorPanel con opción de reintentar visible en el ContactManager",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-04",
+      "title": "**CRÍTICO: Asociar contacto existente a cliente — invalidación de cache**",
+      "priority": "P0",
+      "level": "FE+BE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.2 / FR17 FR19 FR27",
+      "technique": "DT",
+      "risk_score": "5×4=20",
+      "source_stories": [
+        "Story 4.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Contacto sin cliente, cliente activo",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Abrir detalle cliente",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Asociar contacto via ContactManager",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Verificar PUT /api/v1/contactos/{id}/cliente",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Verificar cache invalidation en DevTools de TanStack Query",
+          "expected_result": "PUT con {clienteId: uuid} devuelve 200; contacto aparece en ContactManager sin refresh; keys ['contactos'] y ['contactos', {clienteId}] invalidadas",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-05",
+      "title": "Crear contacto desde ContactManager → auto-asociado",
+      "priority": "P1",
+      "level": "FE+BE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.2 / FR18",
+      "technique": "EP",
+      "risk_score": "4×3=12",
+      "source_stories": [
+        "Story 4.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Cliente activo con ContactManager abierto",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Crear nuevo contacto desde dentro del ContactManager",
+          "expected_result": "Contacto creado con clienteId=clienteActivo automáticamente; aparece en ContactManager inmediatamente",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-06",
+      "title": "Desasociar contacto — no elimina ningún registro",
+      "priority": "P0",
+      "level": "FE+BE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.2 / FR20 FR27",
+      "technique": "DT",
+      "risk_score": "4×4=16",
+      "source_stories": [
+        "Story 4.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Contacto asociado al cliente",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Desasociar \"Juan Pérez\" del cliente via ContactManager",
+          "expected_result": "PUT con {clienteId: null}; \"Juan Pérez\" desaparece del ContactManager; sigue accesible en /contactos; clienteId=null en BD",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-07",
+      "title": "Navegar de cliente a contacto en ≤2 clics",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.3 / FR22 NFR8",
+      "technique": "EP",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 4.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Cliente con contactos en ContactManager",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Clic en contacto en ContactManager (1 clic)",
+          "expected_result": "Navegación a /contactos/:id en exactamente 1 clic; cumple NFR8 ≤2 clics",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-08",
+      "title": "Botón atrás regresa al detalle del cliente",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.3 / FR22",
+      "technique": "EP",
+      "risk_score": "3×2=6",
+      "source_stories": [
+        "Story 4.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Usuario navegó de cliente a contacto",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Presionar botón atrás del browser",
+          "expected_result": "Regreso a /clientes/:clienteId en el mismo estado; sin pérdida de contexto",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-09",
+      "title": "Detalle de contacto muestra cliente asociado",
+      "priority": "P2",
+      "level": "FE+BE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.4 / FR23 NFR9",
+      "technique": "EP",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 4.4"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Contacto con clienteId asignado",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Ver /contactos/:id de contacto asociado",
+          "expected_result": "Nombre del cliente asociado visible en el detalle; sin búsqueda adicional requerida (NFR9)",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-10",
+      "title": "Clic en nombre del cliente navega a su detalle",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.4 / FR24",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 4.4"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Detalle de contacto con cliente visible",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Clic en nombre del cliente",
+          "expected_result": "Navegación a /clientes/:clienteId; detalle del cliente correcto mostrado (FR24)",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-11",
+      "title": "Contacto huérfano muestra \"Sin cliente asignado\"",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.4 / FR23",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 4.4"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Contacto con clienteId=null",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Ver /contactos/:id",
+          "expected_result": "\"Sin cliente asignado\" visible; sin crash; sin link de navegación",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-12",
+      "title": "Filtro \"Sin cliente\" muestra solo contactos huérfanos",
+      "priority": "P1",
+      "level": "FE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.5 / FR25",
+      "technique": "EP",
+      "risk_score": "4×3=12",
+      "source_stories": [
+        "Story 4.5"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Mix de contactos asignados y huérfanos",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Activar filtro \"Sin cliente\"",
+          "expected_result": "Solo contactos con clienteId=null visibles; conteo de huérfanos visible",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-13",
+      "title": "EmptyState cuando todos los contactos están asignados",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.5",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 4.5"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Todos con clienteId",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Activar filtro \"Sin cliente\"",
+          "expected_result": "EmptyState: \"Todos los contactos están asignados a un cliente\"",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-14",
+      "title": "Desactivar filtro restaura lista completa",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.5",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 4.5"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Filtro activo",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Desactivar filtro \"Sin cliente\"",
+          "expected_result": "Lista completa de contactos (asignados + huérfanos) restaurada",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-15",
+      "title": "**CRÍTICO: Huérfanos aparecen en filtro inmediatamente tras eliminar cliente**",
+      "priority": "P0",
+      "level": "FE+BE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.5 / FR25 FR27",
+      "technique": "DT",
+      "risk_score": "5×4=20",
+      "source_stories": [
+        "Story 4.5"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Cliente con 3 contactos; filtro \"Sin cliente\" visible",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Eliminar cliente con 3 contactos",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Activar filtro \"Sin cliente\"",
+          "expected_result": "Los 3 contactos recién huérfanos aparecen en el filtro inmediatamente (FR27); query key ['contactos'] invalidado; clienteId=null confirmado en BD",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-16",
+      "title": "**CRÍTICO: Reasignar contacto — 3 query keys invalidadas**",
+      "priority": "P0",
+      "level": "FE+BE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.6 / FR26 FR27",
+      "technique": "DT",
+      "risk_score": "5×5=25",
+      "source_stories": [
+        "Story 4.6"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Contacto asociado a Empresa A; usuario en /contactos/:id",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "Iniciar reasignación → seleccionar Empresa B → confirmar",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "Verificar en TanStack Query DevTools las keys invalidadas",
+          "expected_result": "PUT {clienteId: empresaBId}; contacto aparece en ContactManager de Empresa B; desaparece de Empresa A; keys ['contactos'], ['contactos',{clienteId:AId}], ['contactos',{clienteId:BId}] todas invalidadas; toast \"Contacto reasignado correctamente\"",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-17",
+      "title": "Cancelar reasignación — asociación sin cambios",
+      "priority": "P3",
+      "level": "FE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.6",
+      "technique": "EP",
+      "risk_score": "2×2=4",
+      "source_stories": [
+        "Story 4.6"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Contacto con cliente asignado",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Iniciar reasignación → seleccionar nuevo cliente → \"Cancelar\"",
+          "expected_result": "Dialog/selector cierra; sin PUT enviado; asociación original intacta",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-18",
+      "title": "PUT /contactos/{id}/cliente con clienteId de formato UUID inválido",
+      "priority": "P1",
+      "level": "BE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.2",
+      "technique": "EG",
+      "risk_score": "4×3=12",
+      "source_stories": [
+        "Story 4.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: BE activo",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. PUT /api/v1/contactos/{id}/cliente con body { clienteId: \"no-es-uuid\" }",
+          "expected_result": "400 Bad Request Problem Details con errors.clienteId; sin 500; sin datos corruptos",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-19",
+      "title": "PUT /contactos/{id}/cliente con contactoId inexistente",
+      "priority": "P2",
+      "level": "BE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.2",
+      "technique": "EG",
+      "risk_score": "3×2=6",
+      "source_stories": [
+        "Story 4.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: BE activo",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. PUT /api/v1/contactos/00000000-0000-0000-0000-000000000000/cliente { clienteId: uuid_valido }",
+          "expected_result": "404 Not Found Problem Details",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-20",
+      "title": "Reasignar contacto al mismo cliente (no-op)",
+      "priority": "P2",
+      "level": "FE+BE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.6",
+      "technique": "EC",
+      "risk_score": "2×3=6",
+      "source_stories": [
+        "Story 4.6"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Contacto asociado a Empresa A",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Iniciar reasignación → seleccionar Empresa A (misma) → confirmar",
+          "expected_result": "Sin error; sin duplicate entry; contacto sigue en Empresa A; sin PUT o PUT idempotente",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-21",
+      "title": "Asociar contacto ya asignado a otro cliente — reasignación implícita",
+      "priority": "P0",
+      "level": "FE+BE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.2",
+      "technique": "EC",
+      "risk_score": "4×4=16",
+      "source_stories": [
+        "Story 4.2"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Contacto con clienteId=EmpresaA, siendo asociado desde ContactManager de EmpresaB",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Desde ContactManager de Empresa B, seleccionar contacto que ya pertenece a Empresa A",
+          "expected_result": "Sistema ejecuta reasignación (PUT {clienteId: EmpresaBId}); contacto desaparece de Empresa A; aparece en Empresa B; las 3 query keys invalidadas",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-22",
+      "title": "Concurrencia: 2 usuarios reasignan el mismo contacto simultáneamente",
+      "priority": "P0",
+      "level": "FE+BE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.6",
+      "technique": "EC",
+      "risk_score": "5×4=20",
+      "source_stories": [
+        "Story 4.6"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Contacto asociado a Empresa A",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "User A envía PUT {clienteId: EmpresaBId}",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "User B envía PUT {clienteId: EmpresaCId} al mismo tiempo",
+          "expected_result": "Último en llegar gana (last-write-wins); base de datos atómica; sin error 500; sin datos corruptos; estado final es consistente",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-23",
+      "title": "Navegación profunda: cliente→contacto→cliente→contacto (5 niveles)",
+      "priority": "P2",
+      "level": "FE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.3",
+      "technique": "EC",
+      "risk_score": "2×3=6",
+      "source_stories": [
+        "Story 4.3"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: Datos reales en BD",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "1. Navegar entre contactos y clientes alternando 5 veces",
+          "expected_result": "Sin errores de memoria; sin bucles de redirección; historial del browser navegable correctamente en cada nivel",
+          "data": ""
+        }
+      ]
+    },
+    {
+      "tc_id": "TC-F4-24",
+      "title": "Cliente eliminado mientras otro usuario lo visualiza",
+      "priority": "P2",
+      "level": "FE+BE",
+      "feature": "Association & Data Quality",
+      "epics": "Story 4.1",
+      "technique": "EC",
+      "risk_score": "3×3=9",
+      "source_stories": [
+        "Story 4.1"
+      ],
+      "steps": [
+        {
+          "action": "SETUP: User A viendo cliente; User B elimina ese cliente",
+          "expected_result": "Precondiciones verificadas",
+          "data": ""
+        },
+        {
+          "action": "User A está en /clientes/:id",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "User B elimina ese cliente",
+          "expected_result": "Paso ejecutado correctamente",
+          "data": ""
+        },
+        {
+          "action": "User A intenta usar el ContactManager",
+          "expected_result": "ContactManager o detalle del cliente muestra error 404 gestionado (ErrorPanel o mensaje); sin crash JavaScript; sin stack trace (NFR6)",
+          "data": ""
+        }
+      ]
+    }
+  ],
+  "traceability": {
+    "Story 1.2": [
+      "TC-F1-10",
+      "TC-F1-06",
+      "TC-F1-03",
+      "TC-F1-09",
+      "TC-F1-04",
+      "TC-F1-08",
+      "TC-F1-07",
+      "TC-F1-01",
+      "TC-F1-02",
+      "TC-F1-05"
+    ],
+    "Story 2.1": [
+      "TC-F2-06",
+      "TC-F2-03",
+      "TC-F2-02",
+      "TC-F2-01",
+      "TC-F2-05",
+      "TC-F2-04"
+    ],
+    "Story 2.2": [
+      "TC-F2-08",
+      "TC-F2-09",
+      "TC-F2-07"
+    ],
+    "Story 2.3": [
+      "TC-F2-29",
+      "TC-F2-10",
+      "TC-F2-27",
+      "TC-F2-23",
+      "TC-F2-14",
+      "TC-F2-25",
+      "TC-F2-12",
+      "TC-F2-26",
+      "TC-F2-24",
+      "TC-F2-28",
+      "TC-F2-11",
+      "TC-F2-13"
+    ],
+    "Story 2.4": [
+      "TC-F2-30",
+      "TC-F2-15",
+      "TC-F2-18",
+      "TC-F2-16",
+      "TC-F2-17"
+    ],
+    "Story 2.5": [
+      "TC-F2-20",
+      "TC-F2-21",
+      "TC-F2-22",
+      "TC-F2-19"
+    ],
+    "Story 3.1": [
+      "TC-F3-02",
+      "TC-F3-05",
+      "TC-F3-03",
+      "TC-F3-04",
+      "TC-F3-20",
+      "TC-F3-01"
+    ],
+    "Story 3.2": [
+      "TC-F3-21",
+      "TC-F3-06"
+    ],
+    "Story 3.3": [
+      "TC-F3-19",
+      "TC-F3-18",
+      "TC-F3-17",
+      "TC-F3-10",
+      "TC-F3-07",
+      "TC-F3-16",
+      "TC-F3-11",
+      "TC-F3-09",
+      "TC-F3-08"
+    ],
+    "Story 3.4": [
+      "TC-F3-12",
+      "TC-F3-13"
+    ],
+    "Story 3.5": [
+      "TC-F3-15",
+      "TC-F3-14"
+    ],
+    "Story 4.1": [
+      "TC-F4-24",
+      "TC-F4-02",
+      "TC-F4-03",
+      "TC-F4-01"
+    ],
+    "Story 4.2": [
+      "TC-F4-21",
+      "TC-F4-05",
+      "TC-F4-19",
+      "TC-F4-06",
+      "TC-F4-18",
+      "TC-F4-04"
+    ],
+    "Story 4.3": [
+      "TC-F4-07",
+      "TC-F4-23",
+      "TC-F4-08"
+    ],
+    "Story 4.4": [
+      "TC-F4-11",
+      "TC-F4-10",
+      "TC-F4-09"
+    ],
+    "Story 4.5": [
+      "TC-F4-15",
+      "TC-F4-14",
+      "TC-F4-13",
+      "TC-F4-12"
+    ],
+    "Story 4.6": [
+      "TC-F4-16",
+      "TC-F4-17",
+      "TC-F4-20",
+      "TC-F4-22"
+    ]
+  }
+}

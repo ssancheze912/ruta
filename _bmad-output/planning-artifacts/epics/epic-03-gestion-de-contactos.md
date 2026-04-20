@@ -1,3 +1,4 @@
+<!-- FEATURE_CODE_JIRA=PENDING:gestion-de-contactos -->
 ## Gestión de Contactos
 
 ### Epic 3: Contact Management

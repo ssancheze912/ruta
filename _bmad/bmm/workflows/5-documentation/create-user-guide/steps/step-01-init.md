@@ -7,11 +7,13 @@ workflow_path: '{project-root}/_bmad/bmm/workflows/5-documentation/create-user-g
 
 # File References
 thisStepFile: '{workflow_path}/steps/step-01-init.md'
-nextStepFile: '{workflow_path}/steps/step-02-seleccion-epicas.md'
-continueFile: '{workflow_path}/steps/step-01b-continue.md'
+nextStepFile: '{workflow_path}/steps/step-02-seleccion-features.md'
 workflowFile: '{workflow_path}/workflow.md'
-outputFileSpanish: '{output_folder}/documentation-artifacts/user-guide/es/{audience}-guide.md'
+featuresOutputFolder: '{output_folder}/documentation-artifacts/user-guide'
 templateSpanish: '{workflow_path}/templates/user-guide-template-es.md'
+
+# Output: ONE FILE PER FEATURE at {featuresOutputFolder}/{feature-slug}-guide.md
+# State is kept in memory during the session (no state file)
 
 # Data References
 audienceTypesData: '{workflow_path}/data/audience-types.csv'
@@ -28,7 +30,13 @@ bmmConfig: '{project-root}/_bmad/bmm/config.yaml'
 
 ## STEP GOAL:
 
-Detectar si existe un workflow en ejecución (continuación) o inicializar un nuevo workflow de generación de guías de usuario. Determinar audiencia objetivo, verificar guías existentes para evitar sobrescrituras accidentales, y crear el documento de output con frontmatter inicial.
+Inicializar el workflow de generación de guías de usuario. Verificar qué features ya tienen documentación en `{featuresOutputFolder}/` para saber si es re-ejecución o nueva. El estado se mantiene en memoria durante la sesión.
+
+**ARQUITECTURA DE OUTPUT:**
+- Un archivo por feature: `{featuresOutputFolder}/{feature-slug}-guide.md`
+- Si el archivo de la feature ya existe → se actualiza (action: update)
+- Si no existe → se crea nuevo (action: create)
+- Sin archivo de estado externo — todo en memoria
 
 ## MANDATORY EXECUTION RULES (READ FIRST):
 
@@ -58,8 +66,7 @@ Detectar si existe un workflow en ejecución (continuación) o inicializar un nu
 ## EXECUTION PROTOCOLS:
 
 - 🎯 Show analysis before taking any action
-- 💾 Initialize document and update frontmatter
-- 📖 Set up frontmatter `stepsCompleted: [1]` before loading next step
+- 💾 Keep all state in memory (no external state file)
 - 🚫 FORBIDDEN to load next step until setup is complete
 
 ## CONTEXT BOUNDARIES:
@@ -91,200 +98,95 @@ Load and parse `{audienceTypesData}` to understand available audience types:
 - api (Consumidores de API / API Consumers)
 - mixed (Audiencia Mixta / Mixed Audience)
 
-### 3. Check for Existing User Guides
+### 3. Check for Existing Feature Docs
 
-Scan for existing user guides in:
-- `{output_folder}/documentation-artifacts/user-guide/es/*.md`
-- `{output_folder}/documentation-artifacts/user-guide/en/*.md`
+Scan `{featuresOutputFolder}/` for files matching `*-guide.md`.
 
-For each guide found:
-- Read frontmatter to extract: target_audience, generated_date, review_status
-- Check if it has `stepsCompleted` array
+For each file found, read its frontmatter to extract: `feature_id`, `feature_slug`, `generated_date`, `review_status`.
 
-### 4. Handle Continuation (If Guides Exist with stepsCompleted)
+Build a lookup map in memory: `{ "gestion-de-clientes": { generated_date, review_status }, ... }`
 
-**If guides exist with `stepsCompleted` array AND steps are incomplete:**
+- If any files found → existing documentation detected (step 5)
+- If no files found → fresh workflow (step 6)
 
-"🔄 **Workflow en Ejecución Detectado**
+This map will be used in step-02 to identify which features are **new** vs **update**.
 
-He encontrado una guía de usuario en progreso:
-- Audiencia: {target_audience}
-- Última modificación: {last_modified}
-- Steps completados: {stepsCompleted}
-- Step actual: {currentStep}
+### 5. Handle Existing Documentation
 
-Voy a cargar el estado previo para continuar donde dejamos..."
+**If any `*-guide.md` files exist in `{featuresOutputFolder}`:**
 
-**STOP here and immediately load, read entire file, then execute `{continueFile}`**
+List the existing feature docs found in step 3.
 
-### 5. Handle Completed Guides
+"✅ **Documentación Existente Encontrada**
 
-**If guides exist with ALL steps completed (stepsCompleted includes all 7 steps):**
-
-"✅ **Guía Existente Encontrada**
-
-He encontrado una guía de usuario completada:
-- Audiencia: {target_audience}
-- Generada: {generated_date}
-- Estado: {review_status}
+Ya existe documentación generada para las siguientes features:
+{for each existing feature doc}
+- **{feature_id}** — {feature_slug}-guide.md (generada: {generated_date}, estado: {review_status})
+{end for}
 
 ¿Qué deseas hacer?
 
-**[N]** Nueva guía - Crear una nueva guía de usuario
-**[U]** Update - Actualizar la guía existente (re-ejecutar workflow)
-**[R]** Replace - Reemplazar completamente (borrar y crear nueva)
+**[N]** Nueva ejecución - Seleccionar features adicionales o regenerar
+**[U]** Update - Actualizar features existentes (re-ejecutar workflow)
 **[X]** Cancel - Cancelar workflow
 
 Por favor selecciona una opción:"
 
 **Menu Handling:**
-- IF N: Continue with fresh workflow (step 6)
-- IF U: Load `{continueFile}` to resume and update
-- IF R: Delete existing files, continue with fresh workflow (step 6)
+- IF N: Continue with fresh run (step 6) — existing feature files are preserved unless re-selected
+- IF U: Continue with fresh run (step 6) — step-02 will mark existing features as action: update
 - IF X: HALT workflow and inform user
 
 ### 6. Fresh Workflow Setup (If No Guides or User Selected New)
 
 "👋 **Bienvenido al Generador de Guías de Usuario**
 
-Este workflow te ayudará a crear guías de usuario comprehensivas en español e inglés desde la documentación existente de tu proyecto (PRDs, épicas, stories).
+Este workflow te ayudará a crear guías de usuario comprehensivas en español desde las features del proyecto (archivos PRD + épicas individuales por feature).
 
 **Características:**
-- 📄 Guías bilingües (español/inglés) con estructura idéntica
+- 📄 Guía en español, archivo único actualizable por feature
 - 📊 Diagramas Mermaid para features y workflows
 - 📸 Screenshot placeholders con índice consolidado
-- 🔗 Trazabilidad completa a fuentes (épicas, stories)
+- 🔗 Trazabilidad completa a fuentes (features, stories)
 - ✅ Validación de completitud y calidad
 
 Comencemos configurando la guía de usuario..."
 
 #### A. Determine Target Audience
 
-"**¿Para qué audiencia deseas generar la guía de usuario?**
+<!-- AUDIENCE SELECTION DISABLED: always use enduser by default. Do NOT show audience menu to user. -->
 
-Según tu proyecto, puedo crear guías optimizadas para:
+Auto-select without asking:
+- audience_id = "enduser"
+- filename_prefix = "enduser-guide"
 
-**[E]** Usuarios Finales (Enduser)
-   - Personas que interactúan con la aplicación
-   - Enfoque: tareas cotidianas, UI, workflows
-
-**[A]** Administradores (Admin)
-   - Personas que gestionan el sistema
-   - Enfoque: configuración, gestión de usuarios, mantenimiento
-
-**[I]** Consumidores de API (API)
-   - Desarrolladores que integran con el sistema
-   - Enfoque: endpoints, autenticación, ejemplos de código
-
-**[M]** Audiencia Mixta (Mixed)
-   - Usuarios finales + administradores
-   - Enfoque: guía completa con todas las perspectivas
-
-Por favor selecciona una opción (E/A/I/M):"
-
-**Wait for user input and parse response:**
-- E → audience_id = "enduser", filename_prefix = "enduser-guide"
-- A → audience_id = "admin", filename_prefix = "admin-guide"
-- I → audience_id = "api", filename_prefix = "api-guide"
-- M → audience_id = "mixed", filename_prefix = "complete-guide"
+<!-- Available options (kept for reference, not shown):
+- E → enduser / enduser-guide
+- A → admin / admin-guide
+- I → api / api-guide
+- M → mixed / complete-guide
+-->
 
 Store selected audience information from CSV data.
 
-#### B. Create Output Document
-
-Load template from `{templateSpanish}` and create initial Spanish output file at:
-`{output_folder}/documentation-artifacts/user-guide/es/{filename_prefix}.md`
-
-Initialize with frontmatter:
-
-```yaml
----
-# Workflow state
-stepsCompleted: [1]
-currentStep: step-01-init
-workflow_name: create-user-guide
-workflow_version: 1.0.0
-
-# Project context
-project_name: "{project_name}"
-generated_date: "{current_date}"
-last_modified: "{current_timestamp}"
-
-# Configuration
-target_audience: "{audience_id}"
-output_language: "es"
-epics_selected: []
-epics_excluded: []
-
-# Source artifacts discovered (populated in step-03)
-source_artifacts:
-  prd_docs: []
-  epics_file: ""  # Path to consolidated epics.md file
-  architecture_docs: []
-  workflow_docs: []
-
-# Content tracking
-features_documented: 0
-workflows_documented: 0
-diagrams_generated: 0
-screenshot_placeholders: 0
-
-# Quality metrics
-source_citations_count: 0
-completeness_score: 0
-review_status: "draft"
-
-# User preferences (populated in step-04)
-technical_level: ""
-include_troubleshooting: false
-additional_scenarios: []
-
-# Bilingual output
-spanish_version: "{output_folder}/documentation-artifacts/user-guide/es/{filename_prefix}.md"
-english_version: "{output_folder}/documentation-artifacts/user-guide/en/{filename_prefix}.md"
-translation_completed: false
----
-
-# {project_name} - Guía de Usuario
-
-[El contenido se generará en los siguientes steps]
-```
-
-#### C. Confirmation Message
+#### B. Confirmation Message
 
 "✅ **Configuración Inicial Completada**
 
 - Audiencia objetivo: **{audience_name_es}**
-- Idioma base: Español (se traducirá a inglés en step-06)
-- Documento creado: `{output_folder}/documentation-artifacts/user-guide/es/{filename_prefix}.md`
+- Idioma: Español
+- Arquitectura: Un archivo por feature en `{output_folder}/documentation-artifacts/user-guide/`
+- Estado del workflow: `_workflow-state.md`
 
-Continuando a la selección de épicas..."
+Continuando a la selección de features..."
 
-### 7. Update State and Proceed
+### 7. Proceed Automatically
 
-Before loading next step:
-- Ensure frontmatter.stepsCompleted = [1]
-- Ensure frontmatter.currentStep = "step-02-seleccion-epicas"
-- Save outputFile
-
-### 8. Present MENU OPTIONS
-
-Display: **Select an Option:** [C] Continue
-
-#### EXECUTION RULES:
-
-- ALWAYS halt and wait for user input after presenting menu
-- ONLY proceed to next step when user selects 'C'
-- User can chat or ask questions - always respond and then end with display again of the menu options
-
-#### Menu Handling Logic:
-
-- IF C: Update frontmatter, then load, read entire file, then execute `{nextStepFile}`
-- IF Any other comments or queries: help user respond then [Redisplay Menu Options](#8-present-menu-options)
+- Load, read entire file, then execute `{nextStepFile}` immediately (no menu, no pause)
 
 ## CRITICAL STEP COMPLETION NOTE
 
-ONLY WHEN C is selected and initialization is complete (OR continuation is properly routed to step-01b-continue.md), will you then load, read entire file, then execute `{nextStepFile}` to begin epic selection.
+NO MENU in this step. Proceed automatically to `{nextStepFile}`.
 
 ---
 
@@ -294,20 +196,18 @@ ONLY WHEN C is selected and initialization is complete (OR continuation is prope
 
 - Configuration loaded from config.yaml
 - Audience types loaded from CSV
-- Existing guides checked and handled appropriately
-- Continuation routed to step-01b-continue.md if needed
-- OR new document created from template with complete frontmatter
-- frontmatter.stepsCompleted = [1]
-- User welcomed and confirmed audience selection
+- `{featuresOutputFolder}` scanned for existing `*-guide.md` files
+- Existing docs detected → [N]/[U]/[X] menu shown, or fresh run started
+- User welcomed and audience auto-selected (enduser)
+- Feature doc lookup map built in memory
 - Ready to proceed to step 2
 
 ### ❌ SYSTEM FAILURE:
 
-- Not checking for existing documents properly
-- Not routing to step-01b-continue.md when appropriate
-- Creating duplicate documents
+- Not scanning for existing feature docs in `{featuresOutputFolder}`
+- Creating a single monolithic output file (forbidden — must be per-feature)
+- Creating `_workflow-state.md` (forbidden — no state file)
 - Missing audience configuration
-- Not initializing frontmatter completely
-- Proceeding without user confirmation
+- Proceeding without user confirmation when docs already exist
 
 **Master Rule:** Skipping steps, optimizing sequences, or not following exact instructions is FORBIDDEN and constitutes SYSTEM FAILURE.

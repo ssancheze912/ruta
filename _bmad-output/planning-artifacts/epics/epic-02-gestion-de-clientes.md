@@ -1,3 +1,4 @@
+<!-- FEATURE_CODE_JIRA=PENDING:gestion-de-clientes -->
 ## Gestión de Clientes
 
 ### Epic 2: Client Management

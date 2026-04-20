@@ -19,3 +19,4 @@
 - [Gestión de Clientes](./feature-gestion-de-clientes.md)
 - [Gestión de Contactos](./feature-gestion-de-contactos.md)
 - [Asociación Cliente ↔ Contacto](./feature-asociacion-cliente-contacto.md)
+- [Payment service](./feature-payment-service.md)

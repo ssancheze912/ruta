@@ -1,0 +1,57 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - img "Siesa" [ref=e6]
+  - generic [ref=e8]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - button "Clientes" [ref=e13] [cursor=pointer]:
+          - img [ref=e16]
+        - button "Contactos" [active] [ref=e18] [cursor=pointer]:
+          - img [ref=e21]
+      - generic [ref=e23]:
+        - separator [ref=e24]
+        - button "Expandir" [ref=e26]:
+          - img [ref=e28]
+    - generic [ref=e114]:
+      - generic [ref=e115]:
+        - generic [ref=e116]:
+          - heading "Contactos" [level=1] [ref=e117]
+          - button "Sin cliente (0)" [ref=e118]:
+            - generic [ref=e119]: Sin cliente (0)
+        - button "Nuevo contacto" [ref=e120]:
+          - generic [ref=e121]: Nuevo contacto
+      - textbox "Buscar contactos" [ref=e125]:
+        - /placeholder: Buscar por nombre o email
+      - generic [ref=e128]:
+        - button "Nombre" [ref=e129] [cursor=pointer]:
+          - generic [ref=e130]: Nombre
+        - generic [ref=e134]: Cargo
+        - generic [ref=e136]: Teléfono
+        - generic [ref=e138]: Email
+        - generic [ref=e140]: Cliente
+        - generic [ref=e142]:
+          - generic [ref=e144]: contactofff
+          - generic [ref=e146]: Directorfff
+          - generic [ref=e148]: "123333"
+          - generic [ref=e150]: saantiago.esquivel@correounivalle.edu.co
+          - generic [ref=e153]: testttt
+          - generic [ref=e156]:
+            - button "Ver" [ref=e157]:
+              - generic [ref=e158]: Ver
+            - button "Editar" [ref=e159]:
+              - generic [ref=e160]: Editar
+            - button "Eliminar" [ref=e161]:
+              - generic [ref=e162]: Eliminar
+        - generic [ref=e163]:
+          - generic [ref=e165]: test
+          - generic [ref=e167]: Director
+          - generic [ref=e169]: "3186287645"
+          - generic [ref=e171]: santiago.esqssssuivel@correounivalle.edu.co
+          - generic [ref=e174]: SANTIAGO SANCHEZ ESQUIVEL
+          - generic [ref=e177]:
+            - button "Ver" [ref=e178]:
+              - generic [ref=e179]: Ver
+            - button "Editar" [ref=e180]:
+              - generic [ref=e181]: Editar
+            - button "Eliminar" [ref=e182]:
+              - generic [ref=e183]: Eliminar

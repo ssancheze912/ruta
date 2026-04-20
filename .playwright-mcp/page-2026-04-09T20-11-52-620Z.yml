@@ -1,0 +1,59 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - navigation [ref=e4]:
+      - img [ref=e143]
+    - generic [ref=e8]:
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - button [ref=e144] [cursor=pointer]:
+            - img [ref=e16]
+          - button [ref=e145] [cursor=pointer]:
+            - img [ref=e21]
+        - generic [ref=e23]:
+          - separator [ref=e24]
+          - button [ref=e146]:
+            - img [ref=e28]
+      - generic [ref=e103]:
+        - generic [ref=e104]:
+          - heading [level=1] [ref=e147]: contactofff
+          - generic [ref=e106]:
+            - button [ref=e148]:
+              - generic [ref=e108]: Editar
+            - button [ref=e149]:
+              - generic [ref=e110]: Eliminar
+            - button [ref=e150]:
+              - generic [ref=e112]: Reasignar cliente
+            - button [ref=e151]:
+              - generic [ref=e114]: Volver
+        - generic [ref=e115]:
+          - generic [ref=e116]:
+            - paragraph [ref=e118]: Nombre
+            - paragraph [ref=e120]: contactofff
+          - generic [ref=e121]:
+            - paragraph [ref=e123]: Cargo
+            - paragraph [ref=e125]: Directorfff
+          - generic [ref=e126]:
+            - paragraph [ref=e128]: Teléfono
+            - paragraph [ref=e130]: "123333"
+          - generic [ref=e131]:
+            - paragraph [ref=e133]: Email
+            - paragraph [ref=e135]: saantiago.esquivel@correounivalle.edu.co
+          - generic [ref=e136]:
+            - paragraph [ref=e138]: Cliente
+            - paragraph [ref=e140]:
+              - button [ref=e152]:
+                - generic [ref=e142]: testttt
+  - dialog "Reasignar a otro cliente" [ref=e156]:
+    - heading "Reasignar a otro cliente" [level=2] [ref=e158]
+    - generic [ref=e159]:
+      - button "Seleccionar cliente destino" [active] [ref=e161]:
+        - generic [ref=e162]: Seleccionar cliente...
+        - img [ref=e163]
+      - generic [ref=e165]:
+        - button "Cancelar" [ref=e166]:
+          - generic [ref=e167]: Cancelar
+        - button "Guardar" [disabled]:
+          - generic: Guardar
+    - button "Close" [ref=e168]:
+      - img
+      - generic [ref=e169]: Close

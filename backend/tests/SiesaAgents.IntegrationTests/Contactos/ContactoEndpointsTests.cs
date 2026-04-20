@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SiesaAgents.Application.Contactos.DTOs;
+using SiesaAgents.Domain.Clientes.Entities;
 using SiesaAgents.Domain.Contactos.Entities;
 using SiesaAgents.Infrastructure.Data;
 using Testcontainers.PostgreSql;
@@ -376,5 +377,64 @@ public class ContactoEndpointsTests : IAsyncLifetime
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+    }
+
+    [Fact]
+    public async Task UpdateContacto_PreservesClienteId_AfterUpdate()
+    {
+        // GIVEN: A cliente and a contacto assigned to that cliente
+        await using var factory = CreateFactory();
+        await MigrateAsync(factory);
+
+        Guid contactoId, clienteId;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+            var cliente = new ClienteEntity
+            {
+                Nombre = "Cliente Preservacion",
+                Nit = "preserve-001",
+                Telefono = "3001234567",
+                Ciudad = "Bogotá",
+            };
+            db.Clientes.Add(cliente);
+            await db.SaveChangesAsync();
+            clienteId = cliente.Id;
+
+            var contacto = new ContactoEntity
+            {
+                Nombre = "Contacto Original",
+                Cargo = "Analista",
+                Telefono = "3007654321",
+                Email = "original@preserve.com",
+                ClienteId = clienteId,
+            };
+            db.Contactos.Add(contacto);
+            await db.SaveChangesAsync();
+            contactoId = contacto.Id;
+        }
+
+        // WHEN: The contact is updated with new field values (clienteId not part of PUT body)
+        var httpClient = factory.CreateClient();
+        var request = new { Nombre = "Contacto Actualizado", Cargo = "Senior Analista", Telefono = "3009876543", Email = "actualizado@preserve.com" };
+        var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+        var response = await httpClient.PutAsync($"/api/v1/contactos/{contactoId}", content);
+
+        // THEN: 200 OK and clienteId is unchanged in the response
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var json = await response.Content.ReadAsStringAsync();
+        var dto = JsonSerializer.Deserialize<ContactoDto>(json, JsonOptions);
+        Assert.NotNull(dto);
+        Assert.Equal("Contacto Actualizado", dto!.Nombre);
+        Assert.Equal(clienteId, dto.ClienteId);
+
+        // AND: A subsequent GET by id still returns the same clienteId
+        var getResponse = await httpClient.GetAsync($"/api/v1/contactos/{contactoId}");
+        Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
+        var getJson = await getResponse.Content.ReadAsStringAsync();
+        var getDto = JsonSerializer.Deserialize<ContactoDto>(getJson, JsonOptions);
+        Assert.NotNull(getDto);
+        Assert.Equal(clienteId, getDto!.ClienteId);
     }
 }

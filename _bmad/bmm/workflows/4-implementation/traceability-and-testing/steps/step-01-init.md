@@ -13,7 +13,7 @@ workflowFile: '{workflow_path}/workflow.md'
 
 # Output Directories
 traceabilityArtifactsDir: '{implementation_artifacts}/traceability-artifacts'
-epicTestPlansDir: '{implementation_artifacts}/epic-test-plans'
+featurePlansDir: '{implementation_artifacts}/feature-test-plans'
 
 # Output Files (4 main files in traceability-artifacts/)
 testCasesFile: '{implementation_artifacts}/traceability-artifacts/test-cases.csv'
@@ -21,8 +21,8 @@ testCasesSummaryFile: '{implementation_artifacts}/traceability-artifacts/test-ca
 traceabilityMapFile: '{implementation_artifacts}/traceability-artifacts/traceability-map.md'
 traceabilityExportFile: '{implementation_artifacts}/traceability-artifacts/traceability-export.csv'
 
-# Epic test plan files go in epic-test-plans/ (generated in Step 4)
-# epicTestPlansDir: '{implementation_artifacts}/epic-test-plans'
+# Feature test plan files go in feature-test-plans/ (generated in Step 4)
+# featurePlansDir: '{implementation_artifacts}/feature-test-plans'
 
 # Template Files
 templateFile: '{workflow_path}/templates/traceability-map-template.md'
@@ -37,7 +37,7 @@ testCaseStructureDoc: '{workflow_path}/templates/test-cases-structure.md'
 
 ## STEP GOAL:
 
-To initialize the traceability and test planning workflow by detecting continuation state, validating prerequisite documents exist (epics.md, pruebas_comandera.xlsm), and extracting FR/Epic/Story structure.
+To initialize the traceability and test planning workflow by detecting continuation state, validating prerequisite documents exist (feature-status.yaml, pruebas_comandera.xlsm), and extracting Feature/Story structure from the individual epic source files.
 
 ## MANDATORY EXECUTION RULES (READ FIRST):
 
@@ -172,8 +172,8 @@ Proceed to section 2 (Welcome and Overview).
 "¡Bienvenido {user_name} al workflow de Trazabilidad y Planificación de Pruebas!
 
 Este workflow te ayudará a:
-- 📊 Generar un mapa completo de trazabilidad (FR→Epic→Story→Task)
-- 🧪 Crear planes de prueba consolidados por épica
+- 📊 Generar un mapa completo de trazabilidad (FR→Feature→Story→Task)
+- 🧪 Crear planes de prueba consolidados por feature
 - 📈 Analizar cobertura de casos de prueba
 - ⚠️ Identificar gaps en la cobertura de testing
 
@@ -181,7 +181,7 @@ El workflow es lineal con 5 pasos:
 1. **Validar Prerequisitos** (este paso)
 2. **Construir Mapa de Trazabilidad**
 3. **Interpretar Casos de Prueba**
-4. **Generar Planes de Prueba por Épica**
+4. **Generar Planes de Prueba por Feature**
 5. **Exportar Artefactos** (Markdown + Excel)
 
 Todos los artefactos se generarán en: `{implementation_artifacts}/`
@@ -196,32 +196,41 @@ Todos los artefactos se generarán en: `{implementation_artifacts}/`
 
 This workflow can operate in two modes:
 
-**Mode 1: Complete Traceability** (epics.md + test cases)
-- Generates FR→Epic→Story→Task→Test Case traceability
-- Requires: epics.md + test case file
+**Mode 1: Complete Traceability** (feature-status.yaml + test cases)
+- Generates Feature→Story→Task→Test Case traceability
+- Reads the `feature-status.yaml` registry and loads each feature's `epic_source` file
+- Requires: feature-status.yaml + test case file
 
 **Mode 2: Test-Based Traceability** (test cases only)
 - Generates traceability from existing test cases
 - Extracts structure from test case organization (OP, Suite, Test Case)
 - Requires: Only test case file
 
-**Search for epics.md:**
+**Search for feature-status.yaml:**
 
-Use Glob to search for epics file in planning artifacts (output from Phase 3: Solutioning):
+Use Glob to search for the feature registry file:
 
 ```
-Pattern: {planning_artifacts}/*epic*.md
+Pattern: {implementation_artifacts}/feature-status.yaml
 ```
 
 **If found:**
-"✅ Archivo de épicas encontrado: `[path]`
+- Read and parse the YAML file
+- Extract list of features: `[{id, epic_source, status, last_update}, ...]`
 
-El workflow operará en **Modo 1: Trazabilidad Completa** (FR→Epic→Story→Task→Test Case)"
+"✅ Registro de features encontrado: `{implementation_artifacts}/feature-status.yaml`
 
-Store: `workflow_mode = "complete"`
+Features disponibles:
+{for each feature in features:
+  \"  • {feature.id} → {feature.epic_source} (status: {feature.status})\"
+}
+
+El workflow operará en **Modo 1: Trazabilidad Completa** (Feature→Story→Task→Test Case)"
+
+Store: `workflow_mode = "complete"`, `all_features = [parsed feature list]`
 
 **If NOT found:**
-"ℹ️ No se encontró el archivo de épicas.
+"ℹ️ No se encontró el archivo `feature-status.yaml`.
 
 El workflow operará en **Modo 2: Trazabilidad Basada en Casos de Prueba**.
 
@@ -229,9 +238,9 @@ En este modo:
 - Se extraerá la estructura de trazabilidad desde los casos de prueba existentes
 - Se organizará por Tipo de Prueba → Escenario/Suite → Caso de Prueba
 - Se generarán planes de prueba consolidados por Tipo/Suite
-- No se generará mapeo a FR/Epic/Story (requiere epics.md)
+- No se generará mapeo a Features/Stories (requiere feature-status.yaml)
 
-**Nota:** Si deseas trazabilidad completa con FRs/Epics/Stories, ejecuta primero el workflow `create-epics-and-stories`.
+**Nota:** Si deseas trazabilidad completa, asegúrate de que exista `{implementation_artifacts}/feature-status.yaml`.
 
 ¿Deseas continuar en Modo 2?"
 
@@ -288,10 +297,10 @@ El workflow tiene una base de conocimiento interna con la estructura completa de
 
 1. **test-cases.csv** - Estructura vacía (20 columnas) que el workflow poblará automáticamente
 2. **test-cases-summary.md** - Resumen de casos de prueba generados
-3. **traceability-map.md** - Trazabilidad completa (FR→Epic→Story→Task→Test Case)
+3. **traceability-map.md** - Trazabilidad completa (FR→Feature→Story→Task→Test Case)
 4. **traceability-export.csv** - Trazabilidad exportada en CSV
 
-🤖 **Generación Automática:** El workflow analizará los FRs/Epics/Stories de tu proyecto y generará automáticamente casos de prueba relevantes para cada funcionalidad.
+🤖 **Generación Automática:** El workflow analizará los FRs/Features/Stories de tu proyecto y generará automáticamente casos de prueba relevantes para cada funcionalidad.
 
 ¿Deseas continuar y crear estos archivos, {user_name}?"
 
@@ -301,7 +310,7 @@ El workflow tiene una base de conocimiento interna con la estructura completa de
 
 "Perfecto. Voy a crear los archivos necesarios para el proyecto.
 
-El archivo de casos de prueba se creará VACÍO (solo estructura). El workflow generará automáticamente los casos de prueba basándose en los FRs/Epics/Stories encontrados en tu proyecto."
+El archivo de casos de prueba se creará VACÍO (solo estructura). El workflow generará automáticamente los casos de prueba basándose en los FRs/Features/Stories encontrados en tu proyecto."
 
 **Actions:**
 
@@ -309,8 +318,8 @@ El archivo de casos de prueba se creará VACÍO (solo estructura). El workflow g
    - Create directory: {implementation_artifacts}/traceability-artifacts
    - This will contain the 4 main workflow output files
 
-2. **Create epic-test-plans directory:**
-   - Create directory: {implementation_artifacts}/epic-test-plans
+2. **Create feature-test-plans directory:**
+   - Create directory: {implementation_artifacts}/feature-test-plans
    - This will contain individual epic test plan files (generated in Step 4)
 
 3. **Create EMPTY test cases file (structure only, NO data):**
@@ -335,7 +344,7 @@ El archivo de casos de prueba se creará VACÍO (solo estructura). El workflow g
 
 🤖 **El workflow generará automáticamente casos de prueba basándose en:**
 - ✅ Requerimientos Funcionales (FRs) del proyecto
-- ✅ Épicas (Epics) del proyecto
+- ✅ Features del proyecto
 - ✅ Historias de Usuario (Stories) del proyecto
 - ✅ Funcionalidades identificadas
 
@@ -349,13 +358,13 @@ El archivo de casos de prueba se creará VACÍO (solo estructura). El workflow g
 3. **traceability-map.md** - Trazabilidad completa (Steps 2-4)
 4. **traceability-export.csv** - Exportación CSV (Step 5)
 
-📁 **Planes de prueba por épica se generarán en `{implementation_artifacts}/epic-test-plans/`:**
-- epic-1-test-plan.md (Step 4)
-- epic-2-test-plan.md (Step 4)
+📁 **Planes de prueba por feature se generarán en `{implementation_artifacts}/feature-test-plans/`:**
+- feature-1-test-plan.md (Step 4)
+- feature-2-test-plan.md (Step 4)
 - etc.
 
 **En Step 3, el workflow:**
-1. Analizará automáticamente todos los FRs/Epics/Stories
+1. Analizará automáticamente todos los FRs/Features/Stories
 2. Generará casos de prueba para cada funcionalidad
 3. Poblará test-cases.csv con los casos generados
 4. Creará el resumen en test-cases-summary.md
@@ -513,19 +522,19 @@ Store structure information in memory for use in Step 3 parsing.
 
 ---
 
-### 5. Extract Requirements and Epics (Mode 1 Only)
+### 5. Extract Features and Stories (Mode 1 Only)
 
-**CONDITIONAL:** Only execute this section if `workflow_mode = "complete"` (epics.md found)
+**CONDITIONAL:** Only execute this section if `workflow_mode = "complete"` (feature-status.yaml found)
 
 **If Mode 1 (Complete Traceability):**
 
-Read the epics.md file completely:
+For each feature in `filtered_features` (the selected features), read its `epic_source` file:
 
 ```
-Read: {path_to_epics_md}
+Read: {feature.epic_source}  (path relative to {project-root})
 ```
 
-**Extract the following:**
+**Extract the following from each epic_source file:**
 
 **A. Functional Requirements (FRs):**
 
@@ -538,45 +547,33 @@ FR2: [Description]
 ...
 ```
 
-Store as array: `frs: [FR-001, FR-002, ...]`
+**B. Feature/Epic title:**
 
-**B. Epics:**
-
-Look for sections starting with "## Epic" (e.g., "## Epic 1: User Management")
-
-Extract Epic ID and Title:
-```
-Epic 1: User Management
-Epic 2: Authentication System
-...
-```
-
-Store as array: `epics: [Epic 1, Epic 2, ...]`
+Extract the main title (first `#` heading) to use as the feature label.
 
 **C. Stories:**
 
-For each Epic section, extract Stories (subsections starting with "### Story")
+Look for sections starting with "### Story" or "## Story".
 
 Extract Story ID and Title:
 ```
-Story 1.1: User Registration
-Story 1.2: User Profile Management
-Story 2.1: Login Functionality
-...
+Story 1.1: ...
+Story 1.2: ...
 ```
-
-Store as hierarchical structure
 
 **D. FR Coverage Map:**
 
-Look for section "### FR Coverage Map" or similar.
+Look for section "### FR Coverage Map" or similar and extract if present.
 
-Extract which Epics cover which FRs:
-```
-FR1 → Epic 1
-FR2 → Epic 1, Epic 2
-FR3 → Epic 3
-...
+**Store combined results (across all selected features):**
+
+```javascript
+frs: [FR-001, FR-002, ...]         // all FRs from selected epic_source files
+features: [                         // feature-level objects
+  { id: "feature-1", title: "...", epic_source: "...", stories: [...], frs: [...] },
+  ...
+]
+stories: [...]                      // flat list of all stories
 ```
 
 ---
@@ -586,54 +583,54 @@ FR3 → Epic 3
 Skip this section. Traceability will be built from test case structure:
 - OP → Suite/Scenario → Test Case
 
-Store as: `frs: []`, `epics: []`, `stories: []`
+Store as: `frs: []`, `features: []`, `stories: []`
 
 "ℹ️ Operando en Modo 2: La trazabilidad se construirá desde la estructura de casos de prueba (OP → Suite → Test Case)"
 
 ---
 
-### 6. Select Epic Scope
+### 6. Select Feature Scope
 
-**CONDITIONAL:** Only execute this section if `workflow_mode = "complete"` (epics found)
+**CONDITIONAL:** Only execute this section if `workflow_mode = "complete"` (feature-status.yaml found)
 
-**Check if epic number was provided as parameter:**
+**Check if feature_id was provided as parameter:**
 
 ```javascript
-if (selected_epic_number !== null && selected_epic_number !== undefined) {
-    // Epic number was provided as parameter - treat as single epic selection
-    epic_scope_mode = "multiple"
-    epic_selection = "single"  // For folder naming (always single when from parameter)
-    target_epic_numbers = [selected_epic_number]
-    epic_count = 1
+if (selected_feature_id !== null && selected_feature_id !== undefined) {
+    // Feature ID was provided as parameter - treat as single feature selection
+    feature_scope_mode = "multiple"
+    feature_selection = "single"  // For folder naming
+    target_feature_ids = [selected_feature_id]
+    feature_count = 1
 
-    // Validate that the epic exists
-    epic_exists = check_epic_exists(target_epic_number, all_epics)
+    // Validate that the feature exists in feature-status.yaml
+    feature_exists = all_features.find(f => f.id === selected_feature_id)
 
-    if (!epic_exists) {
-        Display error and list available epics
+    if (!feature_exists) {
+        Display error and list available feature IDs from feature-status.yaml
         HALT workflow
     }
 } else {
-    // No epic number provided - ask user
+    // No feature ID provided - ask user
     PROCEED TO ASK USER
 }
 ```
 
-**If epic number NOT provided as parameter:**
+**If feature_id NOT provided as parameter:**
 
 "📋 **Selección de Alcance del Workflow**
 
-**Épicas disponibles en el proyecto:**
+**Features disponibles en el proyecto** (desde `feature-status.yaml`):
 
-{for each epic in all_epics:
-  \"Epic {number}: {title}\"
+{for each feature in all_features:
+  \"  • {feature.id} → {feature.epic_source} (status: {feature.status})\"
 }
 
-**Total de épicas disponibles:** {count_all_epics}
+**Total de features disponibles:** {count_all_features}
 
-Los casos de prueba son de alto nivel y a veces una funcionalidad completa (como 'login') se desarrolla en múltiples épicas. Agrupar N épicas permite generar casos de prueba más coherentes que cubran una unidad funcional completa.
+Los casos de prueba son de alto nivel. A veces una unidad funcional completa (como 'gestión de leads') abarca múltiples features. Agrupar features permite generar casos de prueba más coherentes.
 
-¿Cuántas épicas deseas analizar?"
+¿Qué features deseas analizar?"
 
 **Present options using AskUserQuestion tool:**
 
@@ -641,17 +638,17 @@ Los casos de prueba son de alto nivel y a veces una funcionalidad completa (como
 {
   "questions": [
     {
-      "question": "¿Cuántas épicas deseas analizar en este workflow?",
-      "header": "Cantidad",
+      "question": "¿Qué features deseas analizar en este workflow?",
+      "header": "Alcance",
       "multiSelect": false,
       "options": [
         {
-          "label": "Cantidad específica (N épicas)",
-          "description": "Agrupar N épicas para generar casos de prueba consolidados de una unidad funcional completa"
+          "label": "Todos los features",
+          "description": "Generar trazabilidad y planes de prueba para todos los features del proyecto"
         },
         {
-          "label": "Todas las épicas",
-          "description": "Generar trazabilidad y planes de prueba para todas las épicas del proyecto"
+          "label": "Features específicos",
+          "description": "Seleccionar uno o más features específicos para analizar"
         }
       ]
     }
@@ -661,121 +658,100 @@ Los casos de prueba son de alto nivel y a veces una funcionalidad completa (como
 
 **Process user selection:**
 
-**If user selects "Todas las épicas":**
+**If user selects "Todos los features":**
 
 ```javascript
-epic_scope_mode = "all"
-epic_selection = "all"  // For folder naming
-target_epic_numbers = null
-epic_count = count_all_epics
-filtered_epics = all_epics
+feature_scope_mode = "all"
+feature_selection = "all"  // For folder naming
+target_feature_ids = null
+feature_count = count_all_features
+filtered_features = all_features
 
-"✅ **Alcance seleccionado:** Todas las épicas ({count_all_epics} épicas)
+"✅ **Alcance seleccionado:** Todos los features ({count_all_features} features)
 
 El workflow generará:
 - 1 mapa de trazabilidad completo
-- 1 plan de prueba consolidado que agrupa todas las épicas
+- 1 plan de prueba consolidado que agrupa todos los features
 - Casos de prueba para todas las funcionalidades del proyecto"
 ```
 
-**If user selects "Cantidad específica (N épicas)":**
+**If user selects "Features específicos":**
 
-First, ask how many epics:
+Present feature selection (if ≤ 4 features, use AskUserQuestion multiSelect; if > 4, use text input):
 
-"¿Cuántas épicas deseas seleccionar para analizar?
-
-Ingresa un número entre 1 y {count_all_epics}:"
-
-Wait for user input and validate (must be number between 1 and count_all_epics).
-
-Store: `epic_count = user_input_number`
-
-Then, present epic selection using AskUserQuestion with multiSelect:
-
+**If ≤ 4 features:**
 ```json
 {
   "questions": [
     {
-      "question": "Selecciona las {epic_count} épicas que deseas analizar:",
-      "header": "Épicas",
+      "question": "Selecciona los features que deseas analizar:",
+      "header": "Features",
       "multiSelect": true,
       "options": [
         {
-          "label": "Epic 1: {title}",
-          "description": "FRs: {fr_list} | Historias: {story_count}"
-        },
-        {
-          "label": "Epic 2: {title}",
-          "description": "FRs: {fr_list} | Historias: {story_count}"
-        },
-        {
-          "label": "Epic 3: {title}",
-          "description": "FRs: {fr_list} | Historias: {story_count}"
+          "label": "{feature.id}",
+          "description": "{feature.epic_source} | status: {feature.status}"
         }
-        // ... (generate one option per epic)
+        // ... one option per feature
       ]
     }
   ]
 }
 ```
 
-**Note:** Since AskUserQuestion max options is 4, if there are more than 4 epics, use text input instead:
+**If > 4 features, use text input:**
 
-"**Épicas disponibles:**
+"**Features disponibles:**
 
-{list all epics with numbers, FRs, and story counts}
+{list all features with id, epic_source, and status}
 
-Por favor ingresa los números de las épicas que deseas analizar, separados por comas.
-Ejemplo: 1,3,5
+Por favor ingresa los IDs de los features que deseas analizar, separados por comas.
+Ejemplo: feature-1,feature-3
 
-Tu selección (debe seleccionar exactamente {epic_count} épicas):"
+Tu selección:"
 
-Wait for user input and parse response (validate that exactly epic_count numbers are provided).
+Wait for user input and parse response.
 
-**Process epic selection:**
+**Process feature selection:**
 
 ```javascript
-epic_scope_mode = "multiple"
-target_epic_numbers = [extracted_epic_numbers]  // e.g., [1, 3, 5]
+feature_scope_mode = "multiple"
+target_feature_ids = [extracted_feature_ids]  // e.g., ["feature-1", "feature-3"]
 
-// Determine epic_selection for folder naming
-if (target_epic_numbers.length === 1) {
-    epic_selection = "single"
+// Determine feature_selection for folder naming
+if (target_feature_ids.length === 1) {
+    feature_selection = "single"
 } else {
-    epic_selection = "range"
+    feature_selection = "range"
 }
 
-filtered_epics = get_epics_by_numbers(target_epic_numbers)
-filtered_stories = get_stories_for_epics(filtered_epics)
-filtered_frs = get_frs_for_epics(filtered_epics)
+filtered_features = all_features.filter(f => target_feature_ids.includes(f.id))
+feature_count = filtered_features.length
 
-"✅ **Alcance seleccionado:** {epic_count} épicas
+"✅ **Alcance seleccionado:** {feature_count} feature(s)
 
-**Épicas seleccionadas:**
-{for each epic in filtered_epics:
-  \"- Epic {number}: {title}\"
+**Features seleccionados:**
+{for each feature in filtered_features:
+  \"- {feature.id} → {feature.epic_source}\"
 }
 
 El workflow generará:
-- 1 mapa de trazabilidad (épicas seleccionadas)
-- 1 plan de prueba consolidado que agrupa las {epic_count} épicas seleccionadas
+- 1 mapa de trazabilidad (features seleccionados)
+- 1 plan de prueba consolidado que agrupa los {feature_count} features
 - Casos de prueba que cubren la unidad funcional completa
 
-📊 **Elementos a procesar:**
-- Épicas: {epic_count}
-- FRs relacionados: {count_filtered_frs}
-- Historias: {count_filtered_stories}
-- Tareas: {count_filtered_tasks}
-
-Esta agrupación permite generar casos de prueba coherentes que cubren funcionalidades completas que se desarrollaron en múltiples épicas."
+📊 **A procesar:**
+- Features: {feature_count}
+- Archivos epic_source: {feature_count}
+- FRs, Stories y Tasks se extraerán en el siguiente paso"
 ```
 
 **Store selection in memory:**
 
 ```yaml
-epic_scope_mode: "all" | "multiple"
-target_epic_numbers: null | [1, 3, 5]  # Array of epic numbers
-epic_count: {number}  # Count of selected epics
+feature_scope_mode: "all" | "multiple"
+target_feature_ids: null | ["feature-1", "feature-3"]
+feature_count: {number}
 ```
 
 This will be saved to frontmatter in section 8.
@@ -784,13 +760,13 @@ This will be saved to frontmatter in section 8.
 
 **If Mode 2 (Test-Based Traceability):**
 
-Skip epic selection. Mode 2 always processes all test cases.
+Skip feature selection. Mode 2 always processes all test cases.
 
 ```
-epic_scope_mode = "all"
-epic_selection = "all"  // For folder naming
-target_epic_numbers = null
-epic_count = 0
+feature_scope_mode = "all"
+feature_selection = "all"  // For folder naming
+target_feature_ids = null
+feature_count = 0
 ```
 
 ---
@@ -807,7 +783,7 @@ Pattern: {implementation_artifacts}/*story*.md
 "✅ Encontré [N] archivos de historias individuales. Estos se usarán para extraer tareas detalladas."
 
 **If NOT found:**
-"ℹ️ No se encontraron archivos de historias individuales. La trazabilidad se basará en la información de `epics.md`."
+"ℹ️ No se encontraron archivos de historias individuales. La trazabilidad se basará en la información de los archivos epic_source de cada feature."
 
 ---
 
@@ -861,11 +837,11 @@ traceabilityExportFile_relative = make_relative_path(traceabilityExportFile, pro
 ---
 stepsCompleted: [1]
 workflowMode: "complete"
-epicScopeMode: "{epic_scope_mode}"  # "all" or "multiple"
-epicSelection: "{epic_selection}"  # "all", "single", or "range" (for folder naming)
-targetEpicNumbers: {target_epic_numbers}  # null or [1, 3, 5] (array of selected epic numbers)
-epicCount: {epic_count}  # Number of epics being processed
-selectedEpics: {target_epic_numbers}  # Duplicate for step-03 compatibility
+featureScopeMode: "{feature_scope_mode}"  # "all" or "multiple"
+featureSelection: "{feature_selection}"  # "all", "single", or "range" (for folder naming)
+targetFeatureIds: {target_feature_ids}  # null or ["feature-1", "feature-3"]
+featureCount: {feature_count}  # Number of features being processed
+selectedFeatures: {target_feature_ids}  # For downstream step compatibility
 testGenerationMode: "{test_generation_mode}"  # "ui-functional" or "backend-api"
 generatedBy: "traceability-and-testing workflow"
 generatedDate: "{current_date}"
@@ -876,12 +852,15 @@ outputFiles:
   - "{traceabilityMapFile_relative}"
   - "{traceabilityExportFile_relative}"
 inputDocuments:
-  - "{path_to_epics_md_relative}"
+  - "{implementation_artifacts_relative}/feature-status.yaml"
   - "{test_file_path_relative}"
+featureRegistry: "{implementation_artifacts_relative}/feature-status.yaml"
+featureSources:  # List of epic_source files for selected features
+  {for each feature in filtered_features: "- {feature.epic_source}"}
 testFileType: "{test_file_type}"
-frs: [FR-001, FR-002, ...]  # Filtered to selected epics if multiple mode
-epics: [Epic 1, Epic 2, ...]  # Filtered to selected epics if multiple mode
-stories: [1.1, 1.2, 2.1, ...]  # Filtered to selected epics if multiple mode
+frs: [FR-001, FR-002, ...]  # Extracted from selected epic_source files
+features: [feature-1, feature-2, ...]  # Selected feature IDs
+stories: [...]  # Extracted from selected epic_source files
 testCaseStructure: "See workflow step-01-init.md > TEST CASE CSV STRUCTURE"
 ---
 ```
@@ -893,10 +872,10 @@ testCaseStructure: "See workflow step-01-init.md > TEST CASE CSV STRUCTURE"
 ---
 stepsCompleted: [1]
 workflowMode: "test-based"
-epicScopeMode: "all"  # Mode 2 always processes all
-epicSelection: "all"  # For folder naming
-targetEpicNumbers: null
-selectedEpics: []  # Empty for Mode 2
+featureScopeMode: "all"  # Mode 2 always processes all
+featureSelection: "all"  # For folder naming
+targetFeatureIds: null
+selectedFeatures: []  # Empty for Mode 2
 testGenerationMode: "{test_generation_mode}"  # "ui-functional" or "backend-api"
 generatedBy: "traceability-and-testing workflow"
 generatedDate: "{current_date}"
@@ -910,7 +889,7 @@ inputDocuments:
   - "{test_file_path_relative}"
 testFileType: "{test_file_type}"
 frs: []
-epics: []
+features: []
 stories: []
 testCaseStructure: "See workflow step-01-init.md > TEST CASE CSV STRUCTURE"
 ops: []  # Will be populated in Step 2
@@ -943,24 +922,23 @@ Leave other placeholder sections for future steps.
 
 "📋 **Prerequisitos Validados con Éxito - Modo 1: Trazabilidad Completa**
 
-✅ **Archivo de Épicas:** `{path_to_epics_md_relative}`
-   - Requerimientos Funcionales encontrados: {count_all_frs}
-   - Épicas encontradas: {count_all_epics}
-   - Historias de Usuario encontradas: {count_all_stories}
+✅ **Feature Registry:** `{implementation_artifacts_relative}/feature-status.yaml`
+   - Features disponibles: {count_all_features}
+   - Requerimientos Funcionales extraídos: {count_all_frs}
+   - Historias de Usuario extraídas: {count_all_stories}
 
 🎯 **Alcance del Workflow:**
-   {if epic_scope_mode === "all":
-     \"- ✅ Procesando TODAS las épicas ({count_all_epics} épicas)
+   {if feature_scope_mode === "all":
+     \"- ✅ Procesando TODOS los features ({count_all_features} features)
      - Se generará 1 plan de prueba consolidado\"
    else:
-     \"- ✅ Procesando {epic_count} épica(s) seleccionada(s):
-     {for each epic_number in target_epic_numbers:
-       \"  • Epic {epic_number}: {epic_title}\"
+     \"- ✅ Procesando {feature_count} feature(s) seleccionado(s):
+     {for each feature in filtered_features:
+       \"  • {feature.id} → {feature.epic_source}\"
      }
      - FRs relacionados: {count_filtered_frs}
      - Historias relacionadas: {count_filtered_stories}
-     - Tareas relacionadas: {count_filtered_tasks}
-     - Se generará 1 plan de prueba consolidado que agrupa las {epic_count} épicas
+     - Se generará 1 plan de prueba consolidado que agrupa los {feature_count} features
 
      💡 Esta agrupación permite generar casos de prueba coherentes para funcionalidades completas.\"
    }
@@ -980,21 +958,17 @@ Leave other placeholder sections for future steps.
 - {FR2}
 - {FR3}
 
-{if epic_scope_mode === "all":
-  \"**Épicas (primeras 3):**
-  - {Epic 1}
-  - {Epic 2}
-  - {Epic 3}\"
+{if feature_scope_mode === "all":
+  \"**Features (primeros 3):**
+  - {feature-1}: {title}
+  - {feature-2}: {title}
+  - {feature-3}: {title}\"
 else:
-  \"**Épicas seleccionadas:**
-  {for each epic in filtered_epics:
-    \"- Epic {number}: {title}\"
+  \"**Features seleccionados:**
+  {for each feature in filtered_features:
+    \"- {feature.id}: {feature_title}\"
   }\"
 }
-
-**Mapeo FR→Epic (ejemplos):**
-- {FR1} → {Epics covering FR1}
-- {FR2} → {Epics covering FR2}
 
 📄 **Archivos de salida inicializados (en `{implementation_artifacts}/traceability-artifacts/`):**
 
@@ -1006,10 +980,10 @@ else:
 3. `{traceabilityMapFile}` (MD - Trazabilidad completa)
 4. `{traceabilityExportFile}` (CSV - Exportación)
 
-📁 **Planes de prueba (en `{implementation_artifacts}/epic-test-plans/`):**
+📁 **Planes de prueba (en `{implementation_artifacts}/feature-test-plans/`):**
 - Se generará 1 plan de prueba consolidado en Step 4
 
-El workflow generará trazabilidad completa: FR → Epic → Story → Task → Test Case
+El workflow generará trazabilidad completa: Feature → Story → Task → Test Case
 
 ¿Todo se ve correcto? ¿Falta algo por incluir?"
 
@@ -1039,8 +1013,8 @@ El workflow generará trazabilidad completa: FR → Epic → Story → Task → 
 3. `{traceabilityMapFile}` (MD - Trazabilidad OP→Suite→TC)
 4. `{traceabilityExportFile}` (CSV - Exportación)
 
-**Nota:** Sin archivo epics.md, no se generará mapeo a FR/Epic/Story.
-Si más adelante necesitas trazabilidad completa, ejecuta primero el workflow `create-epics-and-stories`.
+**Nota:** Sin archivo feature-status.yaml, no se generará mapeo a FR/Feature/Story.
+Si más adelante necesitas trazabilidad completa, asegúrate de tener el archivo feature-status.yaml y los archivos epic_source correspondientes.
 
 ¿Todo se ve correcto? ¿Deseas continuar?"
 
@@ -1058,29 +1032,29 @@ Ask user (Mode-dependent):
 
 **If Mode 1:**
 
-""**Confirmación final antes de continuar:**
+"**Confirmación final antes de continuar:**
 
 ✅ **Prerequisitos validados:**
-- {count_frs} Requerimientos Funcionales (total en proyecto)
-- {count_all_epics} Épicas (total en proyecto)
-- {count_all_stories} Historias de Usuario (total en proyecto)
+- Feature registry: `{implementation_artifacts_relative}/feature-status.yaml`
+- {count_all_features} Features disponibles
+- {count_frs} Requerimientos Funcionales (total extraídos)
+- {count_all_stories} Historias de Usuario (total extraídas)
 - Archivo de casos de prueba: `{test_file_path_relative}`
 
 🎯 **Alcance seleccionado:**
-{if epic_scope_mode === "all":
-  \"- Procesando TODAS las épicas ({count_all_epics} épicas)
-  - Se generará 1 plan de prueba consolidado para todas las épicas
+{if feature_scope_mode === "all":
+  \"- Procesando TODOS los features ({count_all_features} features)
+  - Se generará 1 plan de prueba consolidado para todos los features
   - FRs a procesar: {count_all_frs}
   - Historias a procesar: {count_all_stories}\"
 else:
-  \"- Procesando {epic_count} épica(s) seleccionada(s)
-  - Épicas: {list_target_epic_numbers_with_titles}
-  - Se generará 1 plan de prueba consolidado que agrupa las {epic_count} épicas
+  \"- Procesando {feature_count} feature(s) seleccionado(s)
+  - Features: {list_target_feature_ids}
+  - Se generará 1 plan de prueba consolidado que agrupa los {feature_count} features
   - FRs relacionados: {count_filtered_frs}
   - Historias relacionadas: {count_filtered_stories}
-  - Tareas relacionadas: {count_filtered_tasks}
 
-  💡 Esta agrupación permite generar casos de prueba coherentes para funcionalidades completas que se desarrollaron en múltiples épicas (ej: 'login' que abarca autenticación, sesión, y recuperación de contraseña).\"
+  💡 Esta agrupación permite generar casos de prueba coherentes para funcionalidades completas que abarcan múltiples features.\"
 }
 
 📋 **Los 4 archivos principales (en `{implementation_artifacts}/traceability-artifacts/`):**
@@ -1089,14 +1063,14 @@ else:
 3. **traceability-map.md** - Trazabilidad ⏳ (Steps 2-4)
 4. **traceability-export.csv** - Exportación CSV ⏳ (Step 5)
 
-📁 **Planes de prueba (en `{implementation_artifacts}/epic-test-plans/`):**
+📁 **Planes de prueba (en `{implementation_artifacts}/feature-test-plans/`):**
 - Se generará 1 plan de prueba consolidado en Step 4
 
 **Modo de operación:** Trazabilidad Completa
 
-El siguiente paso construirá la jerarquía completa de trazabilidad (FR→Epic→Story→Task→Test Case).
+El siguiente paso construirá la jerarquía completa de trazabilidad (Feature→Story→Task→Test Case).
 
-¿Estás listo para continuar?""
+¿Estás listo para continuar?"
 
 ---
 
@@ -1114,7 +1088,7 @@ El siguiente paso construirá la jerarquía completa de trazabilidad (FR→Epic�
 3. **traceability-map.md** - Trazabilidad ⏳ (Steps 2-4)
 4. **traceability-export.csv** - Exportación CSV ⏳ (Step 5)
 
-📁 **Planes de prueba (en `{implementation_artifacts}/epic-test-plans/`):**
+📁 **Planes de prueba (en `{implementation_artifacts}/feature-test-plans/`):**
 - Se generarán en Step 4
 
 **Modo de operación:** Trazabilidad Basada en Casos de Prueba
@@ -1156,7 +1130,7 @@ ONLY WHEN C is selected, all information is saved to {outputFile}, and frontmatt
 
 - Continuation detection worked correctly
 - All prerequisite documents found and validated
-- FRs, Epics, Stories extracted correctly
+- FRs, Features, Stories extracted correctly
 - Excel structure information captured
 - Template loaded and output document created
 - Frontmatter initialized with correct metadata
@@ -1166,7 +1140,7 @@ ONLY WHEN C is selected, all information is saved to {outputFile}, and frontmatt
 
 - Not checking for existing workflow (continuation)
 - Missing prerequisite documents not detected
-- Incomplete extraction of FRs/Epics/Stories
+- Incomplete extraction of FRs/Features/Stories
 - Not capturing Excel structure information
 - Template not loaded or output file not created
 - Frontmatter not properly initialized

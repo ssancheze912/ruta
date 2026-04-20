@@ -1,0 +1,54 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - img "Siesa" [ref=e6]
+  - generic [ref=e8]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - button "Clientes" [ref=e13] [cursor=pointer]:
+          - img [ref=e16]
+        - button "Contactos" [ref=e18] [cursor=pointer]:
+          - img [ref=e21]
+      - generic [ref=e23]:
+        - separator [ref=e24]
+        - button "Expandir" [ref=e26]:
+          - img [ref=e28]
+    - generic [ref=e145]:
+      - generic [ref=e146]:
+        - heading "SANTIAGO SANCHEZ ESQUIVEL" [level=1] [ref=e147]
+        - generic [ref=e148]:
+          - button "Editar" [ref=e149]:
+            - generic [ref=e150]: Editar
+          - button "Eliminar" [ref=e151]:
+            - generic [ref=e152]: Eliminar
+          - button "Volver" [ref=e153]:
+            - generic [ref=e154]: Volver
+      - generic [ref=e155]:
+        - paragraph [ref=e157]: Nombre
+        - paragraph [ref=e159]: SANTIAGO SANCHEZ ESQUIVEL
+      - generic [ref=e160]:
+        - paragraph [ref=e162]: NIT/RUC
+        - paragraph [ref=e164]: "12331233"
+      - generic [ref=e165]:
+        - paragraph [ref=e167]: Teléfono
+        - paragraph [ref=e169]: "3186287645"
+      - generic [ref=e170]:
+        - paragraph [ref=e172]: Ciudad
+        - paragraph [ref=e174]: CALI
+      - generic [ref=e175]:
+        - heading "Contactos asociados" [level=2] [ref=e176]
+        - generic [ref=e177]:
+          - button "Asociar contacto" [ref=e179]:
+            - generic [ref=e180]: Asociar contacto
+          - generic [ref=e182]:
+            - button "Nombre" [ref=e183] [cursor=pointer]:
+              - generic [ref=e184]: Nombre
+            - generic [ref=e188]: Cargo
+            - generic [ref=e190]: Teléfono
+            - generic [ref=e192]: Email
+            - generic [ref=e194]:
+              - generic [ref=e196]: test
+              - generic [ref=e198]: Director
+              - generic [ref=e200]: "3186287645"
+              - generic [ref=e202]: santiago.esqssssuivel@correounivalle.edu.co
+              - button "Desasociar" [ref=e205]:
+                - generic [ref=e206]: Desasociar
