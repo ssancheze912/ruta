@@ -11,11 +11,11 @@ Basado en: [SonarSource/getting-started-agentic-analysis-claude-code](https://gi
 
 1. [Qué hace esto y por qué importa](#1-qué-hace-esto-y-por-qué-importa)
 2. [Prerrequisitos](#2-prerrequisitos)
-3. [Paso 1 — Token de SonarQube](#3-paso-1--token-de-sonarqube)
-4. [Paso 2 — Registrar el servidor MCP](#4-paso-2--registrar-el-servidor-mcp)
-5. [Paso 3 — Verificar conectividad](#5-paso-3--verificar-conectividad)
-6. [Paso 4 — Agregar CLAUDE.md](#6-paso-4--agregar-claudemd)
-7. [Paso 5 — Instalar los skills](#7-paso-5--instalar-los-skills)
+3. [Paso 1 — Token de SonarQube](#3-paso-1--token-de-sonarqube) ✅
+4. [Paso 2 — Registrar el servidor MCP](#4-paso-2--registrar-el-servidor-mcp) ✅
+5. [Paso 3 — Verificar conectividad](#5-paso-3--verificar-conectividad) ✅
+6. [Paso 4 — Agregar CLAUDE.md](#6-paso-4--agregar-claudemd) ✅
+7. [Paso 5 — Instalar los skills](#7-paso-5--instalar-los-skills) ✅
 8. [Cómo usar el ciclo en el día a día](#8-cómo-usar-el-ciclo-en-el-día-a-día)
 9. [Referencia de herramientas por lenguaje](#9-referencia-de-herramientas-por-lenguaje)
 
@@ -38,17 +38,17 @@ El resultado: issues detectados y corregidos **en la misma sesión**, antes de c
 
 ## 2. Prerrequisitos
 
-- [ ] **Docker Desktop** corriendo en tu máquina (el servidor MCP es un contenedor)
-- [ ] **Cuenta SonarQube Cloud** (Enterprise o Teams) con el proyecto ya analizado
-- [ ] **Organization ID** y **Project Key** de SonarQube Cloud
-- [ ] **Claude Code CLI** instalado (`claude --version`)
+- [x] **Docker Desktop** corriendo en tu máquina (el servidor MCP es un contenedor)
+- [x] **Cuenta SonarQube Cloud** con el proyecto ya analizado (`ssancheze912_ruta`)
+- [x] **Organization ID** y **Project Key** — guardados en `.sonarqube.credentials`
+- [x] **Claude Code CLI** instalado
 
 > Para este proyecto: el backend está en C# (.NET) y el frontend en TypeScript/React.
 > Ambos lenguajes son soportados por el servidor MCP.
 
 ---
 
-## 3. Paso 1 — Token de SonarQube
+## 3. Paso 1 — Token de SonarQube ✅
 
 Genera un **user token** (no organization token) en SonarQube Cloud:
 
@@ -71,7 +71,7 @@ export SONARQUBE_TOKEN="squ_tutoken..."
 
 ---
 
-## 4. Paso 2 — Registrar el servidor MCP
+## 4. Paso 2 — Registrar el servidor MCP ✅
 
 Ejecutar este comando **desde el directorio raíz del proyecto**.
 Reemplazar `TU_ORG_ID` y `TU_PROJECT_KEY` con los valores reales:
@@ -133,7 +133,7 @@ Deberías ver `sonarqube` en la lista.
 
 ---
 
-## 5. Paso 3 — Verificar conectividad
+## 5. Paso 3 — Verificar conectividad ✅
 
 Abrir Claude Code en el directorio del proyecto y escribir:
 
@@ -150,7 +150,7 @@ Si no aparecen:
 
 ---
 
-## 6. Paso 4 — Agregar CLAUDE.md
+## 6. Paso 4 — Agregar CLAUDE.md ⬜ pendiente
 
 Agregar el siguiente bloque al `CLAUDE.md` del proyecto (loop autónomo completo — Fase 3):
 
@@ -205,7 +205,7 @@ Never declare a task complete until:
 
 ---
 
-## 7. Paso 5 — Instalar los skills
+## 7. Paso 5 — Instalar los skills ⬜ pendiente
 
 Los skills son slash commands reutilizables que encapsulan el flujo correcto.
 
